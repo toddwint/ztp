@@ -31,7 +31,7 @@ sed -Ei 's/^(starting_ip_addr = .*)192.168.10/\1'"$NET"'/' /opt/ztp/scripts/ztp/
 sed -Ei 's/^(file_server = .*)192.168.10.1/\1'"$IP"'/' /opt/ztp/scripts/ztp/generate-dhcpd-conf.py
 sed -Ei 's/192.168.10/'"$NET"'/g' /opt/ztp/scripts/ztp/dhcpd.conf.template 
 sed -Ei 's/^(\s+option (routers|domain-name-servers)) [0-9.]+;/\1 '"$IP"';/' /opt/ztp/scripts/ztp/dhcpd.conf.template
-sed -Ei 's/^([# ]+option (tftp-server-name)) "[0-9.]+";/\1 "'"$IP"'";/' dhcpd.conf.template
+sed -Ei 's/^([# ]+option (tftp-server-name)) "[0-9.]+";/\1 "'"$IP"'";/' /opt/ztp/scripts/ztp/dhcpd.conf.template
 
 # CD to script directory and run the python script
 cd /opt/ztp/scripts/ztp
