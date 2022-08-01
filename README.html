@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang xml:lang>
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>README</title>
+  <style>
+    html {
+      line-height: 1.5;
+      font-family: Helvetica,Verdana,Sans-serif;
+      font-size: 20px;
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      word-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 1em;
+      }
+    }
+    @media print {
+      body {
+        background-color: transparent;
+        color: black;
+        font-size: 12pt;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: blue;
+    }
+    a:visited {
+      color: blue;
+    }
+    img {
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      font-family: Menlo, Monaco, 'Lucida Console', Consolas, monospace;
+      background-color: whitesmoke;
+      padding: .2em .4em;
+      font-size: 85%;
+      margin: 0;
+    }
+    pre {
+      margin: 1em 0;
+      background-color: whitesmoke;
+      padding: 1em;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      background-color: #1a1a1a;
+      border: none;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#toddwintztp">toddwint/ztp</a>
+<ul>
+<li><a href="#info">Info</a></li>
+<li><a href="#features">Features</a></li>
+<li><a href="#sample-config.txt-file">Sample <code>config.txt</code> file</a></li>
+<li><a href="#sample-docker-run-command">Sample docker run command</a></li>
+<li><a href="#sample-webadmin.html.template-file">Sample webadmin.html.template file</a></li>
+<li><a href="#login-page">Login page</a></li>
+<li><a href="#issues">Issues?</a></li>
+</ul></li>
+</ul>
+</nav>
+<h1 id="toddwintztp">toddwint/ztp</h1>
+<h2 id="info">Info</h2>
+<p><a href="https://hub.docker.com/r/toddwint/ztp" class="uri">https://hub.docker.com/r/toddwint/ztp</a></p>
+<p><a href="https://github.com/toddwint/ztp" class="uri">https://github.com/toddwint/ztp</a></p>
+<p>ZTP (Zero-Touch Provisioning) docker image for Juniper SRX345, SRX1500, and HPE Aruba 2930F devices.</p>
+<p>This image was created for a specific use case in a specific environment.</p>
+<h2 id="features">Features</h2>
+<ul>
+<li>Performs Zero-Touch Provisioning of
+<ul>
+<li>Juniper SRX345</li>
+<li>Juniper SRX1500</li>
+<li>HPE Aruba 2930F</li>
+</ul></li>
+<li>Fill in the file <code>ztp.csv</code> with a list of device hardware models, MACs, os image names, and configuration file names.</li>
+<li>An example CSV file should be found in <code>&lt;volume&gt;/ztp</code></li>
+<li>Modify it as you need and place it back in the same folder with the same name.</li>
+<li>Transfer the configuration files and os images to <code>&lt;volume&gt;/ztp/ftp/os_images</code> and <code>&lt;volume&gt;/ztp/ftp/config_files</code>.</li>
+<li>View DHCP/FTP/TFTP messages in a web browser (<a href="https://github.com/mthenw/frontail">frontail</a>)
+<ul>
+<li>tail the file</li>
+<li>pause the flow</li>
+<li>search through the flow</li>
+<li>highlight multiple rows</li>
+</ul></li>
+</ul>
+<h2 id="sample-config.txt-file">Sample <code>config.txt</code> file</h2>
+<pre><code>TZ=UTC
+INTERFACE=enx0014d1da21f2
+SUBNET=192.168.2.0/24
+GATEWAY=192.168.2.254
+HTTPPORT=8080
+HOSTNAME=ztpsrvr01</code></pre>
+<h2 id="sample-docker-run-command">Sample docker run command</h2>
+<pre><code>#!/usr/bin/env bash
+source config.txt
+HUID=$(id -u)
+HGID=$(id -g)
+
+# Make the macvlan needed to do DHCP
+docker network create -d macvlan --subnet=&quot;$SUBNET&quot; --gateway=&quot;$GATEWAY&quot; -o parent=&quot;$INTERFACE&quot; &quot;$HOSTNAME&quot;-br
+sudo ip link add &quot;$HOSTNAME&quot;-net link &quot;$INTERFACE&quot; type macvlan mode bridge
+sudo ip addr add &quot;$GATEWAY&quot;/32 dev &quot;$HOSTNAME&quot;-net
+sudo ip link set &quot;$HOSTNAME&quot;-net up
+sudo ip route add &quot;$SUBNET&quot; dev &quot;$HOSTNAME&quot;-net
+
+docker run -dit \
+    --name &quot;$HOSTNAME&quot; \
+    --network &quot;$HOSTNAME&quot;-br \
+    -h &quot;$HOSTNAME&quot; \
+    -p &quot;$IPADDR&quot;:&quot;$HTTPPORT&quot;:&quot;$HTTPPORT&quot; \
+    -v &quot;$(pwd)/ztp&quot;:/opt/ztp/scripts/ztp \
+    -e TZ=&quot;$TZ&quot; \
+    -e HTTPPORT=&quot;$HTTPPORT&quot; \
+    -e HOSTNAME=&quot;$HOSTNAME&quot; \
+    -e SUBNET=&quot;$SUBNET&quot; \
+    -e GATEWAY=&quot;$GATEWAY&quot; \
+    -e HUID=&quot;$HUID&quot; \
+    -e HGID=&quot;$HGID&quot; \
+    toddwint/ztp
+
+# Get IP and subnet information and write over template files
+IP=$(docker exec &quot;$HOSTNAME&quot; ip addr show eth0 | sed -En &#39;s/^\s+inet\s([0-9.]+).*/\1/p&#39;)
+NET=$(docker exec &quot;$HOSTNAME&quot; ip addr show eth0 | sed -En &#39;s/^\s+inet\s(([0-9]{,3}.){2}[0-9]{,3}).*/\1/p&#39;)
+cp template/webadmin.html.template webadmin.html
+sed -Ei &#39;s/IPADDR/&#39;&quot;$IP&quot;&#39;:&#39;&quot;$HTTPPORT&quot;&#39;/g&#39; webadmin.html</code></pre>
+<h2 id="sample-webadmin.html.template-file">Sample webadmin.html.template file</h2>
+<p>See my github page (referenced above).</p>
+<h2 id="login-page">Login page</h2>
+<p>Open the <code>webadmin.html</code> file.</p>
+<p>Or just type in your browser <code>http://&lt;ip_address&gt;:&lt;port&gt;</code></p>
+<h2 id="issues">Issues?</h2>
+<p>Make sure if you set the correct interface name and an IP is not needed.</p>
+</body>
+</html>
