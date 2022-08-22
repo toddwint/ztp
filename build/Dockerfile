@@ -1,6 +1,5 @@
 FROM ubuntu:jammy
 COPY scripts /opt/ztp/scripts
-EXPOSE 69/udp 53/udp 20 21 9001
 ENV DEBIAN_FRONTEND=noninteractive \
     TZ=UTC \
     HTTPPORT=8080 \
@@ -10,8 +9,10 @@ RUN apt-get update \
     apt-get install -y \
     tzdata \
     iproute2 \
+    gawk \
     wget \
     python3 \
+    ipcalc \
     isc-dhcp-server \
     vsftpd \
     tftpd-hpa \

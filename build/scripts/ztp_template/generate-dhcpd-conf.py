@@ -1,35 +1,26 @@
 #!/usr/bin/env python3
 #!python3
-
-# Joe's ZTP dhcpd.conf creator
-# Version 0.1a - Initial build 070622
-# Version 0.2 - Remove Hostname Variable
-# Version 0.3 - Modified a bunch of stuff by Todd
-#
-__version__ = 0.3
 '''
  Input a CSV that has the Hardware,MAC,OS,Config and output a modified 
- dhcpd file based upon the template.
- Templated dhcpd file is highly dependent on your enviorment, example 
- provided from an Ubuntu 22.04 environment.
+ dhcpd.conf file based upon the template.
  Script will replace the dhcpd, tftp, and ftp configuration files,
  and then restart the processes.
 '''
+__version__ = '0.0.4'
 
 import argparse
 import csv
 import ipaddress
-import os
 import pathlib
 import re
-import shutil
 import subprocess
 
-import mactools # Todd's mactools.py script (just put in same dir)
+import mactools # mactools.py in same dir
 
 # Variable Definitions
 #starting_ip_addr = '192.168.10.2'
 file_server = '192.168.10.1'
+gateway = '192.168.10.254'
 csv_filename = 'ztp.csv'
 ftpd_daemon_name = 'vsftpd'
 tftpd_daemon_name = 'tftpd-hpa'
@@ -56,10 +47,10 @@ tftp_config_file_virtual_path = '/config_files/'
 transfer_mode = 'ftp'
 ftp_timeout = '3600'
 columns = ['hardware', 'mac', 'os', 'config']
-model_vender = {
+model_vendor = {
         'srx345': 'juniper', 
         'srx1500': 'juniper', 
-        '2930f': 'hp'
+        '2930f': 'aruba'
         }
 increment_mac_list = ['srx345']
 client_templates = {
@@ -74,7 +65,7 @@ host {hostname} {{
     option ztp.juniper-config-file-name "{ftp_config_file}";
 }}
 ''',
-        'hp': '''
+        'aruba': '''
 host {hostname} {{
     hardware ethernet {macaddr};
     fixed-address {ip_addr};
@@ -107,6 +98,7 @@ args = parser.parse_args()
 
 csv_filename = args.filename
 ip_addr = ipaddress.IPv4Address(file_server) + 1
+gateway = ipaddress.IPv4Address(gateway)
 ftpd_template = pathlib.Path(ftpd_template)
 tftpd_template = pathlib.Path(tftpd_template)
 dhcpd_template = pathlib.Path(dhcpd_template)
@@ -122,9 +114,6 @@ tftp_config_file_virtual_path = pathlib.Path(tftp_config_file_virtual_path.lstri
 print(f'Making `{ftpd_tmp_config_file}` from `{ftpd_template}`')
 print(f'Making `{tftpd_tmp_config_file}` from `{tftpd_template}`')
 print(f'Making `{dhcpd_tmp_config_file}` from `{dhcpd_template}`')
-#shutil.copy(ftpd_template, ftpd_tmp_config_file)
-#shutil.copy(tftpd_template, tftpd_tmp_config_file)
-#shutil.copy(dhcpd_template, dhcpd_tmp_config_file)
 ftpd_tmp_config_file.write_text(ftpd_template.read_text())
 tftpd_tmp_config_file.write_text(tftpd_template.read_text())
 dhcpd_tmp_config_file.write_text(dhcpd_template.read_text())
@@ -141,13 +130,16 @@ print('Creating new dhcpd.conf file from csv...')
 for n,row in enumerate(reader_dict, start=1):
     hardware = row[columns_dict['hardware']]
     if not any(
-            (model := x) for x in model_vender 
+            (model := x) for x in model_vendor 
             if x.lower() in re.sub('[ :.-]', '', hardware.lower())
             ):
-        raise Exception(f"Model `{hardware}` not found")
-    hostname = f'device{n:03d}'
+        print(f"Model `{hardware}` not found")
+        continue
+    hostname = f'{model_vendor[hardware]}{n:03d}'
     os_image = row[columns_dict['os']].strip()
     config_file = row[columns_dict['config']].strip()
+    if gateway == ip_addr:
+        ip_addr += 1
     if model in increment_mac_list:
         macaddr = mactools.incr_mac(row[columns_dict['mac']])
     else:
@@ -167,7 +159,7 @@ for n,row in enumerate(reader_dict, start=1):
     ftp_config_file = '/' / ftp_config_file_virtual_path / config_file
     tftp_os_image = '/' / tftp_os_image_virtual_path / os_image
     tftp_config_file = '/' / tftp_config_file_virtual_path / config_file
-    output = output[model_vender[model]].format_map(vars())
+    output = output[model_vendor[model]].format_map(vars())
     with open('dhcpd.conf', mode='a') as f:
         f.write(output)
     ip_addr += 1
@@ -203,15 +195,15 @@ subprocess.call(['chmod', '755', '-R', tftpd_root_native_path])
 #subprocess.call(['chown', 'root:tftp', '-R', tftpd_root_native_path])
 print(f'Permissions set for folders `{ftpd_root_native_path}` and `{tftpd_root_native_path}`')
 
-# Restart FTP server daemon on a system running systemd
+# Restart FTP server daemon
 subprocess.call(['service', ftpd_daemon_name, 'restart'])
 subprocess.call(['service', ftpd_daemon_name, 'status'])
 
-# Restart TFTP server daemon on a system running systemd
+# Restart TFTP server daemon
 subprocess.call(['service', tftpd_daemon_name, 'restart'])
 subprocess.call(['service', tftpd_daemon_name, 'status'])
 
-# Restart DHCP server daemon on a system running systemd
+# Restart DHCP server daemon
 subprocess.call(['service', dhcpd_daemon_name, 'restart'])
 subprocess.call(['service', dhcpd_daemon_name, 'status'])
 
@@ -225,6 +217,13 @@ subprocess.run('./stop_frontail.sh')
 print(f'Running command `./start_frontail.sh`')
 subprocess.run('./start_frontail.sh')
 print(f'Open your browser to `http://{file_server}:8080`')
+
+# Start Tailon to monitor the ZTP server
+print(f'Running command `./stop_tailon.sh`')
+subprocess.run('./stop_tailon.sh')
+print(f'Running command `./start_tailon.sh`')
+subprocess.run('./start_tailon.sh')
+print(f'Open your browser to `http://{file_server}:8081`')
 
 print('Complete!')
 print('Watch the logs with `tail -f /var/log/syslog`')

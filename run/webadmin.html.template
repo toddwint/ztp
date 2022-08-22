@@ -153,14 +153,10 @@
   <![endif]-->
 </head>
 <body>
-<!--
-<nav id="TOC" role="doc-toc">
-<ul>
-<li><a href="#launch-page-for-webadmin">Launch page for webadmin</a></li>
-</ul>
-</nav>
--->
 <h1 id="launch-page-for-webadmin">Launch page for webadmin</h1>
-<p><a href="http://IPADDR/?filter=dhcp|ftp" class="uri">http://IPADDR/?filter=dhcp|ftp</a></p>
+<h2 id="frontail-webadmin-page">Frontail webadmin page</h2>
+<p><a href="http://IPADDR:HTTPPORT" class="uri">http://IPADDR:HTTPPORT</a></p>
+<h2 id="tailon-webadmin-page">Tailon webadmin page</h2>
+<p><a href="http://IPADDR:HTTPPORTPLUSONE" class="uri">http://IPADDR:HTTPPORTPLUSONE</a></p>
 </body>
 </html>

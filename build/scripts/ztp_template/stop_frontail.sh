@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
 
-echo -e 'Stopping frontail-linux...'
+echo -e 'Stopping frontail...'
 
 kill $(pidof frontail)

@@ -14,7 +14,6 @@ docker run -dit \
     --name "$HOSTNAME" \
     --network "$HOSTNAME"-br \
     -h "$HOSTNAME" \
-    -p "$IPADDR":"$HTTPPORT":"$HTTPPORT" \
     -v "$(pwd)/ztp":/opt/ztp/scripts/ztp \
     -e TZ="$TZ" \
     -e HTTPPORT="$HTTPPORT" \
@@ -27,6 +26,6 @@ docker run -dit \
 
 # Get IP and subnet information and write over template files
 IP=$(docker exec "$HOSTNAME" ip addr show eth0 | sed -En 's/^\s+inet\s([0-9.]+).*/\1/p')
-NET=$(docker exec "$HOSTNAME" ip addr show eth0 | sed -En 's/^\s+inet\s(([0-9]{,3}.){2}[0-9]{,3}).*/\1/p')
-cp template/webadmin.html.template webadmin.html
-sed -Ei 's/IPADDR/'"$IP"':'"$HTTPPORT"'/g' webadmin.html
+cp webadmin.html.template webadmin.html
+sed -Ei 's/\bIPADDR:HTTPPORT\b/'"$IP"':'"$HTTPPORT"'/g' webadmin.html
+sed -Ei 's/\bIPADDR:HTTPPORTPLUSONE\b/'"$IP"':'"$(expr $HTTPPORT + 1)"'/g' webadmin.html

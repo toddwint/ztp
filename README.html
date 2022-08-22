@@ -153,20 +153,6 @@
   <![endif]-->
 </head>
 <body>
-<nav id="TOC" role="doc-toc">
-<ul>
-<li><a href="#toddwintztp">toddwint/ztp</a>
-<ul>
-<li><a href="#info">Info</a></li>
-<li><a href="#features">Features</a></li>
-<li><a href="#sample-config.txt-file">Sample <code>config.txt</code> file</a></li>
-<li><a href="#sample-docker-run-command">Sample docker run command</a></li>
-<li><a href="#sample-webadmin.html.template-file">Sample webadmin.html.template file</a></li>
-<li><a href="#login-page">Login page</a></li>
-<li><a href="#issues">Issues?</a></li>
-</ul></li>
-</ul>
-</nav>
 <h1 id="toddwintztp">toddwint/ztp</h1>
 <h2 id="info">Info</h2>
 <p><a href="https://hub.docker.com/r/toddwint/ztp" class="uri">https://hub.docker.com/r/toddwint/ztp</a></p>
@@ -181,10 +167,11 @@
 <li>Juniper SRX1500</li>
 <li>HPE Aruba 2930F</li>
 </ul></li>
-<li>Fill in the file <code>ztp.csv</code> with a list of device hardware models, MACs, os image names, and configuration file names.</li>
-<li>An example CSV file should be found in <code>&lt;volume&gt;/ztp</code></li>
+<li>Download the image and start a new container. The folder <code>run/ztp</code> will be created.</li>
+<li>Fill in the file <code>run/ztp/ztp.csv</code> with a list of device hardware models, MACs, os image names, and configuration file names.</li>
+<li>An example CSV file should be found in <code>run/ztp</code></li>
 <li>Modify it as you need and place it back in the same folder with the same name.</li>
-<li>Transfer the configuration files and os images to <code>&lt;volume&gt;/ztp/ftp/os_images</code> and <code>&lt;volume&gt;/ztp/ftp/config_files</code>.</li>
+<li>Transfer the configuration files and os images to <code>run/ztp/ftp/os_images</code> and <code>run/ztp/ftp/config_files</code>.</li>
 <li>View DHCP/FTP/TFTP messages in a web browser (<a href="https://github.com/mthenw/frontail">frontail</a>)
 <ul>
 <li>tail the file</li>
@@ -192,12 +179,13 @@
 <li>search through the flow</li>
 <li>highlight multiple rows</li>
 </ul></li>
+<li>Alternatively, view the DHCP/FTP/TFTP messages and configuration files in a web browser (<a href="https://github.com/gvalkov/tailon">tailon</a>)</li>
 </ul>
 <h2 id="sample-config.txt-file">Sample <code>config.txt</code> file</h2>
-<pre><code>TZ=UTC
-INTERFACE=enx0014d1da21f2
-SUBNET=192.168.2.0/24
-GATEWAY=192.168.2.254
+<pre><code>TZ=America/Chicago
+INTERFACE=eth0
+SUBNET=192.168.0.0/16
+GATEWAY=192.168.0.1
 HTTPPORT=8080
 HOSTNAME=ztpsrvr01</code></pre>
 <h2 id="sample-docker-run-command">Sample docker run command</h2>
@@ -217,7 +205,6 @@ docker run -dit \
     --name &quot;$HOSTNAME&quot; \
     --network &quot;$HOSTNAME&quot;-br \
     -h &quot;$HOSTNAME&quot; \
-    -p &quot;$IPADDR&quot;:&quot;$HTTPPORT&quot;:&quot;$HTTPPORT&quot; \
     -v &quot;$(pwd)/ztp&quot;:/opt/ztp/scripts/ztp \
     -e TZ=&quot;$TZ&quot; \
     -e HTTPPORT=&quot;$HTTPPORT&quot; \
@@ -230,14 +217,85 @@ docker run -dit \
 
 # Get IP and subnet information and write over template files
 IP=$(docker exec &quot;$HOSTNAME&quot; ip addr show eth0 | sed -En &#39;s/^\s+inet\s([0-9.]+).*/\1/p&#39;)
-NET=$(docker exec &quot;$HOSTNAME&quot; ip addr show eth0 | sed -En &#39;s/^\s+inet\s(([0-9]{,3}.){2}[0-9]{,3}).*/\1/p&#39;)
-cp template/webadmin.html.template webadmin.html
-sed -Ei &#39;s/IPADDR/&#39;&quot;$IP&quot;&#39;:&#39;&quot;$HTTPPORT&quot;&#39;/g&#39; webadmin.html</code></pre>
+cp webadmin.html.template webadmin.html
+sed -Ei &#39;s/\bIPADDR:HTTPPORT\b/&#39;&quot;$IP&quot;&#39;:&#39;&quot;$HTTPPORT&quot;&#39;/g&#39; webadmin.html
+sed -Ei &#39;s/\bIPADDR:HTTPPORTPLUSONE\b/&#39;&quot;$IP&quot;&#39;:&#39;&quot;$(expr $HTTPPORT + 1)&quot;&#39;/g&#39; webadmin.html</code></pre>
 <h2 id="sample-webadmin.html.template-file">Sample webadmin.html.template file</h2>
 <p>See my github page (referenced above).</p>
 <h2 id="login-page">Login page</h2>
 <p>Open the <code>webadmin.html</code> file.</p>
-<p>Or just type in your browser <code>http://&lt;ip_address&gt;:&lt;port&gt;</code></p>
+<p>Or just type in your browser <code>http://&lt;ip_address&gt;:&lt;port&gt;</code> or <code>http://&lt;ip_address&gt;:&lt;(port+1)&gt;</code></p>
+<h2 id="description-of-scripts">Description of scripts</h2>
+<ul>
+<li>config.txt
+<ul>
+<li>User defined variables for the container instance.</li>
+</ul></li>
+<li>create_container.sh
+<ul>
+<li>Creates a networking interface, creates a container, and the webadmin.html file.</li>
+</ul></li>
+<li>delete_container.sh
+<ul>
+<li>Remove the networking interfaces, deletes the container.</li>
+</ul></li>
+<li>generate_dhcp_conf.sh
+<ul>
+<li>Run this to regenerate the DHCP server config and restart services after the ztp.csv file is updated.</li>
+</ul></li>
+<li>is_running.sh
+<ul>
+<li>Displays a message whether the container is running or not.</li>
+</ul></li>
+<li>make_network.sh
+<ul>
+<li>Creates the networking adapter if for some reason it was not created using the create_container.sh script.</li>
+</ul></li>
+<li>remove_network.sh
+<ul>
+<li>Removes the networking adapter if for some reason the user wants to delete it and maybe create it again.</li>
+</ul></li>
+<li>remove_volume.sh
+<ul>
+<li>Removes the container volume if for some reason the user wants to start fresh.</li>
+</ul></li>
+<li>restart_dhcpd.sh
+<ul>
+<li>Restarts the DHCP server on the container.</li>
+</ul></li>
+<li>restart_tftpd-hpa.sh
+<ul>
+<li>Restarts the TFTP server on the container.</li>
+</ul></li>
+<li>restart_vsftpd.sh
+<ul>
+<li>Restarts the FTP server on the container.</li>
+</ul></li>
+<li>show_ip_addr.sh
+<ul>
+<li>Shows the IP address of the container.</li>
+</ul></li>
+<li>start.sh
+<ul>
+<li>Starts the container. Useful when modifying the ztp.csv file or running the container at a later time.</li>
+</ul></li>
+<li>stop.sh
+<ul>
+<li>Stops the container. Useful when modifying the ztp.csv file or running the container at a later time.</li>
+</ul></li>
+<li>tail_syslog.sh
+<ul>
+<li>Alternatively to webadmin.html, this can show the DHCP/FTP/TFTP logs on the container.</li>
+</ul></li>
+<li>webadmin.html.template
+<ul>
+<li>A template webadmin file that is updated with the IP and PORT of the container when it is created.</li>
+</ul></li>
+<li>webadmin.md
+<ul>
+<li>A template webadmin file used to create webadmin.html.template.</li>
+</ul></li>
+</ul>
 <h2 id="issues">Issues?</h2>
 <p>Make sure if you set the correct interface name and an IP is not needed.</p>
 </body>

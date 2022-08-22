@@ -1,5 +1,0 @@
-hardware,mac,os,config
-srx345,000000112233,junos345.tgz,router1.cfg
-srx1500,000000112244,junos1500.tgz,router2.cfg
-srx345,000000112255,junos345.tgz,router3.cfg
-2930f,000000112266,WC_11.04.swi,switch1.cfg
