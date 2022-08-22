@@ -131,11 +131,11 @@ for n,row in enumerate(reader_dict, start=1):
     hardware = row[columns_dict['hardware']]
     if not any(
             (model := x) for x in model_vendor 
-            if x.lower() in re.sub('[ :.-]', '', hardware.lower())
+            if x in re.sub('[ :.-]', '', hardware.lower())
             ):
         print(f"Model `{hardware}` not found")
         continue
-    hostname = f'{model_vendor[hardware]}{n:03d}'
+    hostname = f'{model_vendor[model]}{n:03d}'
     os_image = row[columns_dict['os']].strip()
     config_file = row[columns_dict['config']].strip()
     if gateway == ip_addr:
