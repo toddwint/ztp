@@ -16,10 +16,10 @@ rsyslogd
 # Also change permissions and create ftp folders
 if [ ! -d "/opt/ztp/scripts/ztp/ftp" ]
 then
-    cp -r /opt/ztp/scripts/ztp_template/ /opt/ztp/scripts/ztp/
-    echo "Copied ztp_template to /opt/ztp/scripts/ztp"
     mkdir -p /opt/ztp/scripts/ztp/ftp/os_images
     mkdir -p /opt/ztp/scripts/ztp/ftp/config_files
+    cp -r /opt/ztp/scripts/ztp_template/. /opt/ztp/scripts/ztp/
+    echo "Copied ztp_template to /opt/ztp/scripts/ztp"
     chown -R "${HUID}":"${HGID}" /opt/ztp/scripts/ztp
 fi
 
