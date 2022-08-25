@@ -21,12 +21,14 @@ This image was created for a specific use case in a specific environment.
 - An example CSV file should be found in `run/ztp`
 - Modify it as you need and place it back in the same folder with the same name.
 - Transfer the configuration files and os images to `run/ztp/ftp/os_images` and `run/ztp/ftp/config_files`.
-- View DHCP/FTP/TFTP messages in a web browser ([frontail](https://github.com/mthenw/frontail))
-    - tail the file
-    - pause the flow
-    - search through the flow
-    - highlight multiple rows
-- Alternatively, view the DHCP/FTP/TFTP messages and configuration files in a web browser ([tailon](https://github.com/gvalkov/tailon))
+- Trigger the container to update by restarting it with `stop.sh` and `start.sh` or run `generate_dhcp_conf.sh`
+- Open the file webadmin.html to:
+    - View DHCP/FTP/TFTP messages in a web browser ([frontail](https://github.com/mthenw/frontail))
+        - tail the file
+        - pause the flow
+        - search through the flow
+        - highlight multiple rows
+    - Alternatively, view the DHCP/FTP/TFTP messages and configuration files in a web browser ([tailon](https://github.com/gvalkov/tailon))
 
 
 ## Sample `config.txt` file

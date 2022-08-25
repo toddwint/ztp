@@ -11,6 +11,7 @@ __version__ = '0.0.4'
 import argparse
 import csv
 import ipaddress
+import os
 import pathlib
 import re
 import subprocess
@@ -187,6 +188,15 @@ print(f'Copying `{dhcpd_tmp_config_file}` to `{dhcpd_config_file_loc}`')
 subprocess.call(['cp', ftpd_tmp_config_file, ftpd_config_file_loc])
 subprocess.call(['cp', tftpd_tmp_config_file, tftpd_config_file_loc])
 subprocess.call(['cp', dhcpd_tmp_config_file, dhcpd_config_file_loc])
+
+# Set permissions of templates in ztp folder back to host user
+subprocess.call([
+    'chown', 
+    f"{os.environ['HUID']}:{os.environ['HGID']}", 
+    dhcpd_tmp_config_file,
+    ftpd_tmp_config_file, 
+    tftpd_tmp_config_file, 
+    ])
 
 # Set the permissions of the tftp and ftp folders
 subprocess.call(['chmod', '755', '-R', ftpd_root_native_path])
