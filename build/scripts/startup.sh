@@ -17,13 +17,16 @@ gunzip /usr/local/bin/frontail.gz
 gunzip /usr/local/bin/tailon.gz
 
 
-# Stop services and delete pid of dhcpd if exists
+# Stop services
 service vsftpd stop
 service tftpd-hpa stop
 service isc-dhcp-server stop
-if [ -e "/var/run/dhcpd.pid" ]
+
+
+# stop any extra dhcpd pids
+if [ ! -z "$(pidof dhcpd)" ]
 then
-    rm /var/run/dhcpd.pid
+    kill $(pidof dhcpd)
 fi
 
 

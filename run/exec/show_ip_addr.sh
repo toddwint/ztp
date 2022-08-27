@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-source "$(dirname "$(realpath $0)")"/config.txt
+source "$(dirname "$(dirname "$(realpath $0)")")"/config.txt
 
 # Note: leave the `-it` options in.
 # -i, --interactive[=false]    Keep STDIN open even if not attached

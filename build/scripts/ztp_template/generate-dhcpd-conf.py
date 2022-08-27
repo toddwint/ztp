@@ -207,17 +207,20 @@ subprocess.run(['chmod', '755', '-R', tftpd_root_native_path])
 print(f'Permissions set for folders `{ftpd_root_native_path}` and `{tftpd_root_native_path}`')
 
 # Restart FTP server daemon
-subprocess.run(['service', ftpd_daemon_name, 'restart'])
+subprocess.run(['service', ftpd_daemon_name, 'stop'])
+subprocess.run(['service', ftpd_daemon_name, 'start'])
 subprocess.run(['service', ftpd_daemon_name, 'status'])
 
 # Restart TFTP server daemon
-subprocess.run(['service', tftpd_daemon_name, 'restart'])
+subprocess.run(['service', tftpd_daemon_name, 'stop'])
+subprocess.run(['service', tftpd_daemon_name, 'start'])
 subprocess.run(['service', tftpd_daemon_name, 'status'])
 
 # Restart DHCP server daemon
-# delete old pid first
-subprocess.run(['rm', '/var/run/dhcpd.pid'])
-subprocess.run(['service', dhcpd_daemon_name, 'restart'])
+# delete any extra dhcpd pids
+subprocess.run(['service', dhcpd_daemon_name, 'stop'])
+subprocess.run('if [ ! -z "$(pidof dhcpd)" ]; then kill $(pidof dhcpd); fi', shell=True)
+subprocess.run(['service', dhcpd_daemon_name, 'start'])
 subprocess.run(['service', dhcpd_daemon_name, 'status'])
 
 # Show DHCP leases for non-host entries

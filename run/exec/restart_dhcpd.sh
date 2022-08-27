@@ -5,4 +5,4 @@ source "$(dirname "$(dirname "$(realpath $0)")")"/config.txt
 # -i, --interactive[=false]    Keep STDIN open even if not attached
 # -t, --tty[=false]            Allocate a pseudo-TTY
 
-docker exec -it "$HOSTNAME" bash -c "service isc-dhcp-server stop; rm -rf /var/run/dhcpd.pid; service isc-dhcp-server start"
+docker exec -it "$HOSTNAME" bash -c 'service isc-dhcp-server stop; if [ ! -z "$(pidof dhcpd)" ]; then kill $(pidof dhcpd); fi; service isc-dhcp-server start'
