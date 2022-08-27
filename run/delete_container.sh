@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-source config.txt
+source "$(dirname "$(realpath $0)")"/config.txt
 docker container stop "$HOSTNAME"
 docker container rm "$HOSTNAME"
 docker network rm "$HOSTNAME"-br

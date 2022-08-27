@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-source config.txt
+source "$(dirname "$(realpath $0)")"/config.txt
 running=$(docker ps | grep "$HOSTNAME" | wc -l)
 if [ $running -eq 1 ]
 then

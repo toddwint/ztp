@@ -6,7 +6,7 @@
  Script will replace the dhcpd, tftp, and ftp configuration files,
  and then restart the processes.
 '''
-__version__ = '0.0.4'
+__version__ = '0.0.5'
 
 import argparse
 import csv
@@ -23,6 +23,7 @@ import mactools # mactools.py in same dir
 file_server = '192.168.10.1'
 gateway = '192.168.10.254'
 csv_filename = 'ztp.csv'
+csv_path = pathlib.Path('/opt/ztp/scripts/ftp')
 ftpd_daemon_name = 'vsftpd'
 tftpd_daemon_name = 'tftpd-hpa'
 dhcpd_daemon_name = 'isc-dhcp-server'
@@ -39,8 +40,8 @@ dhcpd_config_file_loc = '/etc/dhcp/dhcpd.conf'
 # as the base path.
 # DO NOT PUT A LEADING SLASH '/' character inside the quotes.
 # A trailing slash is ok.
-ftpd_root_native_path = pathlib.Path('/opt/ztp/scripts/ztp/').resolve() / 'ftp'  # *see note above
-tftpd_root_native_path = pathlib.Path('/opt/ztp/scripts/ztp/').resolve() / 'ftp' # *see note above
+ftpd_root_native_path = pathlib.Path('/opt/ztp/scripts/').resolve() / 'ftp'  # *see note above
+tftpd_root_native_path = pathlib.Path('/opt/ztp/scripts/').resolve() / 'ftp' # *see note above
 ftp_os_image_virtual_path = '/os_images/' 
 ftp_config_file_virtual_path = '/config_files/' 
 tftp_os_image_virtual_path = '/os_images/' 
@@ -97,7 +98,7 @@ parser.add_argument(
     )
 args = parser.parse_args()
 
-csv_filename = args.filename
+csv_filename = csv_path / args.filename
 ip_addr = ipaddress.IPv4Address(file_server) + 1
 gateway = ipaddress.IPv4Address(gateway)
 ftpd_template = pathlib.Path(ftpd_template)
@@ -185,12 +186,12 @@ tftpd_tmp_config_file.write_text(
 print(f'Copying `{ftpd_tmp_config_file}` to `{ftpd_config_file_loc}`')
 print(f'Copying `{tftpd_tmp_config_file}` to `{tftpd_config_file_loc}`')
 print(f'Copying `{dhcpd_tmp_config_file}` to `{dhcpd_config_file_loc}`')
-subprocess.call(['cp', ftpd_tmp_config_file, ftpd_config_file_loc])
-subprocess.call(['cp', tftpd_tmp_config_file, tftpd_config_file_loc])
-subprocess.call(['cp', dhcpd_tmp_config_file, dhcpd_config_file_loc])
+subprocess.run(['cp', ftpd_tmp_config_file, ftpd_config_file_loc])
+subprocess.run(['cp', tftpd_tmp_config_file, tftpd_config_file_loc])
+subprocess.run(['cp', dhcpd_tmp_config_file, dhcpd_config_file_loc])
 
 # Set permissions of templates in ztp folder back to host user
-subprocess.call([
+subprocess.run([
     'chown', 
     f"{os.environ['HUID']}:{os.environ['HGID']}", 
     dhcpd_tmp_config_file,
@@ -199,41 +200,41 @@ subprocess.call([
     ])
 
 # Set the permissions of the tftp and ftp folders
-subprocess.call(['chmod', '755', '-R', ftpd_root_native_path])
-#subprocess.call(['chown', 'root:ftp', '-R', ftpd_root_native_path])
-subprocess.call(['chmod', '755', '-R', tftpd_root_native_path])
-#subprocess.call(['chown', 'root:tftp', '-R', tftpd_root_native_path])
+subprocess.run(['chmod', '755', '-R', ftpd_root_native_path])
+#subprocess.run(['chown', 'root:ftp', '-R', ftpd_root_native_path])
+subprocess.run(['chmod', '755', '-R', tftpd_root_native_path])
+#subprocess.run(['chown', 'root:tftp', '-R', tftpd_root_native_path])
 print(f'Permissions set for folders `{ftpd_root_native_path}` and `{tftpd_root_native_path}`')
 
 # Restart FTP server daemon
-subprocess.call(['service', ftpd_daemon_name, 'restart'])
-subprocess.call(['service', ftpd_daemon_name, 'status'])
+subprocess.run(['service', ftpd_daemon_name, 'restart'])
+subprocess.run(['service', ftpd_daemon_name, 'status'])
 
 # Restart TFTP server daemon
-subprocess.call(['service', tftpd_daemon_name, 'restart'])
-subprocess.call(['service', tftpd_daemon_name, 'status'])
+subprocess.run(['service', tftpd_daemon_name, 'restart'])
+subprocess.run(['service', tftpd_daemon_name, 'status'])
 
 # Restart DHCP server daemon
-subprocess.call(['service', dhcpd_daemon_name, 'restart'])
-subprocess.call(['service', dhcpd_daemon_name, 'status'])
+# delete old pid first
+subprocess.run(['rm', '/var/run/dhcpd.pid'])
+subprocess.run(['service', dhcpd_daemon_name, 'restart'])
+subprocess.run(['service', dhcpd_daemon_name, 'status'])
 
 # Show DHCP leases for non-host entries
 print('Entries below were not found in a host scope in the DHCP file.')
-subprocess.call('dhcp-lease-list')
+subprocess.run('dhcp-lease-list')
 
 # Start Frontail to monitor the ZTP server
 print(f'Running command `./stop_frontail.sh`')
 subprocess.run('./stop_frontail.sh')
 print(f'Running command `./start_frontail.sh`')
 subprocess.run('./start_frontail.sh')
-print(f'Open your browser to `http://{file_server}:8080`')
+print(f"Open your browser to `http://{file_server}:{os.environ['HTTPPORT']}`")
 
 # Start Tailon to monitor the ZTP server
 print(f'Running command `./stop_tailon.sh`')
 subprocess.run('./stop_tailon.sh')
 print(f'Running command `./start_tailon.sh`')
 subprocess.run('./start_tailon.sh')
-print(f'Open your browser to `http://{file_server}:8081`')
+print(f"Open your browser to `http://{file_server}:{int(os.environ['HTTPPORT'])+1}`")
 
-print('Complete!')
-print('Watch the logs with `tail -f /var/log/syslog`')

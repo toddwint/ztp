@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
-echo -e 'Open your browser to `http://127.0.0.1:'"$HTTPPORT"'` to see the logs\n'
+IP=$(ip addr show eth0 | mawk '/ inet / {print $2}' | mawk -F/ '{print $1}')
+
+echo -e 'Open your browser to `http://'"$IP"':'"$HTTPPORT"'` to see the logs\n'
 
 frontail -d -p $HTTPPORT /var/log/syslog &

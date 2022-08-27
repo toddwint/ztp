@@ -1,5 +1,15 @@
 #!/usr/bin/env bash
 
-echo -e 'Stopping frontail...'
+# frontail has a subprocess of tail
+if [ ! -z "$(pidof tail)" ]
+then
+    kill $(pidof tail)
+fi
 
-kill $(pidof frontail)
+if [ ! -z "$(pidof frontail)" ]
+then
+    echo -e 'Stopping frontail...'
+    kill -9 $(pidof frontail)
+else
+    echo -e 'frontail is not running.'
+fi

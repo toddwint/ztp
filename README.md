@@ -16,12 +16,13 @@ This image was created for a specific use case in a specific environment.
     - Juniper SRX345
     - Juniper SRX1500
     - HPE Aruba 2930F
-- Download the image and start a new container. The folder `run/ztp` will be created.
-- Fill in the file `run/ztp/ztp.csv` with a list of device hardware models, MACs, os image names, and configuration file names.
-- An example CSV file should be found in `run/ztp`
+- Download the image and start a new container. The folder `ftp` will be created as specified in the `create_container.sh` script.
+- An example CSV file should be found in `ftp`
+- Fill in the file `ftp/ztp.csv` with a list of device hardware models, MACs, os image names, and configuration file names.
 - Modify it as you need and place it back in the same folder with the same name.
-- Transfer the configuration files and os images to `run/ztp/ftp/os_images` and `run/ztp/ftp/config_files`.
-- Trigger the container to update by restarting it with `stop.sh` and `start.sh` or run `generate_dhcp_conf.sh`
+- You can use the `csv_filter.py` or `csv_filter.sh` to create CSV files sorted by vendor or model and rename them to `ztp.csv` as needed.
+- Transfer the configuration files and os images to `ftp/os_images` and `ftp/config_files`.
+- Trigger the container to update by restarting it with `./stop.sh` and `./start.sh` or run `./exec/generate_dhcp_conf.sh`
 - Open the file webadmin.html to:
     - View DHCP/FTP/TFTP messages in a web browser ([frontail](https://github.com/mthenw/frontail))
         - tail the file
@@ -42,11 +43,11 @@ HTTPPORT=8080
 HOSTNAME=ztpsrvr01
 ```
 
-## Sample docker run command
+## Sample docker create container command
 
 ```
 #!/usr/bin/env bash
-source config.txt
+source "$(dirname "$(realpath $0)")"/config.txt
 HUID=$(id -u)
 HGID=$(id -g)
 
@@ -57,11 +58,13 @@ sudo ip addr add "$GATEWAY"/32 dev "$HOSTNAME"-net
 sudo ip link set "$HOSTNAME"-net up
 sudo ip route add "$SUBNET" dev "$HOSTNAME"-net
 
+# Volume can be changed to another folder. For Example:
+# -v /home/"$USER"/Desktop/"$HOSTNAME":/opt/ztp/scripts/ftp \
 docker run -dit \
     --name "$HOSTNAME" \
     --network "$HOSTNAME"-br \
     -h "$HOSTNAME" \
-    -v "$(pwd)/ztp":/opt/ztp/scripts/ztp \
+    -v "$(pwd)"/ftp:/opt/ztp/scripts/ftp \
     -e TZ="$TZ" \
     -e HTTPPORT="$HTTPPORT" \
     -e HOSTNAME="$HOSTNAME" \
@@ -92,40 +95,77 @@ Or just type in your browser `http://<ip_address>:<port>` or `http://<ip_address
 
 ## Description of scripts
 
+### Files in `build` directory
+
+Files and subdirectories in `build` are used to create the docker image.
+
+A user can clone the project as modify these files as needed to create their own image.
+
+
+### Files in `run` directory
+
+These are files used to manage the docker container. Create it, delete it, start, and stop it.
+
 - config.txt
     - User defined variables for the container instance.
 - create_container.sh
     - Creates a networking interface, creates a container, and the webadmin.html file.
 - delete_container.sh
     - Remove the networking interfaces, deletes the container.
-- generate_dhcp_conf.sh
-    - Run this to regenerate the DHCP server config and restart services after the ztp.csv file is updated.
 - is_running.sh
     - Displays a message whether the container is running or not.
-- make_network.sh
-    - Creates the networking adapter if for some reason it was not created using the create_container.sh script.
-- remove_network.sh
-    - Removes the networking adapter if for some reason the user wants to delete it and maybe create it again.
-- remove_volume.sh
+- rm_ftp_dir.sh
     - Removes the container volume if for some reason the user wants to start fresh.
-- restart_dhcpd.sh
-    - Restarts the DHCP server on the container.
-- restart_tftpd-hpa.sh
-    - Restarts the TFTP server on the container.
-- restart_vsftpd.sh
-    - Restarts the FTP server on the container.
-- show_ip_addr.sh
-    - Shows the IP address of the container.
 - start.sh
     - Starts the container. Useful when modifying the ztp.csv file or running the container at a later time.
 - stop.sh
     - Stops the container. Useful when modifying the ztp.csv file or running the container at a later time.
-- tail_syslog.sh
-    - Alternatively to webadmin.html, this can show the DHCP/FTP/TFTP logs on the container.
 - webadmin.html.template
     - A template webadmin file that is updated with the IP and PORT of the container when it is created.
 - webadmin.md
     - A template webadmin file used to create webadmin.html.template.
+
+### Files in `run/exec` directory
+
+These are files used to debug and manage the container while running.
+
+- exec/generate_dhcp_conf.sh
+  - Run this to regenerate the DHCP server config and restart services after the ztp.csv file is updated.
+- exec/kill_frontail.sh
+    - Stops frontail
+- exec/kill_tailon.sh
+    - Stops tailon
+- exec/processes_status.sh
+    - Shows the processes running on the container.
+- exec/restart_dhcpd.sh
+    - Restarts the DHCP server on the container.
+- exec/restart_frontail.sh
+    - Stops and starts frontail.
+- exec/restart_tailon.sh
+    - Stops and starts tailon.
+- exec/restart_tftpd-hpa.sh
+    - Restarts the TFTP server on the container.
+- exec/restart_vsftpd.sh
+    - Restarts the FTP server on the container.
+- exec/run_frontail.sh
+    - Starts frontail
+- exec/run_tailon.sh
+    - Starts tailon
+- exec/services_status.sh
+    - Shows the status of the services isc-dhcp-server, vsftpd, and tftpd-hpa
+- exec/show_ip_addr.sh
+    - Shows the IP address of the container.
+- exec/tail_syslog.sh
+    - Alternatively to webadmin.html, this can show the DHCP/FTP/TFTP logs on the container.
+- exec/view_dhcpd_conf.sh
+    - Print the contents of `dhcpd.conf` to the terminal.
+- exec/view_tftpd-hpa_conf.sh
+    - Print the contents of `tftpd-hpa` to the terminal.
+- exec/view_vsftpd_conf.sh
+    - Print the contents of `vsftpd.conf` to the terminal.
+- exec/view_ztp_csv.sh
+    - Print the contents of `ztp.csv` to the terminal.
+
 
 ## Issues?
 

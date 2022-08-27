@@ -12,16 +12,48 @@ sed -i '/imklog/s/^/#/' /etc/rsyslog.conf
 rsyslogd
 
 
-# Check if folder exists and copy template files if not
-# Also change permissions and create ftp folders
-if [ ! -d "/opt/ztp/scripts/ztp/ftp" ]
+# Unzip frontail and tailon
+gunzip /usr/local/bin/frontail.gz
+gunzip /usr/local/bin/tailon.gz
+
+
+# Stop services and delete pid of dhcpd if exists
+service vsftpd stop
+service tftpd-hpa stop
+service isc-dhcp-server stop
+if [ -e "/var/run/dhcpd.pid" ]
 then
-    mkdir -p /opt/ztp/scripts/ztp/ftp/os_images
-    mkdir -p /opt/ztp/scripts/ztp/ftp/config_files
+    rm /var/run/dhcpd.pid
+fi
+
+
+# Check if ftp subfolder exists and copy template files if not
+# Checking for a subfolder because if the folder is mounted as a volume
+#  it will already exists when docker starts.
+# Also change permissions
+# --Leave the `.` after the source folder so it copies the contents (not folder)
+if [ ! -d "/opt/ztp/scripts/ftp/os_images" ]
+then
+    mkdir -p /opt/ztp/scripts/ftp/os_images
+    mkdir -p /opt/ztp/scripts/ftp/config_files
+    cp -r /opt/ztp/scripts/ftp_template/. /opt/ztp/scripts/ftp/
+    echo "Copied ftp_template to /opt/ztp/scripts/ftp"
+    chown -R "${HUID}":"${HGID}" /opt/ztp/scripts/ftp
+fi
+
+
+# Check if python script exists and copy template files if not
+# Checking for a script inside the folder because if the folder
+#  is mounted as a volume it will already exists when docker starts.
+# Also change permissions  
+# --Leave the `.` after the source folder so it copies the contents (not folder)
+if [ ! -e "/opt/ztp/scripts/ztp/generate-dhcpd-conf.py" ]
+then
     cp -r /opt/ztp/scripts/ztp_template/. /opt/ztp/scripts/ztp/
     echo "Copied ztp_template to /opt/ztp/scripts/ztp"
     chown -R "${HUID}":"${HGID}" /opt/ztp/scripts/ztp
 fi
+
 
 # Configure isc-dhcp-server interfaces on which to listen
 sed -Ei 's/INTERFACESv4=""/INTERFACESv4="eth0"/' /etc/default/isc-dhcp-server
@@ -29,7 +61,7 @@ sed -Ei 's/INTERFACESv4=""/INTERFACESv4="eth0"/' /etc/default/isc-dhcp-server
 
 # Get IP and subnet information and save to env variables
 
-# Using `ipcalc` (apt install ipcalc) (adds ~50 MB to docker image)
+## Using `ipcalc` (apt install ipcalc) (adds ~50 MB to docker image)
 #IPCALC=$(ipcalc -nb "$SUBNET")
 #export IPCALC
 #IP=$(ip addr show eth0 | mawk '/ inet / {print $2}' | mawk -F/ '{print $1}')
@@ -44,15 +76,28 @@ sed -Ei 's/INTERFACESv4=""/INTERFACESv4="eth0"/' /etc/default/isc-dhcp-server
 #DHCPEND=$(python3 -c "import ipaddress; print(ipaddress.ip_address('$HOSTMAX') - 1)")
 #IPSTART=$(python3 -c "import ipaddress; print(ipaddress.ip_address('$IP') + 1)")
 
-# Using python module `netaddr` (pip3 install netaddr) (adds ~10 MB to docker image)
+## Using python module `netaddr` (pip3 install netaddr) (adds ~10 MB to docker image)
+#IP=$(ip addr show eth0 | mawk '/ inet / {print $2}' | mawk -F/ '{print $1}')
+#NETMASK=$(python3 -c "import netaddr; print(netaddr.IPNetwork('$SUBNET').netmask)")
+#NETMASKBITS=$(python3 -c "import netaddr; print(netaddr.IPNetwork('$SUBNET').prefixlen)")
+#NETWORK=$(python3 -c "import netaddr; print(netaddr.IPNetwork('$SUBNET').cidr)")
+#NETWORKADDR=$(python3 -c "import netaddr; print(netaddr.IPNetwork('$SUBNET').network)")
+#HOSTMIN=$(python3 -c "import netaddr; print(netaddr.IPAddress(netaddr.IPNetwork('$SUBNET').first + 1))")
+#HOSTMAX=$(python3 -c "import netaddr; print(netaddr.IPAddress(netaddr.IPNetwork('$SUBNET').last - 1))")
+#BROADCAST=$(python3 -c "import netaddr; print(netaddr.IPNetwork('$SUBNET').broadcast)")
+#DHCPSTART=$(python3 -c "import ipaddress; print(ipaddress.ip_address('$HOSTMAX') - 5)")
+#DHCPEND=$(python3 -c "import ipaddress; print(ipaddress.ip_address('$HOSTMAX') - 1)")
+#IPSTART=$(python3 -c "import ipaddress; print(ipaddress.ip_address('$IP') + 1)")
+
+# Using python script `ipcalc.py` (adds ~1.6 KB to docker image)
 IP=$(ip addr show eth0 | mawk '/ inet / {print $2}' | mawk -F/ '{print $1}')
-NETMASK=$(python3 -c "import netaddr; print(netaddr.IPNetwork('$SUBNET').netmask)")
-NETMASKBITS=$(python3 -c "import netaddr; print(netaddr.IPNetwork('$SUBNET').prefixlen)")
-NETWORK=$(python3 -c "import netaddr; print(netaddr.IPNetwork('$SUBNET').cidr)")
-NETWORKADDR=$(python3 -c "import netaddr; print(netaddr.IPNetwork('$SUBNET').network)")
-HOSTMIN=$(python3 -c "import netaddr; print(netaddr.IPAddress(netaddr.IPNetwork('$SUBNET').first + 1))")
-HOSTMAX=$(python3 -c "import netaddr; print(netaddr.IPAddress(netaddr.IPNetwork('$SUBNET').last - 1))")
-BROADCAST=$(python3 -c "import netaddr; print(netaddr.IPNetwork('$SUBNET').broadcast)")
+NETMASK=$(/opt/ztp/scripts/ipcalc.py $SUBNET -f netmask | mawk '{print $2}')
+NETMASKBITS=$(/opt/ztp/scripts/ipcalc.py $SUBNET -f netmaskbits | mawk '{print $2}')
+NETWORK=$(/opt/ztp/scripts/ipcalc.py $SUBNET -f network | mawk '{print $2}')
+NETWORKADDR=$(/opt/ztp/scripts/ipcalc.py $SUBNET -f networkaddr | mawk '{print $2}')
+HOSTMIN=$(/opt/ztp/scripts/ipcalc.py $SUBNET -f hostmin | mawk '{print $2}')
+HOSTMAX=$(/opt/ztp/scripts/ipcalc.py $SUBNET -f hostmax | mawk '{print $2}')
+BROADCAST=$(/opt/ztp/scripts/ipcalc.py $SUBNET -f broadcast | mawk '{print $2}')
 DHCPSTART=$(python3 -c "import ipaddress; print(ipaddress.ip_address('$HOSTMAX') - 5)")
 DHCPEND=$(python3 -c "import ipaddress; print(ipaddress.ip_address('$HOSTMAX') - 1)")
 IPSTART=$(python3 -c "import ipaddress; print(ipaddress.ip_address('$IP') + 1)")
@@ -85,6 +130,13 @@ sed -Ei 's/^(\s+option subnet-mask).*/\1 '"$NETMASK"';/' /opt/ztp/scripts/ztp/dh
 sed -Ei 's/^(\s+option broadcast-address).*/\1 '"$BROADCAST"';/' /opt/ztp/scripts/ztp/dhcpd.conf.template 
 sed -Ei 's/^(\s+option (routers|domain-name-servers)) [0-9.]+;/\1 '"$IP"';/' /opt/ztp/scripts/ztp/dhcpd.conf.template
 sed -Ei 's/^([# ]+option (tftp-server-name)) "[0-9.]+";/\1 "'"$IP"'";/' /opt/ztp/scripts/ztp/dhcpd.conf.template
+
+
+## Start services
+## --Do not start the services it messes up isc-dhcp-server as the pid does not get removed--
+#service vsftpd start
+#service tftpd-hpa start
+#service isc-dhcp-server start
 
 
 # CD to script directory and run the python script

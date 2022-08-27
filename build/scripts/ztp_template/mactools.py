@@ -151,9 +151,15 @@ def get_oui(mac: str) -> str:
 def find_oui_org(mac: str) -> str:
     '''Takes a OUI and searches for the owning organization name.'''
     oui = get_oui(mac).upper()
-    ieee_oui_list = pathlib.Path('standards-oui.ieee.org.txt')
+    # Download from <https://standards-oui.ieee.org/oui/oui.txt>
+    # curl -O https://standards-oui.ieee.org/oui/oui.txt
+    ieee_oui_list = pathlib.Path('oui.txt')
     if not ieee_oui_list.exists():
-        raise Exception(f'File `{ieee_oui_list}` not found.')
+        raise Exception(
+        f'''File `{ieee_oui_list}` not found.
+Download from https://standards-oui.ieee.org/oui/oui.txt
+`curl -O https://standards-oui.ieee.org/oui/oui.txt`'''
+        )
     with open(ieee_oui_list, encoding='utf-8') as f:
         t = f.read()
     m = re.search(f'{oui}.*\\t+(?P<oui_org>.*)', t)
@@ -163,9 +169,13 @@ def find_oui_org(mac: str) -> str:
 
 def find_org_ouis(orgname: str) -> str: 
     '''Takes organization name or partial organization name and searches for the owning OUI(s).'''
-    ieee_oui_list = pathlib.Path('standards-oui.ieee.org.txt')
+    ieee_oui_list = pathlib.Path('oui.txt')
     if not ieee_oui_list.exists():
-        raise Exception(f'File `{ieee_oui_list}` not found.')
+        raise Exception(
+        f'''File `{ieee_oui_list}` not found.
+Download from https://standards-oui.ieee.org/oui/oui.txt
+`curl -O https://standards-oui.ieee.org/oui/oui.txt`'''
+        )
     with open(ieee_oui_list, encoding='utf-8') as f:
         t = f.read()
     m = re.findall(f'([0-9A-Fa-f]{{6}}).*\\t+.*{orgname}.*', t)
@@ -175,4 +185,3 @@ def find_org_ouis(orgname: str) -> str:
 
 if __name__ == '__main__':
     print(__doc__)
-

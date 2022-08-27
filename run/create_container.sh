@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-source config.txt
+source "$(dirname "$(realpath $0)")"/config.txt
 HUID=$(id -u)
 HGID=$(id -g)
 
@@ -10,11 +10,13 @@ sudo ip addr add "$GATEWAY"/32 dev "$HOSTNAME"-net
 sudo ip link set "$HOSTNAME"-net up
 sudo ip route add "$SUBNET" dev "$HOSTNAME"-net
 
+# Volume can be changed to another folder. For Example:
+# -v /home/"$USER"/Desktop/"$HOSTNAME":/opt/ztp/scripts/ftp \
 docker run -dit \
     --name "$HOSTNAME" \
     --network "$HOSTNAME"-br \
     -h "$HOSTNAME" \
-    -v "$(pwd)/ztp":/opt/ztp/scripts/ztp \
+    -v "$(pwd)"/ftp:/opt/ztp/scripts/ftp \
     -e TZ="$TZ" \
     -e HTTPPORT="$HTTPPORT" \
     -e HOSTNAME="$HOSTNAME" \

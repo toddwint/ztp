@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
-echo -e 'Stopping tailon...'
-
-kill $(pidof tailon)
+if [ ! -z "$(pidof tailon)" ]
+then
+    echo -e 'Stopping tailon...'
+    kill -9 $(pidof tailon)
+else
+    echo -e 'tailon is not running.'
+fi
