@@ -29,6 +29,11 @@ then
     kill $(pidof dhcpd)
 fi
 
+# remove dhcpd pid if exists
+if [ -e /var/run/dhcpd.pid ]
+then
+    rm -rf /var/run/dhcpd.pid
+fi
 
 # Check if ftp subfolder exists and copy template files if not
 # Checking for a subfolder because if the folder is mounted as a volume
@@ -60,6 +65,7 @@ fi
 
 # Configure isc-dhcp-server interfaces on which to listen
 sed -Ei 's/INTERFACESv4=""/INTERFACESv4="eth0"/' /etc/default/isc-dhcp-server
+sed -Ei 's/INTERFACESv6=""/#INTERFACESv6=""/' /etc/default/isc-dhcp-server
 
 
 # Get IP and subnet information and save to env variables
