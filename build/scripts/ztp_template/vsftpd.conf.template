@@ -1,5 +1,7 @@
 # List of all configuration options can be found at:
 # <http://vsftpd.beasts.org/vsftpd_conf.html>
+# or
+# <https://linux.die.net/man/5/vsftpd.conf>
 
 # If enabled, vsftpd will run in standalone mode. This means that vsftpd must not be run from an inetd of some kind. Instead, the vsftpd executable is run once directly. vsftpd itself will then take care of listening for and handling incoming connections.
 # Default: YES
@@ -139,3 +141,7 @@ allow_writeable_chroot=YES
 # This option is the name of the file loaded when the userlist_enable option is active.
 # Default: /etc/vsftpd.user_list
 #userlist_file=/etc/vsftpd/vsftpd.users
+
+#  If enabled, vsftpd will try and show session status information in the system process listing. In other words, the reported name of the process will change to reflect what a vsftpd session is doing (idle, downloading etc). You probably want to leave this off for security purposes. 
+# Default: NO
+setproctitle_enable=YES
