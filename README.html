@@ -231,7 +231,14 @@ sed -Ei &#39;s/\bIPADDR:HTTPPORTPLUSONE\b/&#39;&quot;$IP&quot;&#39;:&#39;&quot;$
 <p>See my github page (referenced above).</p>
 <h2 id="login-page">Login page</h2>
 <p>Open the <code>webadmin.html</code> file.</p>
-<p>Or just type in your browser <code>http://&lt;ip_address&gt;:&lt;port&gt;</code> or <code>http://&lt;ip_address&gt;:&lt;(port+1)&gt;</code></p>
+<p>Or just type in your browser:</p>
+<ul>
+<li><code>http://&lt;ip_address&gt;:&lt;port&gt;</code></li>
+</ul>
+<p>or</p>
+<ul>
+<li><code>http://&lt;ip_address&gt;:&lt;(port+1)&gt;</code></li>
+</ul>
 <h2 id="description-of-scripts">Description of scripts</h2>
 <h3 id="files-in-build-directory">Files in <code>build</code> directory</h3>
 <p>Files and subdirectories in <code>build</code> are used to create the docker image.</p>
@@ -283,6 +290,10 @@ sed -Ei &#39;s/\bIPADDR:HTTPPORTPLUSONE\b/&#39;&quot;$IP&quot;&#39;:&#39;&quot;$
 <h3 id="files-in-runexec-directory">Files in <code>run/exec</code> directory</h3>
 <p>These are files used to debug and manage the container while running.</p>
 <ul>
+<li>exec/clear_syslog_file.sh
+<ul>
+<li>Deletes or blanks the <code>/var/log/syslog</code> file. Removes old data.</li>
+</ul></li>
 <li>exec/dhcp_lease_list.sh
 <ul>
 <li>Shows the dhcp leases of unspecified hosts.</li>
@@ -291,7 +302,7 @@ sed -Ei &#39;s/\bIPADDR:HTTPPORTPLUSONE\b/&#39;&quot;$IP&quot;&#39;:&#39;&quot;$
 <ul>
 <li>Shows the ftp system processes and can show active transfers.</li>
 </ul></li>
-<li>exec/generate_dhcp_conf.sh
+<li>exec/generate_dhcpd_conf.sh
 <ul>
 <li>Run this to regenerate the DHCP server config and restart services after the ztp.csv file is updated.</li>
 </ul></li>

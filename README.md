@@ -90,7 +90,13 @@ See my github page (referenced above).
 
 Open the `webadmin.html` file.
 
-Or just type in your browser `http://<ip_address>:<port>` or `http://<ip_address>:<(port+1)>`
+Or just type in your browser:
+
+- `http://<ip_address>:<port>` 
+
+or 
+
+- `http://<ip_address>:<(port+1)>`
 
 
 ## Description of scripts
@@ -132,11 +138,13 @@ These are files used to manage the docker container. Create it, delete it, start
 
 These are files used to debug and manage the container while running.
 
+- exec/clear_syslog_file.sh
+    - Deletes or blanks the `/var/log/syslog` file. Removes old data.
 - exec/dhcp_lease_list.sh
     - Shows the dhcp leases of unspecified hosts.
 - exec/ftp_process_status.sh
     - Shows the ftp system processes and can show active transfers.
-- exec/generate_dhcp_conf.sh
+- exec/generate_dhcpd_conf.sh
   - Run this to regenerate the DHCP server config and restart services after the ztp.csv file is updated.
 - exec/kill_frontail.sh
     - Stops frontail.

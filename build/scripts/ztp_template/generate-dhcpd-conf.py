@@ -24,6 +24,7 @@ file_server = '192.168.10.1'
 gateway = '192.168.10.254'
 csv_filename = 'ztp.csv'
 csv_path = pathlib.Path('/opt/ztp/scripts/ftp')
+logfile = '/var/log/syslog'
 ftpd_daemon_name = 'vsftpd'
 tftpd_daemon_name = 'tftpd-hpa'
 dhcpd_daemon_name = 'isc-dhcp-server'
@@ -121,6 +122,11 @@ tftpd_tmp_config_file.write_text(tftpd_template.read_text())
 dhcpd_tmp_config_file.write_text(dhcpd_template.read_text())
 
 
+if not csv_filename.exists():
+    msg = f'[ERROR] `{csv_filename.name}` was not be found/read. Exiting.'
+    print(msg)
+    subprocess.run(f"echo '{msg}' >> {logfile}", shell=True)
+    raise(Exception(f'{msg}'))
 # Read the CSV file, store it, get the headers, and close the file 
 with open(csv_filename) as f:
     t = f.readlines()
@@ -128,39 +134,128 @@ reader_dict = csv.DictReader(t)
 columns_dict = {k:v for k,v in zip(columns, reader_dict.fieldnames)}
 
 # Do all the magic to the dhcpd file from the CSV information
-print('Creating new dhcpd.conf file from csv...')
+msg = '[INFO] Creating new dhcpd.conf file from csv.'
+print(msg)
+subprocess.run(f"echo '{msg}' >> {logfile}", shell=True)
 for n,row in enumerate(reader_dict, start=1):
+    output = client_templates
+    # Model / Hardware type
     hardware = row[columns_dict['hardware']]
     if not any(
             (model := x) for x in model_vendor 
             if x in re.sub('[ :.-]', '', hardware.lower())
             ):
-        print(f"Model `{hardware}` not found")
+        msg = f"[Warning] Line {n} of `{csv_filename.name}`: Hardware \
+`{hardware}` not found. Skipping device."
+        print(msg)
+        subprocess.run(f"echo '{msg}' >> {logfile}", shell=True)
         continue
+    # Create a hostname based on the model type and a unique number
     hostname = f'{model_vendor[model]}{n:03d}'
-    os_image = row[columns_dict['os']].strip()
-    config_file = row[columns_dict['config']].strip()
-    if gateway == ip_addr:
-        ip_addr += 1
+    # MAC ADDR
+    mac = row[columns_dict['mac']]
+    if not all((mac,mactools.is_mac(mac))):
+        msg = f'[Warning] Line {n} of `{csv_filename.name}`: Hardware \
+`{hardware}`, MAC `{mac}`. MAC not valid. Skipping device.'
+        print(msg)
+        subprocess.run(f"echo '{msg}' >> {logfile}", shell=True)
+        continue
     if model in increment_mac_list:
-        macaddr = mactools.incr_mac(row[columns_dict['mac']])
+        macaddr = mactools.incr_mac(mac)
     else:
-        macaddr = mactools.convert_to_str(row[columns_dict['mac']])
-    output = client_templates
-    if not os_image:
+        macaddr = mactools.convert_to_str(mac)
+    # OS image
+    ftp_os_path = ftpd_root_native_path / ftp_os_image_virtual_path
+    tftp_os_path = tftpd_root_native_path / tftp_os_image_virtual_path
+    os_image = os_file = row[columns_dict['os']].strip()
+    if os_image:
+        # Test if the file exists, but expect the user to forget the
+        # file ext and guess it for them. Select first match only.
+        ftp_os_files = sorted((ftp_os_path).glob(f'{os_image}.*'))
+        tftp_os_files = sorted((tftp_os_path).glob(f'{os_image}.*'))
+        if (ftp_os_path / os_image).exists():
+            os_file = (ftp_os_path / os_image).name
+        elif (tftp_os_path / os_image).exists():
+            os_file = (ftp_os_path / os_image).name
+        elif ftp_os_files:
+            os_file = min(ftp_os_files, key=lambda x: x.name).name
+            msg = f'[Warning] Line {n} of `{csv_filename.name}`: Hardware \
+`{hardware}`, MAC `{mac}`. OS file `{os_image}` was not found, but a similar \
+file `{os_file}` was. Adding that file to dhcpd instead.'
+            print(msg)
+            subprocess.run(f"echo '{msg}' >> {logfile}", shell=True)
+        elif tftp_os_files:
+            os_file = min(tftp_os_files, key=lambda x: x.name).name
+            msg = f'[Warning] Line {n} of `{csv_filename.name}`: Hardware \
+`{hardware}`, MAC `{mac}`. OS file `{os_image}` was not found, but a similar \
+file `{os_file}` was. Adding that file to dhcpd instead.'
+            print(msg)
+            subprocess.run(f"echo '{msg}' >> {logfile}", shell=True)
+        else:
+            os_file = ''
+    ftp_os_image = '/' / ftp_os_image_virtual_path / os_file
+    tftp_os_image = '/' / tftp_os_image_virtual_path / os_file
+    # Config file
+    ftp_cf_path = ftpd_root_native_path / ftp_config_file_virtual_path
+    tftp_cf_path = tftpd_root_native_path / tftp_config_file_virtual_path
+    config_file = cf_file = row[columns_dict['config']].strip()
+    if config_file:
+        # Test if the file exists, but expect the user to forget the
+        # file ext and guess it for them. Select first match only.
+        ftp_conf_files = sorted((ftp_cf_path).glob(f'{config_file}.*'))
+        tftp_conf_files = sorted((tftp_cf_path).glob(f'{config_file}.*'))
+        if (ftp_cf_path / config_file).exists():
+            cf_file = (ftp_cf_path / config_file).name
+        elif (tftp_cf_path / config_file).exists():
+            cf_file = (tftp_cf_path / config_file).name
+        elif ftp_conf_files:
+            cf_file = min(ftp_conf_files, key=lambda x: x.name).name
+            msg = f'[Warning] Line {n} of `{csv_filename.name}`: Hardware \
+`{hardware}`, MAC `{mac}`. Config file `{config_file}` was not found, but a \
+similar file `{cf_file}` was. Adding that file to dhcpd instead.'
+            print(msg)
+            subprocess.run(f"echo '{msg}' >> {logfile}", shell=True)
+        elif tftp_conf_files:
+            cf_file = min(tftp_conf_files, key=lambda x: x.name).name
+            msg = f'[Warning] Line {n} of `{csv_filename.name}`: Hardware \
+`{hardware}`, MAC `{mac}`. Config file `{config_file}` was not found, but a \
+similar file `{cf_file}` was. Adding that file to dhcpd instead.'
+            print(msg)
+            subprocess.run(f"echo '{msg}' >> {logfile}", shell=True)
+        else:
+            cf_file = ''
+    ftp_config_file = '/' / ftp_config_file_virtual_path / cf_file
+    tftp_config_file = '/' / tftp_config_file_virtual_path / cf_file
+    # Can't do anything without either an OS or a config file
+    if not os_file and not cf_file:
+        msg = f'[Warning] Line {n} of `{csv_filename.name}`: Hardware \
+`{hardware}`, MAC `{mac}`. OS file `{os_image}` nor config file \
+`{config_file}` were found in ftp/tftp folder. Skipping device'
+        print(msg)
+        subprocess.run(f"echo '{msg}' >> {logfile}", shell=True)
+        continue
+    if not os_file:
+        msg = f'[Warning] Line {n} of `{csv_filename.name}`: Hardware \
+`{hardware}`, MAC `{mac}`. OS file `{os_image}` was not found in ftp/tftp \
+folder. Skipping OS image.'
+        print(msg)
+        subprocess.run(f"echo '{msg}' >> {logfile}", shell=True)
         output = {
                 key:re.sub('.*os_image.*\n', '', template)
                 for key, template in output.items()
                 }
-    if not config_file:
+    if not cf_file:
+        msg = f'[Warning] Line {n} of `{csv_filename.name}`: Hardware \
+`{hardware}`, MAC `{mac}`. Config file `{config_file}` was not found in \
+ftp/tftp folder. Skipping config file'
+        print(msg)
+        subprocess.run(f"echo '{msg}' >> {logfile}", shell=True)
         output = {
                 key:re.sub('.*config_file.*\n', '', template)
                 for key, template in output.items()
                 }
-    ftp_os_image = '/' / ftp_os_image_virtual_path / os_image
-    ftp_config_file = '/' / ftp_config_file_virtual_path / config_file
-    tftp_os_image = '/' / tftp_os_image_virtual_path / os_image
-    tftp_config_file = '/' / tftp_config_file_virtual_path / config_file
+    if gateway == ip_addr:
+        ip_addr += 1
     output = output[model_vendor[model]].format_map(vars())
     with open('dhcpd.conf', mode='a') as f:
         f.write(output)
@@ -204,7 +299,8 @@ subprocess.run(['chmod', '755', '-R', ftpd_root_native_path])
 #subprocess.run(['chown', 'root:ftp', '-R', ftpd_root_native_path])
 subprocess.run(['chmod', '755', '-R', tftpd_root_native_path])
 #subprocess.run(['chown', 'root:tftp', '-R', tftpd_root_native_path])
-print(f'Permissions set for folders `{ftpd_root_native_path}` and `{tftpd_root_native_path}`')
+print(f'Permissions set for folders `{ftpd_root_native_path}` and \
+`{tftpd_root_native_path}`')
 
 # Restart FTP server daemon
 subprocess.run(['service', ftpd_daemon_name, 'stop'])
@@ -219,7 +315,8 @@ subprocess.run(['service', tftpd_daemon_name, 'status'])
 # Restart DHCP server daemon
 # delete any extra dhcpd pids
 subprocess.run(['service', dhcpd_daemon_name, 'stop'])
-subprocess.run('if [ ! -z "$(pidof dhcpd)" ]; then kill $(pidof dhcpd); fi', shell=True)
+subprocess.run('if [ ! -z "$(pidof dhcpd)" ]; \
+then kill $(pidof dhcpd); fi', shell=True)
 subprocess.run(['service', dhcpd_daemon_name, 'start'])
 subprocess.run(['service', dhcpd_daemon_name, 'status'])
 
@@ -232,12 +329,18 @@ print(f'Running command `./stop_frontail.sh`')
 subprocess.run('./stop_frontail.sh')
 print(f'Running command `./start_frontail.sh`')
 subprocess.run('./start_frontail.sh')
-print(f"Open your browser to `http://{file_server}:{os.environ['HTTPPORT']}`")
+print(f"Open your browser to \
+`http://{file_server}:{os.environ['HTTPPORT']}`")
 
 # Start Tailon to monitor the ZTP server
 print(f'Running command `./stop_tailon.sh`')
 subprocess.run('./stop_tailon.sh')
 print(f'Running command `./start_tailon.sh`')
 subprocess.run('./start_tailon.sh')
-print(f"Open your browser to `http://{file_server}:{int(os.environ['HTTPPORT'])+1}`")
+print(f"Open your browser to \
+`http://{file_server}:{int(os.environ['HTTPPORT'])+1}`")
 
+# Done. Ready to go
+msg = '[INFO] Finished reconfiguring files. Ready!'
+print(msg)
+subprocess.run(f"echo '{msg}' >> {logfile}", shell=True)
