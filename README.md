@@ -22,7 +22,7 @@ This image was created for a specific use case in a specific environment.
 - Modify it as you need and place it back in the same folder with the same name.
 - You can use the `csv_filter.py` or `csv_filter.sh` to create CSV files sorted by vendor or model and rename them to `ztp.csv` as needed.
 - Transfer the configuration files and os images to `ftp/os_images` and `ftp/config_files`.
-- Trigger the container to update by restarting it with `./restart.sh`, `./stop.sh` and `./start.sh`, or run `./exec/generate_dhcp_conf.sh`
+- Trigger the container to update by restarting it with `./restart.sh`, `./stop.sh` and `./start.sh`, or run `./exec/generate_dhcpd_conf.sh`
 - Open the file webadmin.html to:
     - View DHCP/FTP/TFTP messages in a web browser ([frontail](https://github.com/mthenw/frontail))
         - tail the file
