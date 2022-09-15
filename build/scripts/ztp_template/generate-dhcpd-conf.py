@@ -24,7 +24,7 @@ file_server = '192.168.10.1'
 gateway = '192.168.10.254'
 csv_filename = 'ztp.csv'
 csv_path = pathlib.Path('/opt/ztp/scripts/ftp')
-logfile = '/var/log/syslog'
+logtag = 'generate-dhcpd-conf.py'
 ftpd_daemon_name = 'vsftpd'
 tftpd_daemon_name = 'tftpd-hpa'
 dhcpd_daemon_name = 'isc-dhcp-server'
@@ -125,7 +125,7 @@ dhcpd_tmp_config_file.write_text(dhcpd_template.read_text())
 if not csv_filename.exists():
     msg = f'[ERROR] `{csv_filename.name}` was not be found/read. Exiting.'
     print(msg)
-    subprocess.run(f"echo '{msg}' >> {logfile}", shell=True)
+    subprocess.run(f"logger -t {logtag} '{msg}'", shell=True)
     raise(Exception(f'{msg}'))
 # Read the CSV file, store it, get the headers, and close the file 
 with open(csv_filename) as f:
@@ -136,7 +136,7 @@ columns_dict = {k:v for k,v in zip(columns, reader_dict.fieldnames)}
 # Do all the magic to the dhcpd file from the CSV information
 msg = '[INFO] Creating new dhcpd.conf file from csv.'
 print(msg)
-subprocess.run(f"echo '{msg}' >> {logfile}", shell=True)
+subprocess.run(f"logger -t {logtag} '{msg}'", shell=True)
 for n,row in enumerate(reader_dict, start=1):
     output = client_templates
     # Model / Hardware type
@@ -148,7 +148,7 @@ for n,row in enumerate(reader_dict, start=1):
         msg = f"[Warning] Line {n} of `{csv_filename.name}`: Hardware \
 `{hardware}` not found. Skipping device."
         print(msg)
-        subprocess.run(f"echo '{msg}' >> {logfile}", shell=True)
+        subprocess.run(f"logger -t {logtag} '{msg}'", shell=True)
         continue
     # Create a hostname based on the model type and a unique number
     hostname = f'{model_vendor[model]}{n:03d}'
@@ -158,7 +158,7 @@ for n,row in enumerate(reader_dict, start=1):
         msg = f'[Warning] Line {n} of `{csv_filename.name}`: Hardware \
 `{hardware}`, MAC `{mac}`. MAC not valid. Skipping device.'
         print(msg)
-        subprocess.run(f"echo '{msg}' >> {logfile}", shell=True)
+        subprocess.run(f"logger -t {logtag} '{msg}'", shell=True)
         continue
     if model in increment_mac_list:
         macaddr = mactools.incr_mac(mac)
@@ -183,14 +183,14 @@ for n,row in enumerate(reader_dict, start=1):
 `{hardware}`, MAC `{mac}`. OS file `{os_image}` was not found, but a similar \
 file `{os_file}` was. Adding that file to dhcpd instead.'
             print(msg)
-            subprocess.run(f"echo '{msg}' >> {logfile}", shell=True)
+            subprocess.run(f"logger -t {logtag} '{msg}'", shell=True)
         elif tftp_os_files:
             os_file = min(tftp_os_files, key=lambda x: x.name).name
             msg = f'[Warning] Line {n} of `{csv_filename.name}`: Hardware \
 `{hardware}`, MAC `{mac}`. OS file `{os_image}` was not found, but a similar \
 file `{os_file}` was. Adding that file to dhcpd instead.'
             print(msg)
-            subprocess.run(f"echo '{msg}' >> {logfile}", shell=True)
+            subprocess.run(f"logger -t {logtag} '{msg}'", shell=True)
         else:
             os_file = ''
     ftp_os_image = '/' / ftp_os_image_virtual_path / os_file
@@ -214,14 +214,14 @@ file `{os_file}` was. Adding that file to dhcpd instead.'
 `{hardware}`, MAC `{mac}`. Config file `{config_file}` was not found, but a \
 similar file `{cf_file}` was. Adding that file to dhcpd instead.'
             print(msg)
-            subprocess.run(f"echo '{msg}' >> {logfile}", shell=True)
+            subprocess.run(f"logger -t {logtag} '{msg}'", shell=True)
         elif tftp_conf_files:
             cf_file = min(tftp_conf_files, key=lambda x: x.name).name
             msg = f'[Warning] Line {n} of `{csv_filename.name}`: Hardware \
 `{hardware}`, MAC `{mac}`. Config file `{config_file}` was not found, but a \
 similar file `{cf_file}` was. Adding that file to dhcpd instead.'
             print(msg)
-            subprocess.run(f"echo '{msg}' >> {logfile}", shell=True)
+            subprocess.run(f"logger -t {logtag} '{msg}'", shell=True)
         else:
             cf_file = ''
     ftp_config_file = '/' / ftp_config_file_virtual_path / cf_file
@@ -232,14 +232,14 @@ similar file `{cf_file}` was. Adding that file to dhcpd instead.'
 `{hardware}`, MAC `{mac}`. OS file `{os_image}` nor config file \
 `{config_file}` were found in ftp/tftp folder. Skipping device'
         print(msg)
-        subprocess.run(f"echo '{msg}' >> {logfile}", shell=True)
+        subprocess.run(f"logger -t {logtag} '{msg}'", shell=True)
         continue
     if not os_file:
         msg = f'[Warning] Line {n} of `{csv_filename.name}`: Hardware \
 `{hardware}`, MAC `{mac}`. OS file `{os_image}` was not found in ftp/tftp \
 folder. Skipping OS image.'
         print(msg)
-        subprocess.run(f"echo '{msg}' >> {logfile}", shell=True)
+        subprocess.run(f"logger -t {logtag} '{msg}'", shell=True)
         output = {
                 key:re.sub('.*os_image.*\n', '', template)
                 for key, template in output.items()
@@ -249,7 +249,7 @@ folder. Skipping OS image.'
 `{hardware}`, MAC `{mac}`. Config file `{config_file}` was not found in \
 ftp/tftp folder. Skipping config file'
         print(msg)
-        subprocess.run(f"echo '{msg}' >> {logfile}", shell=True)
+        subprocess.run(f"logger -t {logtag} '{msg}'", shell=True)
         output = {
                 key:re.sub('.*config_file.*\n', '', template)
                 for key, template in output.items()
@@ -343,4 +343,4 @@ print(f"Open your browser to \
 # Done. Ready to go
 msg = '[INFO] Finished reconfiguring files. Ready!'
 print(msg)
-subprocess.run(f"echo '{msg}' >> {logfile}", shell=True)
+subprocess.run(f"logger -t {logtag} '{msg}'", shell=True)
