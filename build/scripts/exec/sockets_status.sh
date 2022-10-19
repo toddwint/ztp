@@ -1,3 +1,4 @@
 #!/usr/bin/env bash
-#ss -nap
+set -x
+ss -nap
 ss -nl

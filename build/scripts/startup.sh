@@ -8,10 +8,17 @@ echo $HOSTNAME > /etc/hostname
 
 # Disable rsyslog kernel logs and start rsyslogd
 sed -i '/imklog/s/^/#/' /etc/rsyslog.conf
-rm -rf /var/log/syslog
+if [ -e /opt/"$APPNAME"/scripts/.firstrun ]; then
+    rm -rf /var/log/syslog
+else 
+    truncate -s 0 /var/log/syslog
+fi
 #rsyslogd
 service rsyslog start
 logger "[Start of $APPNAME log file]"
+
+# Remove dhcpd pid if it exists
+rm -rf /var/run/dhcpd.pid
 
 # Unzip frontail and tailon
 gunzip /usr/local/bin/frontail.gz
@@ -122,10 +129,12 @@ service tftpd-hpa start
 service isc-dhcp-server start
 
 # Link the log to the app log
-mkdir -p /opt/"$APPNAME"/logs
-ln -s /var/log/syslog /opt/"$APPNAME"/logs/"$APPNAME".log
-# Didn't like the hard link
-#ln /var/mail/root /opt/"$APPNAME"/logs/"$APPNAME".log
+if [ -e /opt/"$APPNAME"/scripts/.firstrun ]; then
+    mkdir -p /opt/"$APPNAME"/logs
+    ln -s /var/log/syslog /opt/"$APPNAME"/logs/"$APPNAME".log
+    # Didn't like the hard link
+    #ln /var/mail/root /opt/"$APPNAME"/logs/"$APPNAME".log
+fi
 
 # Create logs folder and init files
 #mkdir -p /opt/"$APPNAME"/logs
@@ -151,6 +160,11 @@ nohup frontail -n "$NLINES" -p "$HTTPPORT3" /opt/"$APPNAME"/logs/"$APPNAME".log 
 sed -Ei 's/\$lines/'"$NLINES"'/' /opt/"$APPNAME"/scripts/tailon.toml
 sed -Ei '/^listen-addr = /c listen-addr = [":'"$HTTPPORT4"'"]' /opt/"$APPNAME"/scripts/tailon.toml
 nohup tailon -c /opt/"$APPNAME"/scripts/tailon.toml /opt/"$APPNAME"/logs/"$APPNAME".log /etc/dhcp/dhcpd.conf /etc/vsftpd.conf /etc/default/tftpd-hpa /var/lib/dhcp/dhcpd.leases /opt/"$APPNAME"/ftp/ztp.csv /opt/"$APPNAME"/logs/ttyd1.log /opt/"$APPNAME"/logs/ttyd2.log /opt/"$APPNAME"/logs/frontail.log /opt/"$APPNAME"/logs/tailon.log >> /opt/"$APPNAME"/logs/tailon.log 2>&1 &
+
+# Remove the .firstrun file if this is the first run
+if [ -e /opt/"$APPNAME"/scripts/.firstrun ]; then
+    rm -f /opt/"$APPNAME"/scripts/.firstrun
+fi
 
 # Keep docker running
 bash
