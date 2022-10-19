@@ -1,4 +1,4 @@
 TFTP_USERNAME="root"
-TFTP_DIRECTORY="/opt/ztp/scripts/ztp/ftp"
+TFTP_DIRECTORY="/opt/ztp/ftp"
 TFTP_ADDRESS=":69"
 TFTP_OPTIONS="--secure --create --verbosity 4"

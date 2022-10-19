@@ -1,33 +1,58 @@
 #!/usr/bin/env bash
-source "$(dirname "$(realpath $0)")"/config.txt
+REPO=toddwint
+APPNAME=ztp
 HUID=$(id -u)
 HGID=$(id -g)
+source "$(dirname "$(realpath $0)")"/config.txt
 
-# Make the macvlan needed to do DHCP
-docker network create -d macvlan --subnet="$SUBNET" --gateway="$GATEWAY" -o parent="$INTERFACE" "$HOSTNAME"-br
-sudo ip link add "$HOSTNAME"-net link "$INTERFACE" type macvlan mode bridge
-sudo ip addr add "$GATEWAY"/32 dev "$HOSTNAME"-net
-sudo ip link set "$HOSTNAME"-net up
-sudo ip route add "$SUBNET" dev "$HOSTNAME"-net
+# Make the macvlan needed to listen on ports
+# Set the IP on the host and add a route to the container
+docker network create -d macvlan --subnet="$SUBNET" --gateway="$GATEWAY" \
+  --aux-address="mgmt_ip=$MGMTIP" -o parent="$INTERFACE" \
+  "$HOSTNAME"
+sudo ip link add "$HOSTNAME" link "$INTERFACE" type macvlan mode bridge
+sudo ip addr add "$MGMTIP"/32 dev "$HOSTNAME"
+sudo ip link set "$HOSTNAME" up
+sudo ip route add "$IPADDR"/32 dev "$HOSTNAME"
 
-# Volume can be changed to another folder. For Example:
-# -v /home/"$USER"/Desktop/"$HOSTNAME":/opt/ztp/scripts/ftp \
+# Create the docker container
 docker run -dit \
     --name "$HOSTNAME" \
-    --network "$HOSTNAME"-br \
+    --network "$HOSTNAME" \
+    --ip $IPADDR \
     -h "$HOSTNAME" \
-    -v "$(pwd)"/ftp:/opt/ztp/scripts/ftp \
+    ` # Volume can be changed to another folder. For Example: ` \
+    ` # -v /home/"$USER"/Desktop/ftp:/opt/"$APPNAME"/ftp \ ` \
+    -v "$(dirname "$(realpath $0)")"/ftp:/opt/"$APPNAME"/ftp \
     -e TZ="$TZ" \
-    -e HTTPPORT="$HTTPPORT" \
-    -e HOSTNAME="$HOSTNAME" \
-    -e SUBNET="$SUBNET" \
+    -e MGMTIP="$MGMTIP" \
     -e GATEWAY="$GATEWAY" \
     -e HUID="$HUID" \
     -e HGID="$HGID" \
-    toddwint/ztp
+    -e HTTPPORT1="$HTTPPORT1" \
+    -e HTTPPORT2="$HTTPPORT2" \
+    -e HTTPPORT3="$HTTPPORT3" \
+    -e HTTPPORT4="$HTTPPORT4" \
+    -e HOSTNAME="$HOSTNAME" \
+    -e APPNAME="$APPNAME" \
+    `# --cap-add=NET_ADMIN \ ` \
+    ${REPO}/${APPNAME}
 
-# Get IP and subnet information and write over template files
-IP=$(docker exec "$HOSTNAME" ip addr show eth0 | sed -En 's/^\s+inet\s([0-9.]+).*/\1/p')
-cp webadmin.html.template webadmin.html
-sed -Ei 's/\bIPADDR:HTTPPORT\b/'"$IP"':'"$HTTPPORT"'/g' webadmin.html
-sed -Ei 's/\bIPADDR:HTTPPORTPLUSONE\b/'"$IP"':'"$(expr $HTTPPORT + 1)"'/g' webadmin.html
+# Create the webadmin html file from template
+htmltemplate="$(dirname "$(realpath $0)")"/webadmin.html.template
+htmlfile="$(dirname "$(realpath $0)")"/webadmin.html
+cp "$htmltemplate" "$htmlfile"
+sed -Ei 's/(Launch page for webadmin)/\1 - '"$HOSTNAME"'/g' "$htmlfile"
+sed -Ei 's/\bIPADDR:HTTPPORT1\b/'"$IPADDR"':'"$HTTPPORT1"'/g' "$htmlfile"
+sed -Ei 's/\bIPADDR:HTTPPORT2\b/'"$IPADDR"':'"$HTTPPORT2"'/g' "$htmlfile"
+sed -Ei 's/\bIPADDR:HTTPPORT3\b/'"$IPADDR"':'"$HTTPPORT3"'/g' "$htmlfile"
+sed -Ei 's/\bIPADDR:HTTPPORT4\b/'"$IPADDR"':'"$HTTPPORT4"'/g' "$htmlfile"
+
+# Give the user instructions and offer to launch webadmin page
+echo 'Open webadmin.html to use this application (`firefox webadmin.html &`)'
+read -rp 'Would you like me to open that now? [Y/n]: ' answer
+if [ -z ${answer} ]; then answer='y'; fi
+if [[ ${answer,,} =~ ^y ]] 
+then
+    firefox "$htmlfile" &
+fi

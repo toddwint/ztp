@@ -1,0 +1,25 @@
+title = "Tailon file viewer"
+relative-root = "/"
+listen-addr = [":8080"]
+allow-download = true
+allow-commands = ["tail", "grep", "sed", "awk"]
+
+[commands]
+
+[commands.tail]
+action = ["tail", "-n", "$lines", "-F", "$path"]
+
+[commands.grep]
+stdin = "tail"
+action = ["grep", "--text", "--line-buffered", "--color=never", "-e", "$script"]
+default = ".*"
+
+[commands.sed]
+stdin = "tail"
+action = ["sed", "-u", "-e", "$script"]
+default = "s/.*/&/"
+
+[commands.awk]
+stdin = "tail"
+action = ["awk", "--sandbox", "$script"]
+default = "{print $0; fflush()}"

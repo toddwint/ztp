@@ -155,11 +155,10 @@
 <body>
 <h1 id="toddwintztp">toddwint/ztp</h1>
 <h2 id="info">Info</h2>
-<p><a href="https://hub.docker.com/r/toddwint/ztp" class="uri">https://hub.docker.com/r/toddwint/ztp</a></p>
-<p><a href="https://github.com/toddwint/ztp" class="uri">https://github.com/toddwint/ztp</a></p>
-<p>ZTP (Zero-Touch Provisioning) docker image for Juniper SRX345, SRX1500, and HPE Aruba 2930F devices.</p>
-<p>This image was created for a specific use case in a specific environment.</p>
-<h2 id="features">Features</h2>
+<p><code>ztp</code> (Zero-Touch Provisioning) docker image for Juniper SRX345, SRX1500, and HPE Aruba 2930F devices.</p>
+<p>Docker Hub: <a href="https://hub.docker.com/r/toddwint/ztp" class="uri">https://hub.docker.com/r/toddwint/ztp</a></p>
+<p>GitHub: <a href="https://github.com/toddwint/ztp" class="uri">https://github.com/toddwint/ztp</a></p>
+<h2 id="overview">Overview</h2>
 <ul>
 <li>Performs Zero-Touch Provisioning of
 <ul>
@@ -168,218 +167,131 @@
 <li>HPE Aruba 2930F</li>
 </ul></li>
 <li>Download the image and start a new container. The folder <code>ftp</code> will be created as specified in the <code>create_container.sh</code> script.</li>
-<li>An example CSV file should be found in <code>ftp</code></li>
+<li>An example CSV file <code>ztp.csv</code> is created in the <code>ftp</code> volume on the first run.</li>
 <li>Fill in the file <code>ftp/ztp.csv</code> with a list of device hardware models, MACs, os image names, and configuration file names.</li>
-<li>Modify it as you need and place it back in the same folder with the same name.</li>
-<li>You can use the <code>csv_filter.py</code> or <code>csv_filter.sh</code> to create CSV files sorted by vendor or model and rename them to <code>ztp.csv</code> as needed.</li>
+<li>Modify it as you need (additional columns can be added after the last column) and place it back in the same folder with the same name.</li>
+<li>You can use the <code>csv_filter.py</code> or <code>csv_filter.sh</code> scripts in the <code>ftp</code> volume to create CSV files sorted by vendor or model and rename them to <code>ztp.csv</code> as needed. A backup of the original file is created named <code>ztp-all.csv</code>.</li>
 <li>Transfer the configuration files and os images to <code>ftp/os_images</code> and <code>ftp/config_files</code>.</li>
 <li>Trigger the container to update by restarting it with <code>./restart.sh</code>, <code>./stop.sh</code> and <code>./start.sh</code>, or run <code>./exec/generate_dhcpd_conf.sh</code></li>
-<li>Open the file webadmin.html to:
+<li>Open the file webadmin.html to view DHCP/FTP/TFTP messages in a web browser.</li>
+</ul>
+<h2 id="features">Features</h2>
 <ul>
-<li>View DHCP/FTP/TFTP messages in a web browser (<a href="https://github.com/mthenw/frontail">frontail</a>)
+<li>Ubuntu base image</li>
+<li>Plus:
 <ul>
-<li>tail the file</li>
-<li>pause the flow</li>
-<li>search through the flow</li>
-<li>highlight multiple rows</li>
+<li>ftp</li>
+<li>isc-dhcp-server</li>
+<li>rsyslog</li>
+<li>tftp</li>
+<li>tftpd-hpa</li>
+<li>vsftpd</li>
+<li>tmux</li>
+<li>python3-minimal</li>
+<li>iproute2</li>
+<li>tzdata</li>
+<li><a href="https://github.com/tsl0922/ttyd">ttyd</a>
+<ul>
+<li>View the terminal in your browser</li>
 </ul></li>
-<li>Alternatively, view the DHCP/FTP/TFTP messages and configuration files in a web browser (<a href="https://github.com/gvalkov/tailon">tailon</a>)</li>
+<li><a href="https://github.com/mthenw/frontail">frontail</a>
+<ul>
+<li>View logs in your browser</li>
+<li>Mark/Highlight logs</li>
+<li>Pause logs</li>
+<li>Filter logs</li>
+</ul></li>
+<li><a href="https://github.com/gvalkov/tailon">tailon</a>
+<ul>
+<li>View multiple logs and files in your browser</li>
+<li>User selectable <code>tail</code>, <code>grep</code>, <code>sed</code>, and <code>awk</code> commands</li>
+<li>Filter logs and files</li>
+<li>Download logs to your computer</li>
+</ul></li>
 </ul></li>
 </ul>
 <h2 id="sample-config.txt-file">Sample <code>config.txt</code> file</h2>
-<pre><code>TZ=America/Chicago
+<pre><code># To get a list of timezones view the files in `/usr/share/zoneinfo`
+TZ=UTC
+
+# The interface on which to set the IP. Run `ip -br a` to see a list
 INTERFACE=eth0
+
+# The IP address that will be set on the docker container
+# The last 4 IPs in the subnet are available for use.
+IPADDR=172.21.255.252
+
+# The IP address that will be set on the host to manage the docker container
+# The last 4 IPs in the subnet are available for use.
+MGMTIP=172.21.255.253
+
+# The IP subnet in the form subnet/cidr
 SUBNET=172.21.0.0/16
+
+# The IP of the gateway. 
+# Don&#39;t leave blank. Enter a valid ip from the subnet range
+# The last 4 IPs in the subnet are available for use.
 GATEWAY=172.21.255.254
-HTTPPORT=8080
+
+# The ports for web management access of the docker container.
+# ttyd tail, ttyd tmux, frontail, and tmux respectively
+HTTPPORT1=8080
+HTTPPORT2=8081
+HTTPPORT3=8082
+HTTPPORT4=8083
+
+# The hostname of the instance of the docker container
 HOSTNAME=ztpsrvr01</code></pre>
-<h2 id="sample-docker-create-container-command">Sample docker create container command</h2>
+<h2 id="sample-docker-run-script">Sample docker run script</h2>
 <pre><code>#!/usr/bin/env bash
-source &quot;$(dirname &quot;$(realpath $0)&quot;)&quot;/config.txt
+REPO=toddwint
+APPNAME=ztp
 HUID=$(id -u)
 HGID=$(id -g)
+source &quot;$(dirname &quot;$(realpath $0)&quot;)&quot;/config.txt
 
-# Make the macvlan needed to do DHCP
-docker network create -d macvlan --subnet=&quot;$SUBNET&quot; --gateway=&quot;$GATEWAY&quot; -o parent=&quot;$INTERFACE&quot; &quot;$HOSTNAME&quot;-br
-sudo ip link add &quot;$HOSTNAME&quot;-net link &quot;$INTERFACE&quot; type macvlan mode bridge
-sudo ip addr add &quot;$GATEWAY&quot;/32 dev &quot;$HOSTNAME&quot;-net
-sudo ip link set &quot;$HOSTNAME&quot;-net up
-sudo ip route add &quot;$SUBNET&quot; dev &quot;$HOSTNAME&quot;-net
+# Make the macvlan needed to listen on ports
+# Set the IP on the host and add a route to the container
+docker network create -d macvlan --subnet=&quot;$SUBNET&quot; --gateway=&quot;$GATEWAY&quot; \
+  --aux-address=&quot;mgmt_ip=$MGMTIP&quot; -o parent=&quot;$INTERFACE&quot; \
+  &quot;$HOSTNAME&quot;
+sudo ip link add &quot;$HOSTNAME&quot; link &quot;$INTERFACE&quot; type macvlan mode bridge
+sudo ip addr add &quot;$MGMTIP&quot;/32 dev &quot;$HOSTNAME&quot;
+sudo ip link set &quot;$HOSTNAME&quot; up
+sudo ip route add &quot;$IPADDR&quot;/32 dev &quot;$HOSTNAME&quot;
 
-# Volume can be changed to another folder. For Example:
-# -v /home/&quot;$USER&quot;/Desktop/&quot;$HOSTNAME&quot;:/opt/ztp/scripts/ftp \
+# Create the docker container
 docker run -dit \
     --name &quot;$HOSTNAME&quot; \
-    --network &quot;$HOSTNAME&quot;-br \
+    --network &quot;$HOSTNAME&quot; \
+    --ip $IPADDR \
     -h &quot;$HOSTNAME&quot; \
-    -v &quot;$(pwd)&quot;/ftp:/opt/ztp/scripts/ftp \
+    ` # Volume can be changed to another folder. For Example: ` \
+    ` # -v /home/&quot;$USER&quot;/Desktop/ftp:/opt/&quot;$APPNAME&quot;/ftp \ ` \
+    -v &quot;$(dirname &quot;$(realpath $0)&quot;)&quot;/ftp:/opt/&quot;$APPNAME&quot;/ftp \
     -e TZ=&quot;$TZ&quot; \
-    -e HTTPPORT=&quot;$HTTPPORT&quot; \
-    -e HOSTNAME=&quot;$HOSTNAME&quot; \
-    -e SUBNET=&quot;$SUBNET&quot; \
+    -e MGMTIP=&quot;$MGMTIP&quot; \
     -e GATEWAY=&quot;$GATEWAY&quot; \
     -e HUID=&quot;$HUID&quot; \
     -e HGID=&quot;$HGID&quot; \
-    toddwint/ztp
-
-# Get IP and subnet information and write over template files
-IP=$(docker exec &quot;$HOSTNAME&quot; ip addr show eth0 | sed -En &#39;s/^\s+inet\s([0-9.]+).*/\1/p&#39;)
-cp webadmin.html.template webadmin.html
-sed -Ei &#39;s/\bIPADDR:HTTPPORT\b/&#39;&quot;$IP&quot;&#39;:&#39;&quot;$HTTPPORT&quot;&#39;/g&#39; webadmin.html
-sed -Ei &#39;s/\bIPADDR:HTTPPORTPLUSONE\b/&#39;&quot;$IP&quot;&#39;:&#39;&quot;$(expr $HTTPPORT + 1)&quot;&#39;/g&#39; webadmin.html</code></pre>
-<h2 id="sample-webadmin.html.template-file">Sample webadmin.html.template file</h2>
-<p>See my github page (referenced above).</p>
+    -e HTTPPORT1=&quot;$HTTPPORT1&quot; \
+    -e HTTPPORT2=&quot;$HTTPPORT2&quot; \
+    -e HTTPPORT3=&quot;$HTTPPORT3&quot; \
+    -e HTTPPORT4=&quot;$HTTPPORT4&quot; \
+    -e HOSTNAME=&quot;$HOSTNAME&quot; \
+    -e APPNAME=&quot;$APPNAME&quot; \
+    `# --cap-add=NET_ADMIN \ ` \
+    ${REPO}/${APPNAME}</code></pre>
 <h2 id="login-page">Login page</h2>
 <p>Open the <code>webadmin.html</code> file.</p>
-<p>Or just type in your browser:</p>
 <ul>
-<li><code>http://&lt;ip_address&gt;:&lt;port&gt;</code></li>
-</ul>
-<p>or</p>
+<li>Or just type in your browser:
 <ul>
-<li><code>http://&lt;ip_address&gt;:&lt;(port+1)&gt;</code></li>
-</ul>
-<h2 id="description-of-scripts">Description of scripts</h2>
-<h3 id="files-in-build-directory">Files in <code>build</code> directory</h3>
-<p>Files and subdirectories in <code>build</code> are used to create the docker image.</p>
-<p>A user can clone the project as modify these files as needed to create their own image.</p>
-<h3 id="files-in-run-directory">Files in <code>run</code> directory</h3>
-<p>These are files used to manage the docker container. Create it, delete it, start, and stop it.</p>
-<ul>
-<li>config.txt
-<ul>
-<li>User defined variables for the container instance.</li>
-</ul></li>
-<li>create_container.sh
-<ul>
-<li>Creates a networking interface, creates a container, and the webadmin.html file.</li>
-</ul></li>
-<li>delete_container.sh
-<ul>
-<li>Remove the networking interfaces, deletes the container.</li>
-</ul></li>
-<li>is_running.sh
-<ul>
-<li>Displays a message whether the container is running or not.</li>
-</ul></li>
-<li>restart.sh
-<ul>
-<li>Restarts the running container. Useful when modifying the ztp.csv file.</li>
-</ul></li>
-<li>rm_ftp_dir.sh
-<ul>
-<li>Removes the container volume if for some reason the user wants to start fresh.</li>
-</ul></li>
-<li>start.sh
-<ul>
-<li>Starts the container. Useful when modifying the ztp.csv file or running the container at a later time.</li>
-</ul></li>
-<li>stop.sh
-<ul>
-<li>Stops the container. Useful when modifying the ztp.csv file or running the container at a later time.</li>
-</ul></li>
-<li>webadmin.html.template
-<ul>
-<li>A template webadmin file that is updated with the IP and PORT of the container when it is created.</li>
-</ul></li>
-<li>webadmin.md
-<ul>
-<li>A template webadmin file used to create webadmin.html.template.</li>
+<li><code>http://&lt;ip_address&gt;:&lt;port1&gt;</code> or</li>
+<li><code>http://&lt;ip_address&gt;:&lt;port2&gt;</code> or</li>
+<li><code>http://&lt;ip_address&gt;:&lt;port3&gt;</code></li>
+<li><code>http://&lt;ip_address&gt;:&lt;port4&gt;</code></li>
 </ul></li>
 </ul>
-<h3 id="files-in-runexec-directory">Files in <code>run/exec</code> directory</h3>
-<p>These are files used to debug and manage the container while running.</p>
-<ul>
-<li>exec/clear_syslog_file.sh
-<ul>
-<li>Deletes or blanks the <code>/var/log/syslog</code> file. Removes old data.</li>
-</ul></li>
-<li>exec/dhcp_lease_list.sh
-<ul>
-<li>Shows the dhcp leases of unspecified hosts.</li>
-</ul></li>
-<li>exec/ftp_process_status.sh
-<ul>
-<li>Shows the ftp system processes and can show active transfers.</li>
-</ul></li>
-<li>exec/generate_dhcpd_conf.sh
-<ul>
-<li>Run this to regenerate the DHCP server config and restart services after the ztp.csv file is updated.</li>
-</ul></li>
-<li>exec/kill_frontail.sh
-<ul>
-<li>Stops frontail.</li>
-</ul></li>
-<li>exec/kill_tailon.sh
-<ul>
-<li>Stops tailon.</li>
-</ul></li>
-<li>exec/processes_status.sh
-<ul>
-<li>Shows the processes running on the container.</li>
-</ul></li>
-<li>exec/restart_dhcpd.sh
-<ul>
-<li>Restarts the DHCP server on the container.</li>
-</ul></li>
-<li>exec/restart_frontail.sh
-<ul>
-<li>Stops and starts frontail.</li>
-</ul></li>
-<li>exec/restart_tailon.sh
-<ul>
-<li>Stops and starts tailon.</li>
-</ul></li>
-<li>exec/restart_tftpd-hpa.sh
-<ul>
-<li>Restarts the TFTP server on the container.</li>
-</ul></li>
-<li>exec/restart_vsftpd.sh
-<ul>
-<li>Restarts the FTP server on the container.</li>
-</ul></li>
-<li>exec/run_frontail.sh
-<ul>
-<li>Starts frontail.</li>
-</ul></li>
-<li>exec/run_tailon.sh
-<ul>
-<li>Starts tailon.</li>
-</ul></li>
-<li>exec/services_status.sh
-<ul>
-<li>Shows the status of the services isc-dhcp-server, vsftpd, tftpd-hpa, frontail, and tailon.</li>
-</ul></li>
-<li>exec/show_ip_addr.sh
-<ul>
-<li>Shows the IP address of the container.</li>
-</ul></li>
-<li>exec/sockets_status.sh
-<ul>
-<li>Shows the active sockets on the container.</li>
-</ul></li>
-<li>exec/tail_syslog.sh
-<ul>
-<li>Alternatively to webadmin.html, this can show the DHCP/FTP/TFTP logs on the container.</li>
-</ul></li>
-<li>exec/view_dhcpd_conf.sh
-<ul>
-<li>Print the contents of <code>dhcpd.conf</code> to the terminal.</li>
-</ul></li>
-<li>exec/view_tftpd-hpa_conf.sh
-<ul>
-<li>Print the contents of <code>tftpd-hpa</code> to the terminal.</li>
-</ul></li>
-<li>exec/view_vsftpd_conf.sh
-<ul>
-<li>Print the contents of <code>vsftpd.conf</code> to the terminal.</li>
-</ul></li>
-<li>exec/view_ztp_csv.sh
-<ul>
-<li>Print the contents of <code>ztp.csv</code> to the terminal.</li>
-</ul></li>
-</ul>
-<h2 id="issues">Issues?</h2>
-<p>Make sure if you set the correct interface name and an IP is not needed. Delete the container and try again if your adapter was not specified correctly.</p>
 </body>
 </html>

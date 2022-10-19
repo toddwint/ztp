@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
+APPNAME=ztp
 source "$(dirname "$(dirname "$(realpath $0)")")"/config.txt
-
-docker exec "$HOSTNAME" ip addr show eth0
+docker exec -it "$HOSTNAME" tmux kill-session -t "$APPNAME"

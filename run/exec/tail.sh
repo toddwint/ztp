@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
+APPNAME=ztp
 source "$(dirname "$(dirname "$(realpath $0)")")"/config.txt
-
-docker exec "$HOSTNAME" /opt/ztp/scripts/ztp/stop_tailon.sh
+docker exec -it -w /opt/"$APPNAME"/scripts "$HOSTNAME" ./tail.sh
