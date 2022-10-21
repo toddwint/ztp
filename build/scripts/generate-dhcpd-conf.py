@@ -6,7 +6,7 @@
  Script will replace the dhcpd, tftp, and ftp configuration files,
  and then restart the processes.
 '''
-__version__ = '0.0.6'
+__version__ = '0.0.7'
 
 from syslog import syslog
 import argparse
@@ -124,11 +124,15 @@ with open(csv_filename) as f:
 reader_dict = csv.DictReader(t)
 columns_dict = {k:v for k,v in zip(columns, reader_dict.fieldnames)}
 
+# We'll check for duplicates at the end and prompt the user.
+# Since we need to loop over the CSV twice, store it into a dict `d`
+d = [row for row in reader_dict]
+
 # Do all the magic to the dhcpd file from the CSV information
 msg = '[INFO] Creating new dhcpd.conf file from csv.'
 print(msg)
 syslog(msg)
-for n,row in enumerate(reader_dict, start=1):
+for n,row in enumerate(d, start=1):
     while True:
         if any((
             gateway == ip_addr, 
@@ -267,6 +271,50 @@ ftp/tftp folder. Skipping config file'
     with open(dhcpd_tmp_config_file, mode='a') as f:
         f.write(output)
     ip_addr += 1
+
+# Now we search for duplicates and notify the user of any
+m = tuple(row[columns_dict['mac']] for row in d)
+c = tuple(row[columns_dict['config']] for row in d)
+
+# Search for duplicate MACs first
+if len(m) != len(set(m)):
+    msg = '[NOTICE] ***Duplicate MACs found!***'
+    print(msg)
+    syslog(msg)
+    unique_macs = set()
+    dup_pos_macs = []
+    for n, v in enumerate(m):
+        if v == '':
+            continue
+        if not v in unique_macs:
+            unique_macs.add(v)
+        else:
+            dup_pos_macs.append(n)
+    for n in dup_pos_macs:
+        msg = f"[NOTICE] Line {n+1} of `{csv_filename.name}`: \
+Duplicate MAC. {d[n][columns_dict['mac']]}"
+        print(msg)
+        syslog(msg)
+
+# Now search for duplicate configs
+if len(c) != len(set(c)):
+    msg = '[NOTICE] ***Duplicate config files found!***'
+    print(msg)
+    syslog(msg)
+    unique_configs = set()
+    dup_pos_configs = []
+    for n, v in enumerate(c):
+        if v == '':
+            continue
+        if not v in unique_configs:
+            unique_configs.add(v)
+        else:
+            dup_pos_configs.append(n)
+    for n in dup_pos_configs:
+        msg = f"[NOTICE] Line {n+1} of `{csv_filename.name}`: \
+Duplicate config file. {d[n][columns_dict['config']]}"
+        print(msg)
+        syslog(msg)
 
 # Set IP after static hosts as the start of the dynamic range 
 # unless the range is already exhausted
