@@ -11,3 +11,6 @@
 
 ## Tailon webadmin page
 <http://IPADDR:HTTPPORT4>
+
+## webfs webadmin page
+<http://IPADDR:80>

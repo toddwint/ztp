@@ -29,12 +29,13 @@ GitHub: <https://github.com/toddwint/ztp>
 
 - Ubuntu base image
 - Plus:
-  - ftp
-  - isc-dhcp-server
   - rsyslog
+  - isc-dhcp-server
+  - ftp
+  - vsftpd
   - tftp
   - tftpd-hpa
-  - vsftpd
+  - webfs
   - tmux
   - python3-minimal
   - iproute2

@@ -13,13 +13,13 @@ ENV DEBIAN_FRONTEND=noninteractive \
 RUN apt-get update \
     && \
     apt-get install -y \
-    ftp \
-    isc-dhcp-server \
-    webfs \
     rsyslog \
-    tftp \
-    tftpd-hpa \
+    isc-dhcp-server \
+    ftp \
     vsftpd \
+    tftp-hpa \
+    tftpd-hpa \
+    webfs \
     && \
     echo $HOSTNAME > /etc/hostname \
     && \

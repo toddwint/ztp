@@ -47,6 +47,7 @@ sed -Ei 's/\bIPADDR:HTTPPORT1\b/'"$IPADDR"':'"$HTTPPORT1"'/g' "$htmlfile"
 sed -Ei 's/\bIPADDR:HTTPPORT2\b/'"$IPADDR"':'"$HTTPPORT2"'/g' "$htmlfile"
 sed -Ei 's/\bIPADDR:HTTPPORT3\b/'"$IPADDR"':'"$HTTPPORT3"'/g' "$htmlfile"
 sed -Ei 's/\bIPADDR:HTTPPORT4\b/'"$IPADDR"':'"$HTTPPORT4"'/g' "$htmlfile"
+sed -Ei 's/\bIPADDR:80\b/'"$IPADDR"':80/g' "$htmlfile"
 
 # Give the user instructions and offer to launch webadmin page
 echo 'Open webadmin.html to use this application (`firefox webadmin.html &`)'

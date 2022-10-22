@@ -100,12 +100,9 @@ export GATEWAY
 cp /opt/"$APPNAME"/scripts/dhcpd.conf.template /opt/"$APPNAME"/scripts/dhcpd.conf
 cp /opt/"$APPNAME"/scripts/vsftpd.conf.template /opt/"$APPNAME"/scripts/vsftpd.conf
 cp /opt/"$APPNAME"/scripts/tftpd-hpa.template /opt/"$APPNAME"/scripts/tftpd-hpa
+cp /opt/"$APPNAME"/scripts/webfsd.conf.template /opt/"$APPNAME"/scripts/webfsd.conf
 
 # Python generate-dhcpd-conf.py modifications
-#sed -Ei 's/^(#?starting_ip_addr =).*192.168.*/\1 '"'$IPSTART'"'/' /opt/"$APPNAME"/scripts/generate-dhcpd-conf.py 
-#sed -Ei 's/^(#?mgmt_ip_addr =).*192.168.*/\1 '"'$MGMTIP'"'/' /opt/"$APPNAME"/scripts/generate-dhcpd-conf.py 
-#sed -Ei 's/^(file_server =).*192.168.*/\1 '"'$IP'"'/' /opt/"$APPNAME"/scripts/generate-dhcpd-conf.py
-#sed -Ei 's/^(gateway =).*192.168.*/\1 '"'$GATEWAY'"'/' /opt/"$APPNAME"/scripts/generate-dhcpd-conf.py
 sed -i 's#/opt/ztp/#/opt/'"$APPNAME"'/#' /opt/"$APPNAME"/scripts/generate-dhcpd-conf.py
 
 # isc-dhcp-server template modifications
@@ -123,22 +120,25 @@ sed -Ei 's#^(xferlog_file=).*#\1/opt/'"$APPNAME"'/logs/vsftpd_xfers.log#' /opt/"
 # tftpd-hpa template modifications
 sed -Ei 's#^(TFTP_DIRECTORY).*#\1="/opt/'"$APPNAME"'/ftp"#' /opt/"$APPNAME"/scripts/tftpd-hpa
 
+# webfsd template modifications
+sed -Ei '/^web_root=/c web_root="/opt/'"$APPNAME"'/ftp"' /opt/"$APPNAME"/scripts/webfsd.conf
+#sed -Ei '/^web_accesslog=/c web_accesslog="/opt/'"$APPNAME"'/logs/webfsd.log"' /opt/"$APPNAME"/scripts/webfsd.conf
+
 # Copy templates to configuration locations
 cp /opt/"$APPNAME"/scripts/dhcpd.conf /etc/dhcp/dhcpd.conf
 cp /opt/"$APPNAME"/scripts/vsftpd.conf /etc/vsftpd.conf
 cp /opt/"$APPNAME"/scripts/tftpd-hpa /etc/default/tftpd-hpa
+cp /opt/"$APPNAME"/scripts/webfsd.conf /etc/webfsd.conf
 
 # Run the python script
 /opt/"$APPNAME"/scripts/generate-dhcpd-conf.py
 
-# Start services
-service vsftpd start
-service tftpd-hpa start
-service isc-dhcp-server start
-
 # Link the log to the app log
 if [ -e /opt/"$APPNAME"/scripts/.firstrun ]; then
     mkdir -p /opt/"$APPNAME"/logs
+    truncate -s 0 /opt/"$APPNAME"/logs/vsftpd_xfers.log
+    #touch /opt/"$APPNAME"/logs/webfsd.log
+    #truncate -s 0 /opt/"$APPNAME"/logs/webfsd.log
     ln -s /var/log/syslog /opt/"$APPNAME"/logs/"$APPNAME".log
     # Didn't like the hard link
     #ln /var/mail/root /opt/"$APPNAME"/logs/"$APPNAME".log
@@ -150,6 +150,12 @@ fi
 #truncate -s 0 /opt/"$APPNAME"/logs/"$APPNAME".log
 #echo "$(date -Is) [Start of $APPNAME log file]" >> /opt/"$APPNAME"/logs/"$APPNAME".log
 #logger "[Start of $APPNAME log file]"
+
+# Start services
+service vsftpd start
+service tftpd-hpa start
+service isc-dhcp-server start
+service webfs start
 
 # Start web interface
 NLINES=1000

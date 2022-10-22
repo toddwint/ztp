@@ -162,5 +162,7 @@
 <p><a href="http://IPADDR:HTTPPORT3" class="uri">http://IPADDR:HTTPPORT3</a></p>
 <h2 id="tailon-webadmin-page">Tailon webadmin page</h2>
 <p><a href="http://IPADDR:HTTPPORT4" class="uri">http://IPADDR:HTTPPORT4</a></p>
+<h2 id="webfs-webadmin-page">webfs webadmin page</h2>
+<p><a href="http://IPADDR:80" class="uri">http://IPADDR:80</a></p>
 </body>
 </html>
