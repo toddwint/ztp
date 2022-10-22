@@ -275,46 +275,44 @@ m = tuple(row[columns_dict['mac']] for row in d)
 c = tuple(row[columns_dict['config']] for row in d)
 
 # Search for duplicate MACs first
-if len(m) != len(set(m)):
-    unique_macs = set()
-    dup_pos_macs = []
-    for n, v in enumerate(m):
-        if v == '':
-            continue
-        if not v in unique_macs:
-            unique_macs.add(v)
-        else:
-            dup_pos_macs.append(n)
-    if dup_pos_macs:
-        msg = '[NOTICE] ***Duplicate MACs found!***'
-        print(msg)
-        syslog(msg)
-    for n in dup_pos_macs:
-        msg = f"[NOTICE] Line {n+1} of `{csv_filename.name}`: \
+unique_macs = set()
+dup_pos_macs = []
+for n, v in enumerate(m):
+    if v == '':
+        continue
+    if not v in unique_macs:
+        unique_macs.add(v)
+    else:
+        dup_pos_macs.append(n)
+if dup_pos_macs:
+    msg = '[NOTICE] ***Duplicate MACs found!***'
+    print(msg)
+    syslog(msg)
+for n in dup_pos_macs:
+    msg = f"[NOTICE] Line {n+1} of `{csv_filename.name}`: \
 Duplicate MAC. {d[n][columns_dict['mac']]}"
-        print(msg)
-        syslog(msg)
+    print(msg)
+    syslog(msg)
 
 # Now search for duplicate configs
-if len(c) != len(set(c)):
-    unique_configs = set()
-    dup_pos_configs = []
-    for n, v in enumerate(c):
-        if v == '':
-            continue
-        if not v in unique_configs:
-            unique_configs.add(v)
-        else:
-            dup_pos_configs.append(n)
-    if dup_pos_configs:
-        msg = '[NOTICE] ***Duplicate config files found!***'
-        print(msg)
-        syslog(msg)
-    for n in dup_pos_configs:
-        msg = f"[NOTICE] Line {n+1} of `{csv_filename.name}`: \
+unique_configs = set()
+dup_pos_configs = []
+for n, v in enumerate(c):
+    if v == '':
+        continue
+    if not v in unique_configs:
+        unique_configs.add(v)
+    else:
+        dup_pos_configs.append(n)
+if dup_pos_configs:
+    msg = '[NOTICE] ***Duplicate config files found!***'
+    print(msg)
+    syslog(msg)
+for n in dup_pos_configs:
+    msg = f"[NOTICE] Line {n+1} of `{csv_filename.name}`: \
 Duplicate config file. {d[n][columns_dict['config']]}"
-        print(msg)
-        syslog(msg)
+    print(msg)
+    syslog(msg)
 
 # Set IP after static hosts as the start of the dynamic range 
 # unless the range is already exhausted
