@@ -7,14 +7,21 @@ dpkg-reconfigure --frontend noninteractive tzdata
 echo $HOSTNAME > /etc/hostname
 
 # Disable rsyslog kernel logs and start rsyslogd
-sed -i '/imklog/s/^/#/' /etc/rsyslog.conf
 if [ -e /opt/"$APPNAME"/scripts/.firstrun ]; then
+    sed -Ei '/imklog/s/^([^#])/#\1/' /etc/rsyslog.conf
+    sed -Ei '/immark/s/^#//' /etc/rsyslog.conf
     rm -rf /var/log/syslog
 else 
     truncate -s 0 /var/log/syslog
 fi
 #rsyslogd
 service rsyslog start
+if [ -z $(pidof rsyslogd) ]; then 
+    echo 'rsyslog not running'
+    service rsyslog start
+else 
+    echo 'rsyslog is running' 
+fi
 logger "[Start of $APPNAME log file]"
 
 # Remove dhcpd pid if it exists
@@ -110,7 +117,8 @@ sed -Ei 's/^(\s+option (routers|domain-name-servers)) [0-9.]+;/\1 '"$IP"';/' /op
 sed -Ei 's/^([# ]+option (tftp-server-name)) "[0-9.]+";/\1 "'"$IP"'";/' /opt/"$APPNAME"/scripts/dhcpd.conf
 
 # vsftpd template modifications
-sed -Ei 's#^((anon|local)_root).*#\1=/opt/'"$APPNAME"'/ftp#' /opt/"$APPNAME"/scripts/vsftpd.conf
+sed -Ei 's#^((anon|local)_root=).*#\1/opt/'"$APPNAME"'/ftp#' /opt/"$APPNAME"/scripts/vsftpd.conf
+sed -Ei 's#^(xferlog_file=).*#\1/opt/'"$APPNAME"'/logs/vsftpd_xfers.log#' /opt/"$APPNAME"/scripts/vsftpd.conf
 
 # tftpd-hpa template modifications
 sed -Ei 's#^(TFTP_DIRECTORY).*#\1="/opt/'"$APPNAME"'/ftp"#' /opt/"$APPNAME"/scripts/tftpd-hpa
@@ -159,7 +167,7 @@ nohup ttyd -p "$HTTPPORT2" -t titleFixed="${APPNAME}|${APPNAME}.log" -t fontSize
 nohup frontail -n "$NLINES" -p "$HTTPPORT3" /opt/"$APPNAME"/logs/"$APPNAME".log >> /opt/"$APPNAME"/logs/frontail.log 2>&1 &
 sed -Ei 's/\$lines/'"$NLINES"'/' /opt/"$APPNAME"/scripts/tailon.toml
 sed -Ei '/^listen-addr = /c listen-addr = [":'"$HTTPPORT4"'"]' /opt/"$APPNAME"/scripts/tailon.toml
-nohup tailon -c /opt/"$APPNAME"/scripts/tailon.toml /opt/"$APPNAME"/logs/"$APPNAME".log /etc/dhcp/dhcpd.conf /etc/vsftpd.conf /etc/default/tftpd-hpa /var/lib/dhcp/dhcpd.leases /opt/"$APPNAME"/ftp/ztp.csv /opt/"$APPNAME"/logs/ttyd1.log /opt/"$APPNAME"/logs/ttyd2.log /opt/"$APPNAME"/logs/frontail.log /opt/"$APPNAME"/logs/tailon.log >> /opt/"$APPNAME"/logs/tailon.log 2>&1 &
+nohup tailon -c /opt/"$APPNAME"/scripts/tailon.toml /opt/"$APPNAME"/logs/"$APPNAME".log /opt/"$APPNAME"/logs/vsftpd_xfers.log /etc/dhcp/dhcpd.conf /etc/vsftpd.conf /etc/default/tftpd-hpa /var/lib/dhcp/dhcpd.leases /opt/"$APPNAME"/ftp/ztp.csv /opt/"$APPNAME"/logs/ttyd1.log /opt/"$APPNAME"/logs/ttyd2.log /opt/"$APPNAME"/logs/frontail.log /opt/"$APPNAME"/logs/tailon.log >> /opt/"$APPNAME"/logs/tailon.log 2>&1 &
 
 # Remove the .firstrun file if this is the first run
 if [ -e /opt/"$APPNAME"/scripts/.firstrun ]; then

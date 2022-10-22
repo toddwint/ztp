@@ -27,17 +27,12 @@ dhcp_start = os.environ['DHCPSTART']
 dhcp_end = os.environ['DHCPEND']
 csv_filename = 'ztp.csv'
 csv_path = pathlib.Path('/opt/ztp/ftp')
-#logtag = 'generate-dhcpd-conf.py'
 dhcpd_daemon_name = 'isc-dhcp-server'
 dhcpd_template = '/opt/ztp/scripts/dhcpd.conf'
 dhcpd_tmp_config_file = '/opt/ztp/scripts/dhcpd.py.conf'
 dhcpd_config_file_loc = '/etc/dhcp/dhcpd.conf'
-# ftpd_root_native_path and tftpd_root_native_path use current dir
-# as the base path.
-# DO NOT PUT A LEADING SLASH '/' character inside the quotes.
-# A trailing slash is ok.
-ftpd_root_native_path = pathlib.Path('/opt/ztp/').resolve() / 'ftp'  # *see note above
-tftpd_root_native_path = pathlib.Path('/opt/ztp/').resolve() / 'ftp' # *see note above
+ftpd_root_native_path = pathlib.Path('/opt/ztp/ftp')
+tftpd_root_native_path = pathlib.Path('/opt/ztp/ftp')
 ftp_os_image_virtual_path = '/os_images/' 
 ftp_config_file_virtual_path = '/config_files/' 
 tftp_os_image_virtual_path = '/os_images/' 
@@ -114,7 +109,7 @@ print(f'Making `{dhcpd_tmp_config_file}` from `{dhcpd_template}`')
 dhcpd_tmp_config_file.write_text(dhcpd_template.read_text())
 
 if not csv_filename.exists():
-    msg = f'[ERROR] `{csv_filename.name}` was not be found/read. Exiting.'
+    msg = f'[ERROR] `{csv_filename.name}` was not found. Exiting.'
     print(msg)
     syslog(msg)
     raise(Exception(f'{msg}'))
@@ -147,7 +142,8 @@ gateway, or mgmt_ip. It is being skipped."
         else:
             break
     if ip_addr >= dhcp_start:
-        msg = f"[Warning] IP range has been exhausted. Current IP: `{ip_addr}`. No additional devices will be added."
+        msg = f"[Warning] IP range has been exhausted. \
+Current IP: `{ip_addr}`. No additional devices will be added."
         print(msg)
         syslog(msg)
         break
@@ -167,7 +163,9 @@ gateway, or mgmt_ip. It is being skipped."
     hostname = f'{model_vendor[model]}{n:03d}'
     # MAC ADDR
     mac = row[columns_dict['mac']]
-    if not all((mac,mactools.is_mac(mac))):
+    if not mac:
+        continue
+    if not mactools.is_mac(mac):
         msg = f'[Warning] Line {n} of `{csv_filename.name}`: Hardware \
 `{hardware}`, MAC `{mac}`. MAC not valid. Skipping device.'
         print(msg)
@@ -278,9 +276,6 @@ c = tuple(row[columns_dict['config']] for row in d)
 
 # Search for duplicate MACs first
 if len(m) != len(set(m)):
-    msg = '[NOTICE] ***Duplicate MACs found!***'
-    print(msg)
-    syslog(msg)
     unique_macs = set()
     dup_pos_macs = []
     for n, v in enumerate(m):
@@ -290,6 +285,10 @@ if len(m) != len(set(m)):
             unique_macs.add(v)
         else:
             dup_pos_macs.append(n)
+    if dup_pos_macs:
+        msg = '[NOTICE] ***Duplicate MACs found!***'
+        print(msg)
+        syslog(msg)
     for n in dup_pos_macs:
         msg = f"[NOTICE] Line {n+1} of `{csv_filename.name}`: \
 Duplicate MAC. {d[n][columns_dict['mac']]}"
@@ -298,9 +297,6 @@ Duplicate MAC. {d[n][columns_dict['mac']]}"
 
 # Now search for duplicate configs
 if len(c) != len(set(c)):
-    msg = '[NOTICE] ***Duplicate config files found!***'
-    print(msg)
-    syslog(msg)
     unique_configs = set()
     dup_pos_configs = []
     for n, v in enumerate(c):
@@ -310,6 +306,10 @@ if len(c) != len(set(c)):
             unique_configs.add(v)
         else:
             dup_pos_configs.append(n)
+    if dup_pos_configs:
+        msg = '[NOTICE] ***Duplicate config files found!***'
+        print(msg)
+        syslog(msg)
     for n in dup_pos_configs:
         msg = f"[NOTICE] Line {n+1} of `{csv_filename.name}`: \
 Duplicate config file. {d[n][columns_dict['config']]}"

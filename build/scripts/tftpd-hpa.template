@@ -1,4 +1,17 @@
 TFTP_USERNAME="root"
 TFTP_DIRECTORY="/opt/ztp/ftp"
 TFTP_ADDRESS=":69"
-TFTP_OPTIONS="--secure --create --verbosity 4"
+TFTP_OPTIONS="--secure --create --verbose --verbosity 4"
+
+
+#--create, -c
+#Allow new files to be created. By default, tftpd will only allow upload of files that already exist. Files are created with default permissions allowing anyone to read or write them, unless the --permissive or --umask options are specified. 
+#
+#--secure, -s
+#Change root directory on startup. This means the remote host does not need to pass along the directory as part of the transfer, and may add security. When --secure is specified, exactly one directory should be specified on the command line. The use of this option is recommended for security as well as compatibility with some boot ROMs which cannot be easily made to include a directory name in its request. 
+#
+#--verbose, -v
+#Increase the logging verbosity of tftpd. This flag can be specified multiple times for even higher verbosity. 
+#
+#--verbosity value
+#Set the verbosity value to value. 
