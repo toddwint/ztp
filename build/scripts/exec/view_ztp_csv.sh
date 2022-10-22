@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 set -x
-cat /opt/ztp/ftp/ztp.csv
+cat /opt/"$APPNAME"/ftp/ztp.csv

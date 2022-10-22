@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 source "$(dirname "$(dirname "$(realpath $0)")")"/config.txt
-
 docker exec "$HOSTNAME" service rsyslog status
 docker exec "$HOSTNAME" service isc-dhcp-server status
 docker exec "$HOSTNAME" service vsftpd status

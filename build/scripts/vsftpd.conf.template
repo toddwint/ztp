@@ -74,7 +74,7 @@ xferlog_file=/opt/ztp/logs/vsftpd_xfers.log
 
 # When enabled, all FTP requests and responses are logged, providing the option xferlog_std_format is not enabled. Useful for debugging. 
 # Default: NO
-log_ftp_protocol=YES
+#log_ftp_protocol=YES
 
 # If enabled, two log files are generated in parallel, going by default to /var/log/xferlog and /var/log/vsftpd.log. The former is a wu-ftpd style transfer log, parseable by standard tools. The latter is vsftpd's own style log. 
 # Default: NO

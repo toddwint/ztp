@@ -39,19 +39,19 @@ chmod 755 /usr/local/bin/ipcalc.py
 chmod 755 /usr/local/bin/increment_mac.py
 chmod 755 /usr/local/bin/mactools.py
 
-# Check if `ftp` subfolder exists. If non-existing, create it .
+# Check if `ftp` subfolder exists. If non-existing, create it.
 # Checking for a file inside the folder because if the folder
 #  is mounted as a volume it will already exists when docker starts.
 # Also change permissions
-# --Leave the `.` after the source folder so it copies the contents (not folder)
 if [ ! -e "/opt/$APPNAME/ftp/.exists" ]
 then
     mkdir -p /opt/"$APPNAME"/ftp/os_images
     mkdir -p /opt/"$APPNAME"/ftp/config_files
     touch /opt/"$APPNAME"/ftp/.exists
     echo '`ftp` folder created'
-    cp /opt/"$APPNAME"/scripts/ftp_template/ztp.csv /opt/"$APPNAME"/ftp/
-    cp -r /opt/"$APPNAME"/scripts/ftp_template/. /opt/"$APPNAME"/ftp/
+    cp /opt/"$APPNAME"/scripts/ztp.csv.template /opt/"$APPNAME"/ftp/ztp.csv
+    cp /opt/"$APPNAME"/scripts/csv_filter.py /opt/"$APPNAME"/ftp/
+    cp /opt/"$APPNAME"/scripts/csv_filter.sh /opt/"$APPNAME"/ftp/
     echo "Copied ftp_template to /opt/ztp/scripts/ftp"
     chown -R "${HUID}":"${HGID}" /opt/"$APPNAME"/ftp
 fi
