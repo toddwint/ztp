@@ -1,5 +1,5 @@
 FROM toddwint/mybaseimage
-COPY scripts /opt/ztp/scripts
+COPY app /opt/ztp
 ENV DEBIAN_FRONTEND=noninteractive \
     TZ=UTC \
     HTTPPORT1=8080 \
@@ -30,5 +30,5 @@ RUN apt-get update \
     apt-get autoremove -y \
     && \
     rm -rf /var/lib/apt/lists/*
-WORKDIR /opt/ztp/scripts
+WORKDIR /opt/ztp/debug
 CMD ["/opt/ztp/scripts/startup.sh"]

@@ -166,13 +166,15 @@
 <li>Juniper SRX1500</li>
 <li>HPE Aruba 2930F</li>
 </ul></li>
-<li>Download the image and start a new container. The folder <code>ftp</code> will be created as specified in the <code>create_container.sh</code> script.</li>
+<li>Download the image.</li>
+<li>Configure the settings in <code>run/config.txt</code>.</li>
+<li>Start a new container by running <code>run/create_container.sh</code>. The folder <code>ftp</code> will be created as specified in the <code>create_container.sh</code> script.</li>
 <li>An example CSV file <code>ztp.csv</code> is created in the <code>ftp</code> volume on the first run.</li>
 <li>Fill in the file <code>ftp/ztp.csv</code> with a list of device hardware models, MACs, os image names, and configuration file names.</li>
 <li>Modify it as you need (additional columns can be added after the last column) and place it back in the same folder with the same name.</li>
 <li>You can use the <code>csv_filter.py</code> or <code>csv_filter.sh</code> scripts in the <code>ftp</code> volume to create CSV files sorted by vendor or model and rename them to <code>ztp.csv</code> as needed. A backup of the original file is created named <code>ztp-all.csv</code>.</li>
 <li>Transfer the configuration files and os images to <code>ftp/os_images</code> and <code>ftp/config_files</code>.</li>
-<li>Trigger the container to update by restarting it with <code>./restart.sh</code>, <code>./stop.sh</code> and <code>./start.sh</code>, or run <code>./exec/generate_dhcpd_conf.sh</code></li>
+<li>Trigger the container to update by restarting it with <code>./restart.sh</code>, <code>./stop.sh</code> and <code>./start.sh</code>. You can also run <code>./debug/bash.sh</code> and then run <code>./generate_dhcpd_conf.sh</code></li>
 <li>Open the file webadmin.html to view DHCP/FTP/TFTP messages in a web browser.</li>
 </ul>
 <h2 id="features">Features</h2>
@@ -184,7 +186,7 @@
 <li>isc-dhcp-server</li>
 <li>ftp</li>
 <li>vsftpd</li>
-<li>tftp</li>
+<li>tftp-hpa</li>
 <li>tftpd-hpa</li>
 <li>webfs</li>
 <li>tmux</li>
@@ -242,7 +244,7 @@ HTTPPORT3=8082
 HTTPPORT4=8083
 
 # The hostname of the instance of the docker container
-HOSTNAME=ztpsrvr01</code></pre>
+HOSTNAME=ztp01</code></pre>
 <h2 id="sample-docker-run-script">Sample docker run script</h2>
 <pre><code>#!/usr/bin/env bash
 REPO=toddwint

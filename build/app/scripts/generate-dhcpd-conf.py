@@ -12,24 +12,23 @@ from syslog import syslog
 import argparse
 import csv
 import ipaddress
-import os
 import pathlib
 import re
 
 import mactools # mactools.py in same dir
 
 # Variable Definitions
-starting_ip_addr = os.environ['IPSTART']
-mgmt_ip_addr = os.environ['MGMTIP']
-file_server = os.environ['IP']
-gateway = os.environ['GATEWAY']
-dhcp_start = os.environ['DHCPSTART']
-dhcp_end = os.environ['DHCPEND']
+starting_ip_addr = '192.168.10.1'
+file_server = '192.168.1.252'
+mgmt_ip_addr = '192.168.1.253'
+gateway = '192.168.1.254'
+dhcp_start = '192.168.1.249'
+dhcp_end = '192.168.1.250'
 csv_filename = 'ztp.csv'
 csv_path = pathlib.Path('/opt/ztp/ftp')
 dhcpd_daemon_name = 'isc-dhcp-server'
-dhcpd_template = '/opt/ztp/scripts/dhcpd.conf'
-dhcpd_tmp_config_file = '/opt/ztp/scripts/dhcpd.py.conf'
+dhcpd_template = '/opt/ztp/configs/dhcpd.conf'
+dhcpd_tmp_config_file = '/opt/ztp/configs/dhcpd.py.conf'
 dhcpd_config_file_loc = '/etc/dhcp/dhcpd.conf'
 ftpd_root_native_path = pathlib.Path('/opt/ztp/ftp')
 tftpd_root_native_path = pathlib.Path('/opt/ztp/ftp')
@@ -319,7 +318,7 @@ Duplicate config file. {d[n][columns_dict['config']]}"
 if ip_addr >= dhcp_start:
     ip_addr = dhcp_start
 else:
-    dhcp_start, os.environ['DHCPSTART'] = ip_addr, str(ip_addr)
+    dhcp_start = ip_addr
     output = re.sub(
         r'(range )(([0-9]{1,3}\.?){4})', 
         f'\g<1>{dhcp_start}', 

@@ -15,13 +15,15 @@ GitHub: <https://github.com/toddwint/ztp>
     - Juniper SRX345
     - Juniper SRX1500
     - HPE Aruba 2930F
-- Download the image and start a new container. The folder `ftp` will be created as specified in the `create_container.sh` script.
+- Download the image.
+- Configure the settings in `run/config.txt`.
+- Start a new container by running `run/create_container.sh`. The folder `ftp` will be created as specified in the `create_container.sh` script.
 - An example CSV file `ztp.csv` is created in the `ftp` volume on the first run.
 - Fill in the file `ftp/ztp.csv` with a list of device hardware models, MACs, os image names, and configuration file names.
 - Modify it as you need (additional columns can be added after the last column) and place it back in the same folder with the same name.
 - You can use the `csv_filter.py` or `csv_filter.sh` scripts in the `ftp` volume to create CSV files sorted by vendor or model and rename them to `ztp.csv` as needed. A backup of the original file is created named `ztp-all.csv`.
 - Transfer the configuration files and os images to `ftp/os_images` and `ftp/config_files`.
-- Trigger the container to update by restarting it with `./restart.sh`, `./stop.sh` and `./start.sh`, or run `./exec/generate_dhcpd_conf.sh`
+- Trigger the container to update by restarting it with `./restart.sh`, `./stop.sh` and `./start.sh`. You can also run `./debug/bash.sh` and then run `./generate_dhcpd_conf.sh`
 - Open the file webadmin.html to view DHCP/FTP/TFTP messages in a web browser.
 
 
@@ -33,7 +35,7 @@ GitHub: <https://github.com/toddwint/ztp>
   - isc-dhcp-server
   - ftp
   - vsftpd
-  - tftp
+  - tftp-hpa
   - tftpd-hpa
   - webfs
   - tmux
@@ -87,7 +89,7 @@ HTTPPORT3=8082
 HTTPPORT4=8083
 
 # The hostname of the instance of the docker container
-HOSTNAME=ztpsrvr01
+HOSTNAME=ztp01
 ```
 
 

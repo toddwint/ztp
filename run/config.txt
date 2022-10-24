@@ -28,4 +28,4 @@ HTTPPORT3=8082
 HTTPPORT4=8083
 
 # The hostname of the instance of the docker container
-HOSTNAME=ztpsrvr01
+HOSTNAME=ztp01
