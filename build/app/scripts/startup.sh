@@ -38,10 +38,12 @@ else
 fi
 
 # Sometimes rsyslog does not start, so start it and then try again
-service rsyslog start
+#service rsyslog start # ubuntu:focal
+rsyslogd #ubuntu:jammy
 if [ -z $(pidof rsyslogd) ]; then 
     echo 'rsyslog not running'
-    service rsyslog start
+    #service rsyslog start # ubuntu:focal
+    rsyslogd #ubuntu:jammy
 else 
     echo 'rsyslog is running' 
 fi

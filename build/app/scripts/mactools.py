@@ -3,7 +3,7 @@
 '''
 This tool includes functions to handle Ethernet MAC addresses.
 '''
-from __future__ import annotations
+#from __future__ import annotations # python < 3.10
 
 import re
 import pathlib
