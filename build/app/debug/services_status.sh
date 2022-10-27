@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-service rsyslog status
+bash -c 'if [ ! -z "$(pidof rsyslogd)" ]; then echo "rsyslogd is running"; else echo "rsyslogd is not running"; fi;'
 service isc-dhcp-server status
 service vsftpd status
 service tftpd-hpa status
