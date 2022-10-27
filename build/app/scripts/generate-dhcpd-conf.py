@@ -273,27 +273,7 @@ ftp/tftp folder. Skipping config file'
 m = tuple(row[columns_dict['mac']] for row in d)
 c = tuple(row[columns_dict['config']] for row in d)
 
-# Search for duplicate MACs first
-unique_macs = set()
-dup_pos_macs = []
-for n, v in enumerate(m):
-    if v == '':
-        continue
-    if not v in unique_macs:
-        unique_macs.add(v)
-    else:
-        dup_pos_macs.append(n)
-if dup_pos_macs:
-    msg = '[NOTICE] ***Duplicate MACs found!***'
-    print(msg)
-    syslog(msg)
-for n in dup_pos_macs:
-    msg = f"[NOTICE] Line {n+1} of `{csv_filename.name}`: \
-Duplicate MAC. {d[n][columns_dict['mac']]}"
-    print(msg)
-    syslog(msg)
-
-# Now search for duplicate configs
+# Search for duplicate configs
 unique_configs = set()
 dup_pos_configs = []
 for n, v in enumerate(c):
@@ -310,6 +290,26 @@ if dup_pos_configs:
 for n in dup_pos_configs:
     msg = f"[NOTICE] Line {n+1} of `{csv_filename.name}`: \
 Duplicate config file. {d[n][columns_dict['config']]}"
+    print(msg)
+    syslog(msg)
+
+# Search for duplicate MACs
+unique_macs = set()
+dup_pos_macs = []
+for n, v in enumerate(m):
+    if v == '':
+        continue
+    if not v in unique_macs:
+        unique_macs.add(v)
+    else:
+        dup_pos_macs.append(n)
+if dup_pos_macs:
+    msg = '[NOTICE] ***Duplicate MACs found!***'
+    print(msg)
+    syslog(msg)
+for n in dup_pos_macs:
+    msg = f"[NOTICE] Line {n+1} of `{csv_filename.name}`: \
+Duplicate MAC. {d[n][columns_dict['mac']]}"
     print(msg)
     syslog(msg)
 

@@ -1,4 +1,8 @@
 #!/usr/bin/env bash
+if [[ $(tmux list-session -f "$APPNAME" 2> /dev/null) ]]; then
+    tmux attach-session -d
+    exit
+fi
 tmux new-session -s "$APPNAME" -d
 tmux send-keys -t 1 "tail -n 500 -F /opt/$APPNAME/logs/$APPNAME.log" Enter
 tmux new-window
