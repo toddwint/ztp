@@ -3,4 +3,4 @@ echo '
   Welcome to the '"$APPNAME"' docker image.
 '
 sleep 1s
-tail -n 500 -F /opt/"$APPNAME"/logs/"$APPNAME".log
+tail -n 500 --pid=$$ -F /opt/"$APPNAME"/logs/"$APPNAME".log

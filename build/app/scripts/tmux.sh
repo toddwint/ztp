@@ -18,14 +18,15 @@ echo '
   Ctrl + b then ?           | Show shortcuts
 '
 read -p 'Press `enter` to continue'
-tmux new-session -A -s "$APPNAME" -d # -d init size from global, -A attach if exists
 if [[ $(tmux list-session -f "$APPNAME" 2> /dev/null) ]]; then
+    tmux new-session -A -s "$APPNAME"
+else
+    tmux new-session -AD -d -s "$APPNAME"
     tmux send-keys -t 1 "tail -n 500 -F /opt/$APPNAME/logs/$APPNAME.log" Enter
     tmux new-window
     tmux send-keys -t 1 "tail -n 500 -F /opt/"$APPNAME"/logs/vsftpd_xfers.log" Enter
     tmux select-window -t 1
     #tmux selectp -t 1 -d #disable user input in pane
     #tmux selectp -t 1 -e #enable user input in pane
-    #tmux attach-session -s "$APPNAME" -d # -d detaches other clients
-    tmux attach-session -t "$APPNAME"
+    tmux new-session -A -s "$APPNAME"
 fi
