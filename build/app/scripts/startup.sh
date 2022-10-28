@@ -28,24 +28,32 @@ if [ -e /opt/"$APPNAME"/scripts/.firstrun ]; then
     #ln -s /opt/"$APPNAME"/scripts/generate-dhcpd-conf.py /opt/"$APPNAME"/debug
 fi
 
+# Create the file /var/run/utmp or when using tmux this error will be received
+# utempter: pututline: No such file or directory
+if [ -e /opt/"$APPNAME"/scripts/.firstrun ]; then
+    touch /var/run/utmp
+else
+    truncate -s 0 /var/run/utmp
+fi
+
 # Disable rsyslog kernel logs and start rsyslogd
 if [ -e /opt/"$APPNAME"/scripts/.firstrun ]; then
     sed -Ei '/imklog/s/^([^#])/#\1/' /etc/rsyslog.conf
     sed -Ei '/immark/s/^#//' /etc/rsyslog.conf
     rm -rf /var/log/syslog
-else 
+else
     truncate -s 0 /var/log/syslog
 fi
 
 # Sometimes rsyslog does not start, so start it and then try again
 #service rsyslog start # ubuntu:focal
 rsyslogd #ubuntu:jammy
-if [ -z $(pidof rsyslogd) ]; then 
+if [ -z $(pidof rsyslogd) ]; then
     echo 'rsyslog not running'
     #service rsyslog start # ubuntu:focal
     rsyslogd #ubuntu:jammy
-else 
-    echo 'rsyslog is running' 
+else
+    echo 'rsyslog is running'
 fi
 
 # Link the log to the app log. Create/clear other log files.
@@ -126,7 +134,7 @@ if [ -e /opt/"$APPNAME"/scripts/.firstrun ]; then
     cp /opt/"$APPNAME"/configs/webfsd.conf.template /opt/"$APPNAME"/configs/webfsd.conf
 
     # python generate-dhcpd-conf.py modifications
-    sed -Ei 's/^(starting_ip_addr =).*192.168.*/\1 '"'$IPSTART'"'/' /opt/"$APPNAME"/scripts/generate-dhcpd-conf.py 
+    sed -Ei 's/^(starting_ip_addr =).*192.168.*/\1 '"'$IPSTART'"'/' /opt/"$APPNAME"/scripts/generate-dhcpd-conf.py
     sed -Ei 's/^(file_server =).*192.168.*/\1 '"'$IP'"'/' /opt/"$APPNAME"/scripts/generate-dhcpd-conf.py
     sed -Ei 's/^(mgmt_ip_addr =).*192.168.*/\1 '"'$MGMTIP'"'/' /opt/"$APPNAME"/scripts/generate-dhcpd-conf.py 
     sed -Ei 's/^(gateway =).*192.168.*/\1 '"'$GATEWAY'"'/' /opt/"$APPNAME"/scripts/generate-dhcpd-conf.py
