@@ -89,6 +89,7 @@ then
     chown -R "${HUID}":"${HGID}" /opt/"$APPNAME"/ftp
 fi
 
+# Calculate network values
 if [ -e /opt/"$APPNAME"/scripts/.firstrun ]; then
     # Get IP and subnet information and save to env variables
     # Using python script `ipcalc.py` (adds ~1.6 KB to docker image)
@@ -126,6 +127,7 @@ if [ -e /opt/"$APPNAME"/scripts/.firstrun ]; then
     export GATEWAY
 fi
 
+# Modify configuration files or customize container
 if [ -e /opt/"$APPNAME"/scripts/.firstrun ]; then
     # Make copies of template files
     cp /opt/"$APPNAME"/configs/dhcpd.conf.template /opt/"$APPNAME"/configs/dhcpd.conf
