@@ -251,7 +251,8 @@ REPO=toddwint
 APPNAME=ztp
 HUID=$(id -u)
 HGID=$(id -g)
-source &quot;$(dirname &quot;$(realpath $0)&quot;)&quot;/config.txt
+SCRIPTDIR=&quot;$(dirname &quot;$(realpath &quot;$0&quot;)&quot;)&quot;
+source &quot;$SCRIPTDIR&quot;/config.txt
 
 # Make the macvlan needed to listen on ports
 # Set the IP on the host and add a route to the container
@@ -271,7 +272,7 @@ docker run -dit \
     -h &quot;$HOSTNAME&quot; \
     ` # Volume can be changed to another folder. For Example: ` \
     ` # -v /home/&quot;$USER&quot;/Desktop/ftp:/opt/&quot;$APPNAME&quot;/ftp \ ` \
-    -v &quot;$(dirname &quot;$(realpath $0)&quot;)&quot;/ftp:/opt/&quot;$APPNAME&quot;/ftp \
+    -v &quot;$SCRIPTDIR&quot;/ftp:/opt/&quot;$APPNAME&quot;/ftp \
     -e TZ=&quot;$TZ&quot; \
     -e MGMTIP=&quot;$MGMTIP&quot; \
     -e GATEWAY=&quot;$GATEWAY&quot; \

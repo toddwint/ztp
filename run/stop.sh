@@ -1,3 +1,5 @@
 #!/usr/bin/env bash
-source "$(dirname "$(realpath $0)")"/config.txt
+SCRIPTDIR="$(dirname "$(realpath "$0")")"
+source "${SCRIPTDIR}"/config.txt
+
 docker stop "$HOSTNAME"

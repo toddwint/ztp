@@ -3,7 +3,8 @@ REPO=toddwint
 APPNAME=ztp
 HUID=$(id -u)
 HGID=$(id -g)
-source "$(dirname "$(realpath $0)")"/config.txt
+SCRIPTDIR="$(dirname "$(realpath "$0")")"
+source "$SCRIPTDIR"/config.txt
 
 # Make the macvlan needed to listen on ports
 # Set the IP on the host and add a route to the container
@@ -23,7 +24,7 @@ docker run -dit \
     -h "$HOSTNAME" \
     ` # Volume can be changed to another folder. For Example: ` \
     ` # -v /home/"$USER"/Desktop/ftp:/opt/"$APPNAME"/ftp \ ` \
-    -v "$(dirname "$(realpath $0)")"/ftp:/opt/"$APPNAME"/ftp \
+    -v "$SCRIPTDIR"/ftp:/opt/"$APPNAME"/ftp \
     -e TZ="$TZ" \
     -e MGMTIP="$MGMTIP" \
     -e GATEWAY="$GATEWAY" \
@@ -39,8 +40,8 @@ docker run -dit \
     ${REPO}/${APPNAME}
 
 # Create the webadmin html file from template
-htmltemplate="$(dirname "$(realpath $0)")"/webadmin.html.template
-htmlfile="$(dirname "$(realpath $0)")"/webadmin.html
+htmltemplate="$SCRIPTDIR"/webadmin.html.template
+htmlfile="$SCRIPTDIR"/webadmin.html
 cp "$htmltemplate" "$htmlfile"
 sed -Ei 's/(Launch page for webadmin)/\1 - '"$HOSTNAME"'/g' "$htmlfile"
 sed -Ei 's/\bIPADDR:HTTPPORT1\b/'"$IPADDR"':'"$HTTPPORT1"'/g' "$htmlfile"
