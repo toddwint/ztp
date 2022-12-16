@@ -15,7 +15,7 @@ GitHub: <https://github.com/toddwint/ztp>
     - Juniper SRX345
     - Juniper SRX1500
     - HPE Aruba 2930F
-- Download the image.
+- Download the docker image and github files.
 - Configure the settings in `run/config.txt`.
 - Start a new container by running `run/create_container.sh`. The folder `ftp` will be created as specified in the `create_container.sh` script.
 - An example CSV file `ztp.csv` is created in the `ftp` volume on the first run.
