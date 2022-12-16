@@ -12,7 +12,7 @@ IPADDR=172.21.255.252
 # The last 4 IPs in the subnet are available for use.
 MGMTIP=172.21.255.253
 
-# The IP subnet in the form subnet/cidr
+# The IP subnet in the form NETWORK/PREFIX
 SUBNET=172.21.0.0/16
 
 # The IP of the gateway. 

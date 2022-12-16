@@ -12,12 +12,14 @@ from syslog import syslog
 import argparse
 import csv
 import ipaddress
+import os
 import pathlib
 import re
 
 import mactools # mactools.py in same dir
 
 # Variable Definitions
+appname = os.environ['APPNAME']
 starting_ip_addr = '192.168.10.1'
 file_server = '192.168.1.252'
 mgmt_ip_addr = '192.168.1.253'
@@ -25,13 +27,13 @@ gateway = '192.168.1.254'
 dhcp_start = '192.168.1.249'
 dhcp_end = '192.168.1.250'
 csv_filename = 'ztp.csv'
-csv_path = pathlib.Path('/opt/ztp/ftp')
+csv_path = pathlib.Path(f'/opt/{appname}/ftp')
 dhcpd_daemon_name = 'isc-dhcp-server'
-dhcpd_template = '/opt/ztp/configs/dhcpd.conf'
-dhcpd_tmp_config_file = '/opt/ztp/configs/dhcpd.py.conf'
+dhcpd_template = f'/opt/{appname}/configs/dhcpd.conf'
+dhcpd_tmp_config_file = f'/opt/{appname}/configs/dhcpd.py.conf'
 dhcpd_config_file_loc = '/etc/dhcp/dhcpd.conf'
-ftpd_root_native_path = pathlib.Path('/opt/ztp/ftp')
-tftpd_root_native_path = pathlib.Path('/opt/ztp/ftp')
+ftpd_root_native_path = pathlib.Path(f'/opt/{appname}/ftp')
+tftpd_root_native_path = pathlib.Path(f'/opt/{appname}/ftp')
 ftp_os_image_virtual_path = '/os_images/' 
 ftp_config_file_virtual_path = '/config_files/' 
 tftp_os_image_virtual_path = '/os_images/' 
