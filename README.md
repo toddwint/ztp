@@ -2,7 +2,7 @@
 
 ## Info
 
-`ztp` (Zero-Touch Provisioning) docker image for Juniper SRX345, SRX1500, AXS7024, and HPE Aruba 2930F devices.
+`ztp` (Zero-Touch Provisioning) docker image for Juniper SRX345, SRX1500, ACX7024, and HPE Aruba 2930F devices.
 
 Docker Hub: <https://hub.docker.com/r/toddwint/ztp>
 
