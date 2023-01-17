@@ -48,7 +48,7 @@ pathlib.Path(f'{f.stem}-all{f.suffix}').write_text(
 print(f'Generating `{f.stem}-juniper{f.suffix}`')
 print(f'Generating `{f.stem}-aruba{f.suffix}`')
 pathlib.Path(f'{f.stem}-juniper{f.suffix}').write_text(''.join(
-    hdr + [x for x in t if re.search('^[^,]*(?:345|1500)[^,]*,', x)]
+    hdr + [x for x in t if re.search('^[^,]*(?:345|1500|7024)[^,]*,', x)]
     ))
 pathlib.Path(f'{f.stem}-aruba{f.suffix}').write_text(''.join(
     hdr + [x for x in t if re.search('^[^,]*2930[^,]*,', x)]
@@ -58,6 +58,7 @@ pathlib.Path(f'{f.stem}-aruba{f.suffix}').write_text(''.join(
 print(f'Generating `{f.stem}-srx1500{f.suffix}`')
 print(f'Generating `{f.stem}-srx345{f.suffix}`')
 print(f'Generating `{f.stem}-2930f{f.suffix}`')
+print(f'Generating `{f.stem}-acx7024{f.suffix}`')
 pathlib.Path(f'{f.stem}-srx1500{f.suffix}').write_text(''.join(
     hdr + [x for x in t if re.search('^[^,]*1500[^,]*,', x)]
     ))
@@ -67,5 +68,8 @@ pathlib.Path(f'{f.stem}-srx345{f.suffix}').write_text(''.join(
 pathlib.Path(f'{f.stem}-2930f{f.suffix}').write_text(''.join(
     hdr + [x for x in t if re.search('^[^,]*2930[^,]*,', x)]
     #hdr + re.findall('^[^,]*2930[^,]*,.*', ''.join(t), re.MULTILINE)
+    ))
+pathlib.Path(f'{f.stem}-acx7024{f.suffix}').write_text(''.join(
+    hdr + [x for x in t if re.search('^[^,]*7024[^,]*,', x)]
     ))
 

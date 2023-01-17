@@ -44,9 +44,10 @@ columns = ['hardware', 'mac', 'os', 'config']
 model_vendor = {
         'srx345': 'juniper', 
         'srx1500': 'juniper', 
+        'acx7024': 'juniper',
         '2930f': 'aruba'
         }
-increment_mac_list = ['srx345']
+increment_mac_list = {'srx345': 1, 'acx7024': 0x3ff}
 client_templates = {
         'juniper': '''
 host {hostname} {{
@@ -173,7 +174,7 @@ Current IP: `{ip_addr}`. No additional devices will be added."
         syslog(msg)
         continue
     if model in increment_mac_list:
-        macaddr = mactools.incr_mac(mac)
+        macaddr = mactools.incr_mac(mac, increment_mac_list[model])
     else:
         macaddr = mactools.convert_to_str(mac)
     # OS image

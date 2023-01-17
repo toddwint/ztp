@@ -5,3 +5,4 @@ srx345,888888eeeee3,junos345.tgz,router3.cfg
 2930f,888888eeeee4,WC_11.04.swi,switch1.cfg
 2930f,888888eeeee5,WC_11.06.swi,switch2.cfg
 2930f,888888eeeee6,WC_12.00.swi,switch3.cfg
+acx7024,888888eeeee7,junos-acx7024.tgz,mpls1.cfg

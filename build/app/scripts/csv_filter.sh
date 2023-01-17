@@ -20,14 +20,16 @@ cp "$csvfile" "$name"-all."$ext"
 # By vender
 echo Generating "$name"-juniper."$ext"
 echo Generating "$name"-aruba."$ext"
-sed -E '1p; /^[^,]*(345|1500)[^,]*,/!d' "$csvfile" > "$name"-juniper."$ext"
+sed -E '1p; /^[^,]*(345|1500|7024)[^,]*,/!d' "$csvfile" > "$name"-juniper."$ext"
 sed -E '1p; /^[^,]*2930[^,]*,/!d' "$csvfile" > "$name"-aruba."$ext"
 
 # By model
 echo Generating "$name"-srx1500."$ext"
 echo Generating "$name"-srx345."$ext"
 echo Generating "$name"-2930f."$ext"
+echo Generating "$name"-acx7024."$ext"
 sed -E '1p; /^[^,]*1500[^,]*,/!d' "$csvfile" > "$name"-srx1500."$ext"
 sed -E '1p; /^[^,]*345[^,]*,/!d' "$csvfile" > "$name"-srx345."$ext"
 sed -E '1p; /^[^,]*2930[^,]*,/!d' "$csvfile" > "$name"-2930f."$ext"
+sed -E '1p; /^[^,]*7024[^,]*,/!d' "$csvfile" > "$name"-acx7024."$ext"
 
