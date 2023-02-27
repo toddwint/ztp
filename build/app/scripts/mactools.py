@@ -2,155 +2,141 @@
 #!python3
 '''
 This tool includes functions to handle Ethernet MAC addresses.
+Test with is_mac or is_oui in your program before using other fucntions.
+Experimental functions:
+  - find_oui_org(mac)
+  - find_org_ouis(orgname):
 '''
-#from __future__ import annotations # python < 3.10
+
+__author__ = 'Todd Wintermute'
+__version__ = '0.0.2'
+__date__ = '2023-02-27'
 
 import re
 import pathlib
 import string
 
-def remove_separators(mac: str) -> str:
-    '''Takes various types of MACs and removes separating and whitespace characters.'''
+def remove_separators(mac):
+    """Takes a hex MAC string.
+    Returns string with removed separating and white space characters.
+    """
     xmac = re.sub('[ :.-]', '', mac)
     return xmac
 
-def convert_to_str(mac: int | str, sep: str = ':') -> str:
-    '''Takes an integer or hexadecimal string and adds in separators.'''
-    if type(mac) == int:
-        strmac = f'{sep}'.join(re.findall('.{1,2}', f'{mac:012x}'))
-    elif type(mac) == str:
-        base = 16
-        numbases = ['0b', '0o', '0x']
-        if any([mac.startswith(x) for x in numbases]):
-            base = 0
-        strmac = f'{sep}'.join(re.findall('.{1,2}', f'{convert_to_int(mac, base=base):012x}'))
-    else:
-        raise TypeError('Type(int|str) not received.')
-    if not is_mac(strmac):
-        raise Exception('Supplied value is not a MAC address.')
+def std_mac_format(mac, sep=':'):
+    """Takes a hexadecimal MAC string. Returns string with separators."""
+    base = 16
+    strmac = f'{sep}'.join(re.findall(
+        '.{1,2}', f'{remove_separators(mac):0>12}'
+        ))
     return strmac
 
-def convert_to_hex(mac: int | str, sep: str = '') -> str:
-    '''Takes in a MAC and returns the hexadecimal representation of that value.'''
-    return convert_to_str(mac, sep=sep)
+def std_oui_format(oui, sep=':'):
+    """Takes a hex OUI string. Returns string with separators."""
+    base = 16
+    stroui = f'{sep}'.join(re.findall(
+        '.{1,2}', f'{remove_separators(oui):0>6}'
+        ))
+    return stroui
 
-def convert_to_int(mac: str, base: int = 16) -> int:
-    '''Takes in a MAC and returns the integer representation of that value.'''
-    if type(mac) == str:
-        numbases = ['0b', '0o', '0x']
-        if any([mac.startswith(x) for x in numbases]):
-            base = 0
-        intmac = int(remove_separators(mac), base=base)
-    else:
-        raise TypeError('Type(str) not received.')
-    return intmac
+def convert_to_str(mac, sep =':'):
+    """Deprecated function. Will be removed
+    Use std_mac_format or std_oui_format instead.
+    """
+    strmac = std_mac_format(mac, sep=sep)
+    return strmac
 
-def convert_to_bin(mac: int | str, base: int = 16) -> str:
-    '''Takes in a MAC and returns the binary string representation of that value.'''
-    if type(mac) == int:
-        binmac = f'{mac:048b}'
-    elif type(mac) == str:
-        numbases = ['0b', '0o', '0x']
-        if any([mac.startswith(x) for x in numbases]):
-            base = 0
-        binmac = f'{convert_to_int(mac, base=base):048b}'
-    else:
-        raise TypeError('Type(str) not received.')
-    return binmac
-
-def is_mac(mac: str) -> bool:
-    '''Takes in a MAC and checks it against various tests to determine if it is valid.'''
+def is_mac(mac):
+    """Takes a hex MAC string. Validates it is a MAC."""
     xmac = remove_separators(mac)
-    if False in [char in string.hexdigits for char in xmac]:
+    if not all([(char in string.hexdigits) for char in xmac]):
         return False
     if len(xmac) != 12:
         return False
-    intmac = convert_to_int(mac)
+    intmac = int(xmac, base=16)
     if intmac < 0 or intmac > 0xffffffffffff:
         return False
     return True
 
-def is_oui(oui: str) -> bool:
-    '''Takes in an OUI and checks it against various tests to determine if it is valid.'''
+def is_oui(oui):
+    """Takes a hex OUI string. Validates it is on OUI"""
     xoui = remove_separators(oui)
-    if False in [char in string.hexdigits for char in xoui]:
+    if not all([char in string.hexdigits for char in xoui]):
         return False
     if len(xoui) != 6:
         return False
-    intoui = convert_to_int(oui)
+    intoui = int(xoui, base=16)
     if intoui < 0 or intoui > 0xffffff:
         return False
     return True
 
-def is_unicast(mac: str) -> bool:
-    '''Takes in a MAC and compares it to determine if it is unicast/individual.'''
-    if not is_mac(mac):
-        raise ValueError('This is not a correct mac: {mac}')
-    intmac = convert_to_int(mac)
+def is_unicast(mac):
+    """Takes a hex MAC string. Returns True if unicast/individual"""
+    xmac = remove_separators(mac)
+    intmac = int(xmac, base=16)
     testbit = 0x010000000000
     if intmac & testbit == testbit:
         return False
     return True
 
-def is_multicast(mac: str) -> bool:
-    '''Takes in a MAC and compares it to determine if it is multicast/group.'''
-    if not is_mac(mac):
-        raise ValueError('This is not a correct mac: {mac}')
-    intmac = convert_to_int(mac)
+def is_multicast(mac):
+    """Takes a hex MAC string. Returns True if multicast/group."""
+    xmac = remove_separators(mac)
+    intmac = int(xmac, base=16)
     testbit = 0x010000000000
     if intmac & testbit != testbit:
         return False
     return True
 
-def is_universal(mac: str) -> bool:
-    '''Takes in a MAC and compares it to determine if it is universal.'''
-    if not is_mac(mac):
-        raise ValueError('This is not a correct mac: {mac}')
-    intmac = convert_to_int(mac)
+def is_universal(mac):
+    """Takes a hex MAC string. Returns True if universal."""
+    xmac = remove_separators(mac)
+    intmac = int(xmac, base=16)
     testbit = 0x020000000000
     if intmac & testbit == testbit:
         return False
     return True
 
-def is_local(mac: str) -> bool:
-    '''Takes in a MAC and compares it to determine if it is local.'''
-    if not is_mac(mac):
-        raise ValueError('This is not a correct mac: {mac}')
-    intmac = convert_to_int(mac)
+def is_local(mac):
+    """Takes a hex MAC string. Returns True if local."""
+    xmac = remove_separators(mac)
+    intmac = int(xmac, base=16)
     testbit = 0x020000000000
     if intmac & testbit != testbit:
         return False
     return True
-    
-def incr_mac(mac: str, step: int = 1) -> str:
-    '''Takes in a MAC and increments it to the next value.'''
-    if not is_mac(mac):
-        raise ValueError('MAC provided is incorrect.')
-    intnextmac = convert_to_int(mac) + step
-    nextmac = convert_to_str(intnextmac)
+
+def incr_mac(mac, step=1):
+    """Takes a hex MAC string. Returns incremented value if possible."""
+    xmac = remove_separators(mac)
+    intmac = int(xmac, base=16)
+    intnextmac = intmac + step
+    xnextmac = format(intnextmac, 'x')
+    nextmac = std_mac_format(xnextmac)
     if not is_mac(nextmac):
         raise ValueError('Calculated MAC is not a MAC address.')
     return nextmac
 
-def decr_mac(mac: str, step: int = 1) -> str:
-    '''Takes in a MAC and decrements it to the next value.'''
-    if not is_mac(mac):
-        raise ValueError('MAC provided is incorrect.')
-    intprevmac = convert_to_int(mac) - step
-    prevmac = convert_to_str(intprevmac)
+def decr_mac(mac, step=1):
+    """Takes a hex MAC string. Returns decremented value if possible."""
+    xmac = remove_separators(mac)
+    intmac = int(xmac, base=16)
+    intprevmac = intmac - step
+    xprevmac = format(intprevmac, 'x')
+    prevmac = std_mac_format(xprevmac)
     if not is_mac(prevmac):
         raise ValueError('Calculated MAC is not a MAC address.')
     return prevmac
 
-def get_oui(mac: str) -> str:
-    '''Takes a MAC and returns the OUI portion.'''
+def get_oui(mac):
+    """Takes a MAC and returns the OUI portion."""
     oui = remove_separators(mac)[:6]
-    if not is_oui(oui):
-        raise ValueError('This is not a correct oui: {oui}')
-    return oui.upper()
+    return oui
 
-def find_oui_org(mac: str) -> str:
-    '''Takes a OUI and searches for the owning organization name.'''
+def find_oui_org(mac):
+    """Takes an OUI. Returns organization name if found.
+    Requires oui.txt file.
+    """
     oui = get_oui(mac).upper()
     # Download from <https://standards-oui.ieee.org/oui/oui.txt>
     # curl -O https://standards-oui.ieee.org/oui/oui.txt
@@ -165,11 +151,14 @@ Download from https://standards-oui.ieee.org/oui/oui.txt
         t = f.read()
     m = re.search(f'{oui}.*\\t+(?P<oui_org>.*)', t)
     if not m or not m['oui_org']:
-        return f'Could not find Organization for {oui}.'
+        return f'unknown'
     return m['oui_org']
 
-def find_org_ouis(orgname: str) -> str: 
-    '''Takes organization name or partial organization name and searches for the owning OUI(s).'''
+def find_org_ouis(orgname):
+    """Takes an organization name or partial organization name.
+    Returns a list of OUI(s) that organization owns.
+    Requires oui.txt file.
+    """
     ieee_oui_list = pathlib.Path('oui.txt')
     if not ieee_oui_list.exists():
         raise Exception(
@@ -181,7 +170,7 @@ Download from https://standards-oui.ieee.org/oui/oui.txt
         t = f.read()
     m = re.findall(f'([0-9A-Fa-f]{{6}}).*\\t+.*{orgname}.*', t)
     if not m:
-        return f'Could not find OUIs for {orgname}.'
+        return f'unknown'
     return m
 
 if __name__ == '__main__':

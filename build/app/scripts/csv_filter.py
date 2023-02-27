@@ -4,7 +4,10 @@
 Takes a CSV file and creates separate CSV files
 filtered by vender and model of devices
 '''
-__version__ = '0.0.0'
+
+__author__ = 'Todd Wintermute'
+__version__ = '0.0.1'
+__date__ = '2023-02-27'
 
 import argparse
 import pathlib
@@ -48,10 +51,10 @@ pathlib.Path(f'{f.stem}-all{f.suffix}').write_text(
 print(f'Generating `{f.stem}-juniper{f.suffix}`')
 print(f'Generating `{f.stem}-aruba{f.suffix}`')
 pathlib.Path(f'{f.stem}-juniper{f.suffix}').write_text(''.join(
-    hdr + [x for x in t if re.search('^[^,]*(?:345|1500|7024)[^,]*,', x)]
+    hdr + [x for x in t if re.search('^[^,]*(?:srx345|srx1500|acx7024|ex2300)[^,]*,', x)]
     ))
 pathlib.Path(f'{f.stem}-aruba{f.suffix}').write_text(''.join(
-    hdr + [x for x in t if re.search('^[^,]*2930[^,]*,', x)]
+    hdr + [x for x in t if re.search('^[^,]*2930f[^,]*,', x)]
     ))
 
 # By model
@@ -59,17 +62,19 @@ print(f'Generating `{f.stem}-srx1500{f.suffix}`')
 print(f'Generating `{f.stem}-srx345{f.suffix}`')
 print(f'Generating `{f.stem}-2930f{f.suffix}`')
 print(f'Generating `{f.stem}-acx7024{f.suffix}`')
+print(f'Generating `{f.stem}-ex2300{f.suffix}`')
 pathlib.Path(f'{f.stem}-srx1500{f.suffix}').write_text(''.join(
-    hdr + [x for x in t if re.search('^[^,]*1500[^,]*,', x)]
+    hdr + [x for x in t if re.search('^[^,]*srx1500[^,]*,', x)]
     ))
 pathlib.Path(f'{f.stem}-srx345{f.suffix}').write_text(''.join(
-    hdr + [x for x in t if re.search('^[^,]*345[^,]*,', x)]
+    hdr + [x for x in t if re.search('^[^,]*srx345[^,]*,', x)]
     ))
 pathlib.Path(f'{f.stem}-2930f{f.suffix}').write_text(''.join(
-    hdr + [x for x in t if re.search('^[^,]*2930[^,]*,', x)]
-    #hdr + re.findall('^[^,]*2930[^,]*,.*', ''.join(t), re.MULTILINE)
+    hdr + [x for x in t if re.search('^[^,]*2930f[^,]*,', x)]
     ))
 pathlib.Path(f'{f.stem}-acx7024{f.suffix}').write_text(''.join(
-    hdr + [x for x in t if re.search('^[^,]*7024[^,]*,', x)]
+    hdr + [x for x in t if re.search('^[^,]*acx7024[^,]*,', x)]
     ))
-
+pathlib.Path(f'{f.stem}-ex2300{f.suffix}').write_text(''.join(
+    hdr + [x for x in t if re.search('^[^,]*ex2300[^,]*,', x)]
+    ))

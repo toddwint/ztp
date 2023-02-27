@@ -45,7 +45,8 @@ model_vendor = {
         'srx345': 'juniper', 
         'srx1500': 'juniper', 
         'acx7024': 'juniper',
-        '2930f': 'aruba'
+        '2930f': 'aruba',
+        'ex2300': 'juniper',
         }
 increment_mac_list = {'srx345': 1, 'acx7024': 0x3ff}
 client_templates = {
@@ -176,7 +177,7 @@ Current IP: `{ip_addr}`. No additional devices will be added."
     if model in increment_mac_list:
         macaddr = mactools.incr_mac(mac, increment_mac_list[model])
     else:
-        macaddr = mactools.convert_to_str(mac)
+        macaddr = mactools.std_mac_format(mac)
     # OS image
     ftp_os_path = ftpd_root_native_path / ftp_os_image_virtual_path
     tftp_os_path = tftpd_root_native_path / tftp_os_image_virtual_path
