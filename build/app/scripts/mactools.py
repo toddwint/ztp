@@ -1,16 +1,12 @@
 #!/usr/bin/env python3
 #!python3
-'''
+"""
 This tool includes functions to handle Ethernet MAC addresses.
-Test with is_mac or is_oui in your program before using other fucntions.
-Experimental functions:
-  - find_oui_org(mac)
-  - find_org_ouis(orgname):
-'''
+"""
 
 __author__ = 'Todd Wintermute'
 __version__ = '0.0.2'
-__date__ = '2023-02-27'
+__date__ = '2023-02-28'
 
 import re
 import pathlib
@@ -25,26 +21,17 @@ def remove_separators(mac):
 
 def std_mac_format(mac, sep=':'):
     """Takes a hexadecimal MAC string. Returns string with separators."""
-    base = 16
-    strmac = f'{sep}'.join(re.findall(
-        '.{1,2}', f'{remove_separators(mac):0>12}'
-        ))
+    strmac = f'{sep}'.join(
+        re.findall('.{1,2}', f'{remove_separators(mac):0>12}')
+        )
     return strmac
 
 def std_oui_format(oui, sep=':'):
     """Takes a hex OUI string. Returns string with separators."""
-    base = 16
-    stroui = f'{sep}'.join(re.findall(
-        '.{1,2}', f'{remove_separators(oui):0>6}'
-        ))
+    stroui = f'{sep}'.join(
+        re.findall('.{1,2}', f'{remove_separators(oui):0>6}')
+        )
     return stroui
-
-def convert_to_str(mac, sep =':'):
-    """Deprecated function. Will be removed
-    Use std_mac_format or std_oui_format instead.
-    """
-    strmac = std_mac_format(mac, sep=sep)
-    return strmac
 
 def is_mac(mac):
     """Takes a hex MAC string. Validates it is a MAC."""
@@ -128,22 +115,28 @@ def decr_mac(mac, step=1):
         raise ValueError('Calculated MAC is not a MAC address.')
     return prevmac
 
-def get_oui(mac):
-    """Takes a MAC and returns the OUI portion."""
+def get_oui_from_mac(mac):
+    """Takes a hex MAC string. Returns OUI portion without separators."""
     oui = remove_separators(mac)[:6]
     return oui
 
-def find_oui_org(mac):
-    """Takes an OUI. Returns organization name if found.
+def get_oui_as_mac(oui):
+    """Takes a hex OUI string. Returns MAC using zeros without separators"""
+    strmac = f'{remove_separators(oui):0<12}'
+    return strmac
+
+def find_oui_org(oui):
+    """__Experimental__
+    Takes a hex OUI string. Returns organization name if found.
     Requires oui.txt file.
     """
-    oui = get_oui(mac).upper()
+    oui = (oui).upper()
     # Download from <https://standards-oui.ieee.org/oui/oui.txt>
     # curl -O https://standards-oui.ieee.org/oui/oui.txt
     ieee_oui_list = pathlib.Path('oui.txt')
     if not ieee_oui_list.exists():
         raise Exception(
-        f'''File `{ieee_oui_list}` not found.
+        f'''File `{ieee_oui_list.absolute()}` not found.
 Download from https://standards-oui.ieee.org/oui/oui.txt
 `curl -O https://standards-oui.ieee.org/oui/oui.txt`'''
         )
@@ -154,15 +147,25 @@ Download from https://standards-oui.ieee.org/oui/oui.txt
         return f'unknown'
     return m['oui_org']
 
+def find_mac_org(mac):
+    """__Experimental__
+    Takes a hex MAC string. Returns organization name if found.
+    Requires oui.txt file.
+    """
+    oui = get_oui_from_mac(mac)
+    mac_org = find_oui_org(oui)
+    return mac_org
+
 def find_org_ouis(orgname):
-    """Takes an organization name or partial organization name.
+    """__Experimental__
+    Takes an organization name or partial organization name.
     Returns a list of OUI(s) that organization owns.
     Requires oui.txt file.
     """
     ieee_oui_list = pathlib.Path('oui.txt')
     if not ieee_oui_list.exists():
         raise Exception(
-        f'''File `{ieee_oui_list}` not found.
+        f'''File `{ieee_oui_list.absolute()}` not found.
 Download from https://standards-oui.ieee.org/oui/oui.txt
 `curl -O https://standards-oui.ieee.org/oui/oui.txt`'''
         )

@@ -47,7 +47,7 @@ netmaskbits = network.prefixlen
 networkaddr = network.network_address
 broadcast = network.broadcast_address
 hostmin = networkaddr + 1
-hostmax = broadcast -1
+hostmax = broadcast - 1
 total_hosts = network.num_addresses - 2
 
 items = {
