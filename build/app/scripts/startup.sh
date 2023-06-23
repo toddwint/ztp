@@ -25,6 +25,7 @@ fi
 if [ -e /opt/"$APPNAME"/scripts/.firstrun ]; then
     ln -s /opt/"$APPNAME"/scripts/tail.sh /opt/"$APPNAME"/debug
     ln -s /opt/"$APPNAME"/scripts/tmux.sh /opt/"$APPNAME"/debug
+    ln -s /opt/"$APPNAME"/scripts/transfer_report.sh /opt/"$APPNAME"/debug
     #ln -s /opt/"$APPNAME"/scripts/generate-dhcpd-conf.py /opt/"$APPNAME"/debug
 fi
 
@@ -83,8 +84,8 @@ then
     touch /opt/"$APPNAME"/ftp/.exists
     echo '`ftp` folder created'
     cp /opt/"$APPNAME"/configs/ztp.csv.template /opt/"$APPNAME"/ftp/ztp.csv
+    cp /opt/"$APPNAME"/scripts/device_models.json /opt/"$APPNAME"/ftp/
     cp /opt/"$APPNAME"/scripts/csv_filter.py /opt/"$APPNAME"/ftp/
-    cp /opt/"$APPNAME"/scripts/csv_filter.sh /opt/"$APPNAME"/ftp/
     echo "Copied files to /opt/$APPNAME/ftp"
     chown -R "${HUID}":"${HGID}" /opt/"$APPNAME"/ftp
 fi
@@ -197,7 +198,8 @@ NLINES=1000 # how many tail lines to follow
 # `-t 'theme={"foreground":"black","background":"white", "selection":"#ff6969"}'` # 69, nice!
 # `-t 'theme={"foreground":"black","background":"white", "selectionBackground":"#ff6969"}'`
 sed -Ei 's/tail -n 500/tail -n '"$NLINES"'/' /opt/"$APPNAME"/scripts/tail.sh
-nohup ttyd -p "$HTTPPORT1" -R -t titleFixed="${APPNAME}.log" -t fontSize=16 -t 'theme={"foreground":"black","background":"white", "selectionBackground":"#ff6969"}' -s 2 /opt/"$APPNAME"/scripts/tail.sh >> /opt/"$APPNAME"/logs/ttyd1.log 2>&1 &
+#nohup ttyd -p "$HTTPPORT1" -R -t titleFixed="${APPNAME}.log" -t fontSize=16 -t 'theme={"foreground":"black","background":"white", "selectionBackground":"#ff6969"}' -s 2 /opt/"$APPNAME"/scripts/tail.sh >> /opt/"$APPNAME"/logs/ttyd1.log 2>&1 &
+nohup ttyd -p "$HTTPPORT1" -R -t titleFixed="${APPNAME}.log" -t fontSize=16 -t 'theme={"foreground":"black","background":"white", "selectionBackground":"#ff6969"}' -s 2 /opt/"$APPNAME"/scripts/transfer_report.sh >> /opt/"$APPNAME"/logs/ttyd1.log 2>&1 &
 
 # ttyd2 (tmux with color)
 # to remove color add the option `-T xterm-mono`

@@ -2,7 +2,7 @@
 
 ## Info
 
-`ztp` (Zero-Touch Provisioning) docker image for Juniper SRX345, SRX1500, ACX7024, EX2300, and HPE Aruba 2930F devices.
+`ztp` (Zero-Touch Provisioning) docker image for Juniper SRX345, SRX1500, ACX7024, EX2300, EX4100, and HPE Aruba 2930F devices.
 
 Docker Hub: <https://hub.docker.com/r/toddwint/ztp>
 
@@ -16,6 +16,7 @@ GitHub: <https://github.com/toddwint/ztp>
     - Juniper SRX1500
     - Juniper ACX7024
     - Juniper EX2300
+    - Juniper EX4100
     - HPE Aruba 2930F
 - Download the docker image and github files.
 - Configure the settings in `run/config.txt`.
@@ -25,13 +26,13 @@ GitHub: <https://github.com/toddwint/ztp>
 - Fill in the file `ftp/ztp.csv` with a list of device hardware models, MACs, OS image names, and configuration file names.
   - Modify it as you need, and place it back in the same folder with the same name.
   - Additional columns can be added after the last column
-  - You can use the `csv_filter.py` or `csv_filter.sh` scripts in the `ftp` volume to create CSV files sorted by vendor or model and rename them to `ztp.csv` as needed. 
+  - You can use the `csv_filter.py` script in the `ftp` volume to create CSV files sorted by vendor or model and rename them to `ztp.csv` as needed. 
     - A backup of the original file is created named `ztp-all.csv`.
 - Transfer the configuration files and OS images to `ftp/os_images` and `ftp/config_files`.
 - Trigger the container to update by restarting it with `./restart.sh` or `./stop.sh` and `./start.sh`. 
-  - You can also run `./delete_container` followed by `./create_container` as the `upload` folder will not be removed automatically.
+  - You can also run `./delete_container` followed by `./create_container` as the `ftp` folder will not be removed automatically.
   - To trigger the update without restarting the container run `./exec/bash.sh` and then run `./generate_dhcpd_conf.sh`
-- Open the file webadmin.html to view DHCP/FTP/TFTP messages in a web browser.
+- Open the file webadmin.html and click one of the links to view the file transfers in a web browser.
 
 
 ## Features
@@ -45,6 +46,8 @@ GitHub: <https://github.com/toddwint/ztp>
   - tftp-hpa
   - tftpd-hpa
   - webfs
+  - bsdmainitils
+  - fzf
   - tmux
   - python3-minimal
   - iproute2

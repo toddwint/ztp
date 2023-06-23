@@ -22,6 +22,8 @@ if [[ $(tmux list-session -f "$APPNAME" 2> /dev/null) ]]; then
     tmux new-session -A -s "$APPNAME"
 else
     tmux new-session -AD -d -s "$APPNAME"
+    tmux send-keys -t 1 "/opt/$APPNAME/scripts/transfer_report.sh" Enter
+    tmux new-window
     tmux send-keys -t 1 "tail -n 500 -F /opt/$APPNAME/logs/$APPNAME.log" Enter
     tmux new-window
     tmux send-keys -t 1 "tail -n 500 -F /opt/$APPNAME/logs/vsftpd_xfers.log" Enter

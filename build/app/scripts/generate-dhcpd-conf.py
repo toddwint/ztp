@@ -3,15 +3,20 @@
 '''
  Input a CSV that has the Hardware,MAC,OS,Config and output a modified 
  dhcpd.conf file based upon the template.
+ Also, generate a dhcp_report.csv file to be used later to monitor
+ the progress of the file transfers.
  Script will replace the dhcpd, tftp, and ftp configuration files,
  and then restart the processes.
 '''
-__version__ = '0.0.7'
+__version__ = '0.0.8'
+__date__ = '2023-06-22'
+__author__ = 'Todd Wintermute'
 
 from syslog import syslog
 import argparse
 import csv
 import ipaddress
+import json
 import os
 import pathlib
 import re
@@ -28,6 +33,10 @@ dhcp_start = '192.168.1.249'
 dhcp_end = '192.168.1.250'
 csv_filename = 'ztp.csv'
 csv_path = pathlib.Path(f'/opt/{appname}/ftp')
+dhcp_report_template = f'/opt/{appname}/configs/dhcp_report.csv.template'
+dhcp_report_template = pathlib.Path(dhcp_report_template)
+dhcp_report = f'/opt/{appname}/logs/dhcp_report.csv'
+dhcp_report = pathlib.Path(dhcp_report)
 dhcpd_daemon_name = 'isc-dhcp-server'
 dhcpd_template = f'/opt/{appname}/configs/dhcpd.conf'
 dhcpd_tmp_config_file = f'/opt/{appname}/configs/dhcpd.py.conf'
@@ -41,14 +50,9 @@ tftp_config_file_virtual_path = '/config_files/'
 transfer_mode = 'ftp'
 ftp_timeout = '3600'
 columns = ['hardware', 'mac', 'os', 'config']
-model_vendor = {
-        'srx345': 'juniper', 
-        'srx1500': 'juniper', 
-        'acx7024': 'juniper',
-        '2930f': 'aruba',
-        'ex2300': 'juniper',
-        }
-increment_mac_list = {'srx345': 1, 'acx7024': 0x3ff}
+device_models_json = f'/opt/{appname}/scripts/device_models.json'
+device_models_json = pathlib.Path(device_models_json)
+device_models = json.loads(device_models_json.read_text())
 client_templates = {
         'juniper': '''
 host {hostname} {{
@@ -102,14 +106,20 @@ dhcp_end = ipaddress.IPv4Address(dhcp_end)
 dhcpd_template = pathlib.Path(dhcpd_template)
 dhcpd_tmp_config_file = pathlib.Path(dhcpd_tmp_config_file)
 dhcpd_config_file_loc = pathlib.Path(dhcpd_config_file_loc)
-ftp_os_image_virtual_path = pathlib.Path(ftp_os_image_virtual_path.lstrip('/'))
-ftp_config_file_virtual_path = pathlib.Path(ftp_config_file_virtual_path.lstrip('/'))
-tftp_os_image_virtual_path = pathlib.Path(tftp_os_image_virtual_path.lstrip('/'))
-tftp_config_file_virtual_path = pathlib.Path(tftp_config_file_virtual_path.lstrip('/'))
+ftp_os_image_virtual_path = \
+    pathlib.Path(ftp_os_image_virtual_path.lstrip('/'))
+ftp_config_file_virtual_path = \
+    pathlib.Path(ftp_config_file_virtual_path.lstrip('/'))
+tftp_os_image_virtual_path = \
+    pathlib.Path(tftp_os_image_virtual_path.lstrip('/'))
+tftp_config_file_virtual_path = \
+    pathlib.Path(tftp_config_file_virtual_path.lstrip('/'))
 
 # Make working copies of template files which will be modified
 print(f'Making `{dhcpd_tmp_config_file}` from `{dhcpd_template}`')
 dhcpd_tmp_config_file.write_text(dhcpd_template.read_text())
+print(f'Making `{dhcp_report}` from `{dhcp_report_template}`')
+dhcp_report.write_text(dhcp_report_template.read_text())
 
 if not csv_filename.exists():
     msg = f'[ERROR] `{csv_filename.name}` was not found. Exiting.'
@@ -126,11 +136,23 @@ columns_dict = {k:v for k,v in zip(columns, reader_dict.fieldnames)}
 # Since we need to loop over the CSV twice, store it into a dict `d`
 d = [row for row in reader_dict]
 
+# Create the headers and empty array to store dhcp_report info
+report_columns = columns + [
+    'ip',
+    'os_xfer_msg', 'os_xfer_time',
+    'config_xfer_msg', 'config_xfer_time',
+    'msg'
+    ]
+report_d = [] #empty array to store dhcp_report dictionary rows
+
 # Do all the magic to the dhcpd file from the CSV information
 msg = '[INFO] Creating new dhcpd.conf file from csv.'
 print(msg)
 syslog(msg)
 for n,row in enumerate(d, start=1):
+    report_d.append(dict.fromkeys(report_columns))
+    reportrow = report_d[-1]
+    report_msg = ''
     while True:
         if any((
             gateway == ip_addr, 
@@ -152,36 +174,61 @@ Current IP: `{ip_addr}`. No additional devices will be added."
         break
     output = client_templates
     # Model / Hardware type 
-    hardware = row[columns_dict['hardware']]
+    hardware = row[columns_dict['hardware']].strip()
+    mac = row[columns_dict['mac']].strip()
+    os_image = os_file = row[columns_dict['os']].strip()
+    config_file = cf_file = row[columns_dict['config']].strip()
     if not any(
-            (model := x) for x in model_vendor 
+            (model := x) for x in device_models
             if x in re.sub('[ :.-]', '', hardware.lower())
             ):
-        msg = f"[Warning] Line {n} of `{csv_filename.name}`: Hardware \
-`{hardware}` not found. Skipping device."
+        msg = f"Hardware `{hardware}` not found. Skipping device."
+        report_msg += msg
+        reportrow.update({
+            'hardware': hardware,
+            'mac': mac,
+            'os': os_image,
+            'config': config_file,
+            'msg': report_msg,
+        })
+        msg = f"[Warning] Line {n} of `{csv_filename.name}`: {msg}"
         print(msg)
         syslog(msg)
         continue
     # Create a hostname based on the model type and a unique number
-    hostname = f'{model_vendor[model]}{n:03d}'
+    hostname = f'{model}-{n:03d}'
     # MAC ADDR
-    mac = row[columns_dict['mac']]
     if not mac:
+        reportrow.update({
+            'hardware': hardware,
+            'mac': mac,
+            'os': os_image,
+            'config': config_file,
+            'msg': report_msg,
+        })
         continue
     if not mactools.is_mac(mac):
+        msg = 'MAC not valid. Skipping device.'
+        report_msg += msg
+        reportrow.update({
+            'hardware': hardware,
+            'mac': mac,
+            'os': os_image,
+            'config': config_file,
+            'msg': report_msg,
+        })
         msg = f'[Warning] Line {n} of `{csv_filename.name}`: Hardware \
-`{hardware}`, MAC `{mac}`. MAC not valid. Skipping device.'
+`{hardware}`, MAC `{mac}`. {msg}'
         print(msg)
         syslog(msg)
         continue
-    if model in increment_mac_list:
-        macaddr = mactools.incr_mac(mac, increment_mac_list[model])
+    if device_models[model]['incr_mac']:
+        macaddr = mactools.incr_mac(mac, device_models[model]['incr_mac'])
     else:
         macaddr = mactools.std_mac_format(mac)
     # OS image
     ftp_os_path = ftpd_root_native_path / ftp_os_image_virtual_path
     tftp_os_path = tftpd_root_native_path / tftp_os_image_virtual_path
-    os_image = os_file = row[columns_dict['os']].strip()
     if os_image:
         # Test if the file exists, but expect the user to forget the
         # file ext and guess it for them. Select first match only.
@@ -193,16 +240,20 @@ Current IP: `{ip_addr}`. No additional devices will be added."
             os_file = (ftp_os_path / os_image).name
         elif ftp_os_files:
             os_file = min(ftp_os_files, key=lambda x: x.name).name
-            msg = f'[Warning] Line {n} of `{csv_filename.name}`: Hardware \
-`{hardware}`, MAC `{mac}`. OS file `{os_image}` was not found, but a similar \
+            msg = f'OS file `{os_image}` was not found, but a similar \
 file `{os_file}` was. Adding that file to dhcpd instead.'
+            report_msg += msg
+            msg = f'[Warning] Line {n} of `{csv_filename.name}`: Hardware \
+`{hardware}`, MAC `{mac}`. {msg}'
             print(msg)
             syslog(msg)
         elif tftp_os_files:
             os_file = min(tftp_os_files, key=lambda x: x.name).name
-            msg = f'[Warning] Line {n} of `{csv_filename.name}`: Hardware \
-`{hardware}`, MAC `{mac}`. OS file `{os_image}` was not found, but a similar \
+            msg = f'OS file `{os_image}` was not found, but a similar \
 file `{os_file}` was. Adding that file to dhcpd instead.'
+            report_msg += msg
+            msg = f'[Warning] Line {n} of `{csv_filename.name}`: Hardware \
+`{hardware}`, MAC `{mac}`. {msg}'
             print(msg)
             syslog(msg)
         else:
@@ -212,7 +263,6 @@ file `{os_file}` was. Adding that file to dhcpd instead.'
     # Config file
     ftp_cf_path = ftpd_root_native_path / ftp_config_file_virtual_path
     tftp_cf_path = tftpd_root_native_path / tftp_config_file_virtual_path
-    config_file = cf_file = row[columns_dict['config']].strip()
     if config_file:
         # Test if the file exists, but expect the user to forget the
         # file ext and guess it for them. Select first match only.
@@ -224,16 +274,20 @@ file `{os_file}` was. Adding that file to dhcpd instead.'
             cf_file = (tftp_cf_path / config_file).name
         elif ftp_conf_files:
             cf_file = min(ftp_conf_files, key=lambda x: x.name).name
-            msg = f'[Warning] Line {n} of `{csv_filename.name}`: Hardware \
-`{hardware}`, MAC `{mac}`. Config file `{config_file}` was not found, but a \
+            msg = f'Config file `{config_file}` was not found, but a \
 similar file `{cf_file}` was. Adding that file to dhcpd instead.'
+            report_msg += msg
+            msg = f'[Warning] Line {n} of `{csv_filename.name}`: Hardware \
+`{hardware}`, MAC `{mac}`. {msg}'
             print(msg)
             syslog(msg)
         elif tftp_conf_files:
             cf_file = min(tftp_conf_files, key=lambda x: x.name).name
-            msg = f'[Warning] Line {n} of `{csv_filename.name}`: Hardware \
-`{hardware}`, MAC `{mac}`. Config file `{config_file}` was not found, but a \
+            msg = f'Config file `{config_file}` was not found, but a \
 similar file `{cf_file}` was. Adding that file to dhcpd instead.'
+            report_msg += msg
+            msg = f'[Warning] Line {n} of `{csv_filename.name}`: Hardware \
+`{hardware}`, MAC `{mac}`. {msg}'
             print(msg)
             syslog(msg)
         else:
@@ -242,16 +296,30 @@ similar file `{cf_file}` was. Adding that file to dhcpd instead.'
     tftp_config_file = '/' / tftp_config_file_virtual_path / cf_file
     # Can't do anything without either an OS or a config file
     if not os_file and not cf_file:
+        msg = f'OS file `{os_image}` nor config file `{config_file}` were \
+found in ftp/tftp folder. Skipping device.'
+        report_msg += msg
+        reportrow.update({
+            'hardware': hardware,
+            'mac': mac,
+            'os': os_image,
+            'config': config_file,
+            'msg': report_msg,
+        })
         msg = f'[Warning] Line {n} of `{csv_filename.name}`: Hardware \
-`{hardware}`, MAC `{mac}`. OS file `{os_image}` nor config file \
-`{config_file}` were found in ftp/tftp folder. Skipping device'
+`{hardware}`, MAC `{mac}`. {msg}'
         print(msg)
         syslog(msg)
         continue
     if not os_file:
+        msg = f'OS file `{os_image}` was not found in ftp/tftp folder. \
+Skipping OS image.'
+        report_msg += msg
+        reportrow.update({
+            'os_xfer_msg': 'No file',
+        })
         msg = f'[Warning] Line {n} of `{csv_filename.name}`: Hardware \
-`{hardware}`, MAC `{mac}`. OS file `{os_image}` was not found in ftp/tftp \
-folder. Skipping OS image.'
+`{hardware}`, MAC `{mac}`. {msg}'
         print(msg)
         syslog(msg)
         output = {
@@ -259,21 +327,34 @@ folder. Skipping OS image.'
                 for key, template in output.items()
                 }
     if not cf_file:
+        msg = f'Config file `{config_file}` was not found in tp/tftp \
+folder. Skipping config file.'
+        report_msg += msg
+        reportrow.update({
+            'config_xfer_msg': 'No file',
+        })
         msg = f'[Warning] Line {n} of `{csv_filename.name}`: Hardware \
-`{hardware}`, MAC `{mac}`. Config file `{config_file}` was not found in \
-ftp/tftp folder. Skipping config file'
+`{hardware}`, MAC `{mac}`. {msg}'
         print(msg)
         syslog(msg)
         output = {
                 key:re.sub('.*config_file.*\n', '', template)
                 for key, template in output.items()
                 }
-    output = output[model_vendor[model]].format_map(vars())
+    output = output[device_models[model]['vendor']].format_map(vars())
     with open(dhcpd_tmp_config_file, mode='a') as f:
         f.write(output)
+    reportrow.update({
+        'hardware': hardware,
+        'mac': mac,
+        'os': os_image,
+        'config': config_file,
+        'ip': ip_addr,
+        'msg': report_msg,
+    })
     ip_addr += 1
 
-# Now we search for duplicates and notify the user of any
+# Now we search and notify the user of duplicates
 m = tuple(row[columns_dict['mac']] for row in d)
 c = tuple(row[columns_dict['config']] for row in d)
 
@@ -333,6 +414,14 @@ else:
 # Copy working templates to the server daemon locations
 print(f'Copying `{dhcpd_tmp_config_file}` to `{dhcpd_config_file_loc}`')
 dhcpd_config_file_loc.write_text(dhcpd_tmp_config_file.read_text())
+
+# Write the dhcp_report.csv file
+def dhcp_report_write(d, columns=report_columns):
+    with open(dhcp_report, 'w') as f:
+        writer = csv.DictWriter(f, fieldnames=columns)
+        writer.writeheader()
+        writer.writerows(d)
+dhcp_report_write(report_d, report_columns)
 
 # Done. Ready to go
 msg = '[INFO] Finished reconfiguring files. Ready!'

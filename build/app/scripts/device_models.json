@@ -1,0 +1,32 @@
+{
+ "srx345": {
+  "vendor": "juniper",
+  "protocol": "ftp",
+  "incr_mac": 1
+ },
+ "srx1500": {
+  "vendor": "juniper",
+  "protocol": "ftp",
+  "incr_mac": null
+ },
+ "acx7024": {
+  "vendor": "juniper",
+  "protocol": "ftp",
+  "incr_mac": 1023
+ },
+ "2930f": {
+  "vendor": "aruba",
+  "protocol": "tftp",
+  "incr_mac": null
+ },
+ "ex2300": {
+  "vendor": "juniper",
+  "protocol": "ftp",
+  "incr_mac": null
+ },
+ "ex4100": {
+  "vendor": "juniper",
+  "protocol": "ftp",
+  "incr_mac": null
+ }
+}

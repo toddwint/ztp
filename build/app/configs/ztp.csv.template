@@ -1,9 +1,7 @@
 hardware,mac,os,config
 2930f,888888eeeee1,aruba-2930f.swi,switch1.cfg
-2930f,888888eeeee2,aruba-2930f.swi,switch2.cfg
-2930f,888888eeeee3,aruba-2930f.swi,switch3.cfg
-ex2300,888888eeeee4,junos-ex2300.tgz,switch4.cfg
-srx1500,888888eeeee5,junos-srx1500.tgz,router1.cfg
-srx345,888888eeeee6,junos-srx345.tgz,router2.cfg
-srx345,888888eeeee7,junos-srx345.tgz,router3.cfg
-acx7024,888888eeeee8,junos-acx7024.tgz,router4.cfg
+ex2300,888888eeeee2,junos-ex2300.tgz,switch2.cfg
+ex4100,888888eeeee3,junos-ex4100.tgz,switch3.cfg
+srx1500,888888eeeee4,junos-srx1500.tgz,router1.cfg
+srx345,888888eeeee5,junos-srx345.tgz,router2.cfg
+acx7024,888888eeeee6,junos-acx7024.tgz,router3.cfg

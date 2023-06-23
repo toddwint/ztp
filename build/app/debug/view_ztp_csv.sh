@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 set -x
-cat /opt/"$APPNAME"/ftp/ztp.csv
+column -ts, /opt/"$APPNAME"/ftp/ztp.csv

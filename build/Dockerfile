@@ -20,6 +20,9 @@ RUN apt-get update \
     tftp-hpa \
     tftpd-hpa \
     webfs \
+    #util-linux \
+    bsdmainutils \
+    fzf \
     && \
     echo $HOSTNAME > /etc/hostname \
     && \
