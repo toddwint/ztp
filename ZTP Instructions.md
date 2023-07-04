@@ -1,5 +1,6 @@
 ---
 title: ZTP Instructions
+date: 2023-07-04
 ---
 
 

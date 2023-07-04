@@ -1,7 +1,7 @@
 ---
 title:
 author: Todd Wintermute
-date: 2023-07-02
+date:
 header-includes:
   - \usepackage{enumitem}
   - \setlistdepth{20}

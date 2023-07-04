@@ -1,5 +1,6 @@
 ---
 title: README
+date: 2023-07-04
 ---
 
 # toddwint/ztp
@@ -12,7 +13,7 @@ Docker Hub: <https://hub.docker.com/r/toddwint/ztp>
 
 GitHub: <https://github.com/toddwint/ztp>
 
-_For more detailed information, please view the `ZTP Instructions` file [here](ZTP Instructions.md), [here](ZTP Instructions.html), or [here](ZTP Instructions.pdf)._
+_For more detailed information, please view the `ZTP Instructions` file [here](./ZTP Instructions.md), [here](./ZTP Instructions.html), or [here](./ZTP Instructions.pdf)._
 
 
 ## Overview
