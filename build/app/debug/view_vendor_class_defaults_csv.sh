@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-FILE=/opt/"$APPNAME"/logs/vsftpd_xfers.log
+FILE=/opt/"$APPNAME"/ftp/vendor_class_defaults.csv
 
 if [ ! -f "$FILE" ]
     then
@@ -9,4 +9,4 @@ if [ ! -f "$FILE" ]
 fi
 
 set -x
-truncate -s 0 "$FILE"
+column.py "$FILE"

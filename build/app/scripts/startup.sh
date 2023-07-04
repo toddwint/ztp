@@ -16,9 +16,11 @@ if [ -e /opt/"$APPNAME"/scripts/.firstrun ]; then
     cp /opt/"$APPNAME"/scripts/ipcalc.py /usr/local/bin
     cp /opt/"$APPNAME"/scripts/increment_mac.py /usr/local/bin
     cp /opt/"$APPNAME"/scripts/mactools.py /usr/local/bin
-    chmod 755 /usr/local/bin/ipcalc.py
-    chmod 755 /usr/local/bin/increment_mac.py
-    chmod 755 /usr/local/bin/mactools.py
+    cp /opt/"$APPNAME"/scripts/column.py /usr/local/bin
+    chmod 775 /usr/local/bin/ipcalc.py
+    chmod 775 /usr/local/bin/increment_mac.py
+    chmod 775 /usr/local/bin/mactools.py
+    chmod 775 /usr/local/bin/column.py
 fi
 
 # Link scripts to debug folder as needed
@@ -26,7 +28,6 @@ if [ -e /opt/"$APPNAME"/scripts/.firstrun ]; then
     ln -s /opt/"$APPNAME"/scripts/tail.sh /opt/"$APPNAME"/debug
     ln -s /opt/"$APPNAME"/scripts/tmux.sh /opt/"$APPNAME"/debug
     ln -s /opt/"$APPNAME"/scripts/transfer_report.sh /opt/"$APPNAME"/debug
-    #ln -s /opt/"$APPNAME"/scripts/generate-dhcpd-conf.py /opt/"$APPNAME"/debug
 fi
 
 # Create the file /var/run/utmp or when using tmux this error will be received
@@ -84,7 +85,8 @@ then
     touch /opt/"$APPNAME"/ftp/.exists
     echo '`ftp` folder created'
     cp /opt/"$APPNAME"/configs/ztp.csv.template /opt/"$APPNAME"/ftp/ztp.csv
-    cp /opt/"$APPNAME"/scripts/device_models.json /opt/"$APPNAME"/ftp/
+    cp /opt/"$APPNAME"/configs/vendor_class_defaults.csv /opt/"$APPNAME"/ftp/
+    cp /opt/"$APPNAME"/configs/supported_device_models.json /opt/"$APPNAME"/ftp/
     cp /opt/"$APPNAME"/scripts/csv_filter.py /opt/"$APPNAME"/ftp/
     echo "Copied files to /opt/$APPNAME/ftp"
     chown -R "${HUID}":"${HGID}" /opt/"$APPNAME"/ftp
@@ -137,9 +139,9 @@ if [ -e /opt/"$APPNAME"/scripts/.firstrun ]; then
     cp /opt/"$APPNAME"/configs/webfsd.conf.template /opt/"$APPNAME"/configs/webfsd.conf
 
     # python generate-dhcpd-conf.py modifications
-    sed -Ei 's/^(starting_ip_addr =).*192.168.*/\1 '"'$IPSTART'"'/' /opt/"$APPNAME"/scripts/generate-dhcpd-conf.py
+    sed -Ei 's/^(starting_ip =).*192.168.*/\1 '"'$IPSTART'"'/' /opt/"$APPNAME"/scripts/generate-dhcpd-conf.py
     sed -Ei 's/^(file_server =).*192.168.*/\1 '"'$IP'"'/' /opt/"$APPNAME"/scripts/generate-dhcpd-conf.py
-    sed -Ei 's/^(mgmt_ip_addr =).*192.168.*/\1 '"'$MGMTIP'"'/' /opt/"$APPNAME"/scripts/generate-dhcpd-conf.py 
+    sed -Ei 's/^(mgmt_ip =).*192.168.*/\1 '"'$MGMTIP'"'/' /opt/"$APPNAME"/scripts/generate-dhcpd-conf.py 
     sed -Ei 's/^(gateway =).*192.168.*/\1 '"'$GATEWAY'"'/' /opt/"$APPNAME"/scripts/generate-dhcpd-conf.py
     sed -Ei 's/^(dhcp_start =).*192.168.*/\1 '"'$DHCPSTART'"'/' /opt/"$APPNAME"/scripts/generate-dhcpd-conf.py
     sed -Ei 's/^(dhcp_end =).*192.168.*/\1 '"'$DHCPEND'"'/' /opt/"$APPNAME"/scripts/generate-dhcpd-conf.py

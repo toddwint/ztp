@@ -1,0 +1,24 @@
+---
+title:
+author: Todd Wintermute
+date: 2023-07-02
+header-includes:
+  - \usepackage{enumitem}
+  - \setlistdepth{20}
+  - \renewlist{itemize}{itemize}{20}
+  - \renewlist{enumerate}{enumerate}{20}
+  - \setlist[itemize]{label=$\cdot$}
+  - \setlist[itemize,1]{label=\textbullet}
+  - \setlist[itemize,2]{label=--}
+  - \setlist[itemize,3]{label=$\diamond$}
+  - \setlist[itemize,4]{label=--}
+  - \setlist[itemize,5]{label=$\circ$}
+  - \usepackage{float}
+  - \let\origfigure\figure
+  - \let\endorigfigure\endfigure
+  - \renewenvironment{figure}[1][2]{
+      \expandafter\origfigure\expandafter[H]
+      }{
+      \endorigfigure
+      } 
+---

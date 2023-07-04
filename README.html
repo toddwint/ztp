@@ -4,161 +4,215 @@
   <meta charset="utf-8" />
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <meta name="author" content="Todd Wintermute" />
+  <meta name="dcterms.date" content="2023-07-02" />
   <title>README</title>
   <style>
-    html {
-      line-height: 1.5;
-      font-family: Helvetica,Verdana,Sans-serif;
-      font-size: 20px;
-      color: #1a1a1a;
-      background-color: #fdfdfd;
-    }
-    body {
-      margin: 0 auto;
-      max-width: 36em;
-      padding-left: 50px;
-      padding-right: 50px;
-      padding-top: 50px;
-      padding-bottom: 50px;
-      hyphens: auto;
-      word-wrap: break-word;
-      text-rendering: optimizeLegibility;
-      font-kerning: normal;
-    }
-    @media (max-width: 600px) {
-      body {
-        font-size: 0.9em;
-        padding: 1em;
-      }
-    }
-    @media print {
-      body {
-        background-color: transparent;
-        color: black;
-        font-size: 12pt;
-      }
-      p, h2, h3 {
-        orphans: 3;
-        widows: 3;
-      }
-      h2, h3, h4 {
-        page-break-after: avoid;
-      }
-    }
-    p {
-      margin: 1em 0;
-    }
-    a {
-      color: blue;
-    }
-    a:visited {
-      color: blue;
-    }
-    img {
-      max-width: 100%;
-    }
-    h1, h2, h3, h4, h5, h6 {
-      margin-top: 1.4em;
-    }
-    h5, h6 {
-      font-size: 1em;
-      font-style: italic;
-    }
-    h6 {
-      font-weight: normal;
-    }
-    ol, ul {
-      padding-left: 1.7em;
-      margin-top: 1em;
-    }
-    li > ol, li > ul {
-      margin-top: 0;
-    }
-    blockquote {
-      margin: 1em 0 1em 1.7em;
-      padding-left: 1em;
-      border-left: 2px solid #e6e6e6;
-      color: #606060;
-    }
-    code {
-      font-family: Menlo, Monaco, 'Lucida Console', Consolas, monospace;
-      background-color: whitesmoke;
-      padding: .2em .4em;
-      font-size: 85%;
-      margin: 0;
-    }
-    pre {
-      margin: 1em 0;
-      background-color: whitesmoke;
-      padding: 1em;
-      overflow: auto;
-    }
-    pre code {
-      padding: 0;
-      overflow: visible;
-    }
-    .sourceCode {
-     background-color: transparent;
-     overflow: visible;
-    }
-    hr {
-      background-color: #1a1a1a;
-      border: none;
-      height: 1px;
-      margin: 1em 0;
-    }
-    table {
-      margin: 1em 0;
-      border-collapse: collapse;
-      width: 100%;
-      overflow-x: auto;
-      display: block;
-      font-variant-numeric: lining-nums tabular-nums;
-    }
-    table caption {
-      margin-bottom: 0.75em;
-    }
-    tbody {
-      margin-top: 0.5em;
-      border-top: 1px solid #1a1a1a;
-      border-bottom: 1px solid #1a1a1a;
-    }
-    th {
-      border-top: 1px solid #1a1a1a;
-      padding: 0.25em 0.5em 0.25em 0.5em;
-    }
-    td {
-      padding: 0.125em 0.5em 0.25em 0.5em;
-    }
-    header {
-      margin-bottom: 4em;
-      text-align: center;
-    }
-    #TOC li {
-      list-style: none;
-    }
-    #TOC a:not(:hover) {
-      text-decoration: none;
-    }
-    code{white-space: pre-wrap;}
-    span.smallcaps{font-variant: small-caps;}
-    span.underline{text-decoration: underline;}
-    div.column{display: inline-block; vertical-align: top; width: 50%;}
-    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
-    ul.task-list{list-style: none;}
-    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
-  </style>
+html {
+line-height: 1.5;
+font-family: Helvetica,Verdana,Sans-serif;
+font-size: 20px;
+color: #1a1a1a;
+background-color: #fdfdfd;
+}
+body {
+margin: 0 auto;
+max-width: 36em;
+padding-left: 50px;
+padding-right: 50px;
+padding-top: 50px;
+padding-bottom: 50px;
+hyphens: auto;
+overflow-wrap: break-word;
+text-rendering: optimizeLegibility;
+font-kerning: normal;
+}
+@media (max-width: 600px) {
+body {
+font-size: 0.9em;
+padding: 1em;
+}
+h1 {
+font-size: 1.8em;
+}
+}
+@media print {
+body {
+background-color: transparent;
+color: black;
+font-size: 12pt;
+}
+p, h2, h3 {
+orphans: 3;
+widows: 3;
+}
+h2, h3, h4 {
+page-break-after: avoid;
+}
+}
+p {
+margin: 1em 0;
+}
+a {
+color: blue;
+}
+a:visited {
+color: blue;
+}
+img {
+max-width: 100%;
+}
+h1, h2, h3, h4, h5, h6 {
+margin-top: 1.4em;
+}
+h5, h6 {
+font-size: 1em;
+font-style: italic;
+}
+h6 {
+font-weight: normal;
+}
+ol, ul {
+padding-left: 1.7em;
+margin-top: 1em;
+}
+li > ol, li > ul {
+margin-top: 0;
+}
+blockquote {
+margin: 1em 0 1em 1.7em;
+padding-left: 1em;
+border-left: 2px solid #e6e6e6;
+color: #606060;
+}
+code {
+font-family: Menlo, Monaco, 'Lucida Console', Consolas, monospace;
+background-color: whitesmoke;
+padding: .2em .4em;
+font-size: 85%;
+margin: 0;
+}
+pre {
+margin: 1em 0;
+background-color: whitesmoke;
+padding: 1em;
+overflow: auto;
+}
+pre code {
+padding: 0;
+overflow: visible;
+overflow-wrap: normal;
+}
+.sourceCode {
+background-color: transparent;
+overflow: visible;
+}
+hr {
+background-color: #1a1a1a;
+border: none;
+height: 1px;
+margin: 1em 0;
+}
+table {
+margin: 1em 0;
+border-collapse: collapse;
+width: 100%;
+overflow-x: auto;
+display: block;
+font-variant-numeric: lining-nums tabular-nums;
+}
+table caption {
+margin-bottom: 0.75em;
+}
+tbody {
+margin-top: 0.5em;
+border-top: 1px solid #1a1a1a;
+border-bottom: 1px solid #1a1a1a;
+}
+th {
+border-top: 1px solid #1a1a1a;
+padding: 0.25em 0.5em 0.25em 0.5em;
+}
+td {
+padding: 0.125em 0.5em 0.25em 0.5em;
+}
+header {
+margin-bottom: 4em;
+text-align: center;
+}
+#TOC li {
+list-style: none;
+}
+#TOC ul {
+padding-left: 1.3em;
+}
+#TOC > ul {
+padding-left: 0;
+}
+#TOC a:not(:hover) {
+text-decoration: none;
+}
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+width: 0.8em;
+margin: 0 0.8em 0.2em -1.6em;
+vertical-align: middle;
+}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
   <!--[if lt IE 9]>
     <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
   <![endif]-->
 </head>
 <body>
-<h1 id="toddwintztp">toddwint/ztp</h1>
-<h2 id="info">Info</h2>
-<p><code>ztp</code> (Zero-Touch Provisioning) docker image for Juniper SRX345, SRX1500, ACX7024, EX2300, EX4100, and HPE Aruba 2930F devices.</p>
+<header id="title-block-header">
+<h1 class="title">README</h1>
+<p class="author">Todd Wintermute</p>
+<p class="date">2023-07-02</p>
+</header>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#toddwintztp" id="toc-toddwintztp"><span class="toc-section-number">1</span> toddwint/ztp</a>
+<ul>
+<li><a href="#info" id="toc-info"><span class="toc-section-number">1.1</span> Info</a></li>
+<li><a href="#overview" id="toc-overview"><span class="toc-section-number">1.2</span> Overview</a></li>
+<li><a href="#features" id="toc-features"><span class="toc-section-number">1.3</span> Features</a></li>
+<li><a href="#sample-config.txt-file" id="toc-sample-config.txt-file"><span class="toc-section-number">1.4</span> Sample <code>config.txt</code>
+file</a></li>
+<li><a href="#sample-docker-run-script" id="toc-sample-docker-run-script"><span class="toc-section-number">1.5</span> Sample docker run script</a></li>
+<li><a href="#login-page" id="toc-login-page"><span class="toc-section-number">1.6</span> Login page</a></li>
+</ul></li>
+</ul>
+</nav>
+<h1 data-number="1" id="toddwintztp"><span class="header-section-number">1</span> toddwint/ztp</h1>
+<h2 data-number="1.1" id="info"><span class="header-section-number">1.1</span> Info</h2>
+<p><code>ZTP</code> (Zero-Touch Provisioning) docker image for Juniper
+SRX345, SRX1500, ACX7024, EX2300, EX4100, and HPE Aruba 2930F
+devices.</p>
 <p>Docker Hub: <a href="https://hub.docker.com/r/toddwint/ztp" class="uri">https://hub.docker.com/r/toddwint/ztp</a></p>
 <p>GitHub: <a href="https://github.com/toddwint/ztp" class="uri">https://github.com/toddwint/ztp</a></p>
-<h2 id="overview">Overview</h2>
+<p><em>For more detailed information, please view the
+<code>ZTP Instructions</code> file <a href="ZTP%20Instructions.md">here</a>, <a href="ZTP%20Instructions.html">here</a>, or <a href="ZTP%20Instructions.pdf">here</a>.</em></p>
+<h2 data-number="1.2" id="overview"><span class="header-section-number">1.2</span> Overview</h2>
 <ul>
 <li>Performs Zero-Touch Provisioning of
 <ul>
@@ -169,31 +223,8 @@
 <li>Juniper EX4100</li>
 <li>HPE Aruba 2930F</li>
 </ul></li>
-<li>Download the docker image and github files.</li>
-<li>Configure the settings in <code>run/config.txt</code>.</li>
-<li>Start a new container by running <code>run/create_container.sh</code>.
-<ul>
-<li>The folder <code>ftp</code> will be created as specified in the <code>create_container.sh</code> script.</li>
-<li>An example CSV file <code>ztp.csv</code> is created in the <code>ftp</code> volume on the first run.</li>
-</ul></li>
-<li>Fill in the file <code>ftp/ztp.csv</code> with a list of device hardware models, MACs, OS image names, and configuration file names.
-<ul>
-<li>Modify it as you need, and place it back in the same folder with the same name.</li>
-<li>Additional columns can be added after the last column</li>
-<li>You can use the <code>csv_filter.py</code> script in the <code>ftp</code> volume to create CSV files sorted by vendor or model and rename them to <code>ztp.csv</code> as needed.
-<ul>
-<li>A backup of the original file is created named <code>ztp-all.csv</code>.</li>
-</ul></li>
-</ul></li>
-<li>Transfer the configuration files and OS images to <code>ftp/os_images</code> and <code>ftp/config_files</code>.</li>
-<li>Trigger the container to update by restarting it with <code>./restart.sh</code> or <code>./stop.sh</code> and <code>./start.sh</code>.
-<ul>
-<li>You can also run <code>./delete_container</code> followed by <code>./create_container</code> as the <code>ftp</code> folder will not be removed automatically.</li>
-<li>To trigger the update without restarting the container run <code>./exec/bash.sh</code> and then run <code>./generate_dhcpd_conf.sh</code></li>
-</ul></li>
-<li>Open the file webadmin.html and click one of the links to view the file transfers in a web browser.</li>
 </ul>
-<h2 id="features">Features</h2>
+<h2 data-number="1.3" id="features"><span class="header-section-number">1.3</span> Features</h2>
 <ul>
 <li>Ubuntu base image</li>
 <li>Plus:
@@ -225,13 +256,15 @@
 <li><a href="https://github.com/gvalkov/tailon">tailon</a>
 <ul>
 <li>View multiple logs and files in your browser</li>
-<li>User selectable <code>tail</code>, <code>grep</code>, <code>sed</code>, and <code>awk</code> commands</li>
+<li>User selectable <code>tail</code>, <code>grep</code>,
+<code>sed</code>, and <code>awk</code> commands</li>
 <li>Filter logs and files</li>
 <li>Download logs to your computer</li>
 </ul></li>
 </ul></li>
 </ul>
-<h2 id="sample-config.txt-file">Sample <code>config.txt</code> file</h2>
+<h2 data-number="1.4" id="sample-config.txt-file"><span class="header-section-number">1.4</span> Sample <code>config.txt</code>
+file</h2>
 <pre><code># To get a list of timezones view the files in `/usr/share/zoneinfo`
 TZ=UTC
 
@@ -263,7 +296,7 @@ HTTPPORT4=8083
 
 # The hostname of the instance of the docker container
 HOSTNAME=ztp01</code></pre>
-<h2 id="sample-docker-run-script">Sample docker run script</h2>
+<h2 data-number="1.5" id="sample-docker-run-script"><span class="header-section-number">1.5</span> Sample docker run script</h2>
 <pre><code>#!/usr/bin/env bash
 REPO=toddwint
 APPNAME=ztp
@@ -304,7 +337,7 @@ docker run -dit \
     -e APPNAME=&quot;$APPNAME&quot; \
     `# --cap-add=NET_ADMIN \ ` \
     ${REPO}/${APPNAME}</code></pre>
-<h2 id="login-page">Login page</h2>
+<h2 data-number="1.6" id="login-page"><span class="header-section-number">1.6</span> Login page</h2>
 <p>Open the <code>webadmin.html</code> file.</p>
 <ul>
 <li>Or just type in your browser:

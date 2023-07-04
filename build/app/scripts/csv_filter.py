@@ -5,7 +5,7 @@ filtered by vender and model of devices
 """
 
 __version__ = '0.0.2'
-__date__ = '2023-06-22'
+__date__ = '2023-06-30'
 __author__ = 'Todd Wintermute'
 
 import argparse
@@ -14,13 +14,7 @@ import pathlib
 import re
 import sys
 
-device_models_json = 'device_models.json'
-
-device_models_json = pathlib.Path(device_models_json)
-if not device_models_json.exists():
-    print(f'Could not find file `{device_models_json}`. Bye!')
-    sys.exit()
-device_models = json.loads(device_models_json.read_text())
+device_models_json = pathlib.Path('supported_device_models.json')
 
 parser = argparse.ArgumentParser(
     description=__doc__, 
@@ -40,8 +34,13 @@ parser.add_argument(
     help=f'name of CSV file (default=%(default)s)',
     )
 args = parser.parse_args()
-file = args.filename
 
+if not device_models_json.exists():
+    print(f'Could not find file `{device_models_json}`. Bye!')
+    sys.exit()
+device_models = json.loads(device_models_json.read_text())
+
+file = args.filename
 print(f'Input filename: `{file}`')
 
 with open(file) as f:
