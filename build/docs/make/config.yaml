@@ -9,7 +9,7 @@ toc-depth: 5                 # setitng max depth of 1 for table of contents
 number-sections: true        # we will prefix headings with numbers
 highlight-style: tango
 variables:
-  lof: true                  # List of Figures
+  lof: false                 # List of Figures
   lot: false                 # List of tables
   documentclass: article     # supported values: book, scrbook, article, etc.
   linkcolor: blue
