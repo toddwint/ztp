@@ -81,7 +81,7 @@ You can edit it using a text editor or using a program like Microsoft Excel or L
 
 Here is a look at the example `vendor_class_defaults.csv`:
 ```csv
-hardware,vendor_class_string,os_image,config_file
+hardware,vendor_class_string,os,config
 srx345,Juniper-srx345,,
 srx1500,Juniper-srx1500,,
 2930f,Aruba JL253A 2930F-24G-4SFP+ Switch dslforum.org,,
@@ -95,17 +95,17 @@ srx1500,Juniper-srx1500,,
 
 Or in an human viewable way
 
-| hardware | vendor_class_string                                       | os_image | config_file |
-|----------|-----------------------------------------------------------|----------|-------------|
-| srx345   | Juniper-srx345                                            |          |             |
-| srx1500  | Juniper-srx1500                                           |          |             |
-| 2930f    | Aruba JL253A 2930F-24G-4SFP+ Switch dslforum.org          |          |             |
-| 2930f    | Aruba JL254A 2930F-48G-4SFP+ Switch dslforum.org          |          |             |
-| 2930f    | Aruba JL255A 2930F-24G-PoE+-4SFP+ Switch dslforum.org     |          |             |
-| 2930f    | Aruba JL256A 2930F-48G-PoE+-4SFP+ Switch dslforum.org     |          |             |
-| 2930f    | Aruba JL260A 2930F-48G-4SFP Switch dslforum.org           |          |             |
-| 2930f    | Aruba JL263A 2930F-24G-PoE+-4SFP+-TAA Switch dslforum.org |          |             |
-| 2930f    | Aruba JL264A 2930F-48G-PoE+-4SFP+-TAA Switch dslforum.org |          |             |
+| hardware | vendor_class_string                                       | os  | config |
+|----------|-----------------------------------------------------------|-----|--------|
+| srx345   | Juniper-srx345                                            |     |        |
+| srx1500  | Juniper-srx1500                                           |     |        |
+| 2930f    | Aruba JL253A 2930F-24G-4SFP+ Switch dslforum.org          |     |        |
+| 2930f    | Aruba JL254A 2930F-48G-4SFP+ Switch dslforum.org          |     |        |
+| 2930f    | Aruba JL255A 2930F-24G-PoE+-4SFP+ Switch dslforum.org     |     |        |
+| 2930f    | Aruba JL256A 2930F-48G-PoE+-4SFP+ Switch dslforum.org     |     |        |
+| 2930f    | Aruba JL260A 2930F-48G-4SFP Switch dslforum.org           |     |        |
+| 2930f    | Aruba JL263A 2930F-24G-PoE+-4SFP+-TAA Switch dslforum.org |     |        |
+| 2930f    | Aruba JL264A 2930F-48G-PoE+-4SFP+-TAA Switch dslforum.org |     |        |
 
 And here is a description of each column:
 
