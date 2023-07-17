@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 """
- Input a ztp.csv that has the Hardware,MAC,OS,Config and output a modified 
- dhcpd.conf file based on a template.
- Optionally, input a vendor class defaults CSV file with the fields
- Hardware,Vendor Class ID, OS, Config and modify the dhcpd.conf file.
- Also, generate a dhcp_report.csv file to be used later to monitor
- the progress of the file transfers.
- Script will replace the dhcpd, tftp, and ftp configuration files,
- and then restart the processes.
+Input a ztp.csv that has the Hardware,MAC,OS,Config and output a modified 
+dhcpd.conf file based on a template.
+Optionally, input a vendor class defaults CSV file with the fields 
+Hardware,Vendor Class ID, OS, Config and modify the dhcpd.conf file.
+Also, generate a dhcp_report.csv file to be used later to monitor 
+the progress of the file transfers.
+Script will replace the dhcpd, tftp, and ftp configuration files, 
+and then restart the processes.
 """
 __version__ = '0.0.9'
 __date__ = '2023-07-04'
@@ -36,6 +36,7 @@ ztp_csv_file = pathlib.Path('ztp.csv')
 ztp_csv_path = pathlib.Path(f'/opt/{appname}/ftp')
 vendor_csv_file = pathlib.Path('vendor_class_defaults.csv')
 vendor_csv_path = pathlib.Path(f'/opt/{appname}/ftp')
+prov_methods = pathlib.Path(f'/opt/{appname}/logs/provisioning_methods.json')
 dhcp_report_template = pathlib.Path(
     f'/opt/{appname}/configs/dhcp_report.csv.template'
     )
@@ -161,6 +162,10 @@ dhcpd_tmp_config_file.write_text(dhcpd_template.read_text())
 print(f'Making `{dhcp_report}` from `{dhcp_report_template}`')
 dhcp_report.write_text(dhcp_report_template.read_text())
 
+# Keep track of provisioning methods enabled. Reset the values.
+prov_enabled = {'vendor_class_id_method': False, 'mac_addr_method': False}
+prov_methods.write_text(json.dumps(prov_enabled))
+
 # Start of Vendor Class ID section
 if not vendor_csv_file.exists():
     msg = f'[WARNING] `{vendor_csv_file.name}` was not found. '
@@ -205,7 +210,7 @@ for n,item in enumerate(vendor_objs, 1):
         tmp_vendor_objs.remove(tmp_item)
         continue
     number_of_matches = [
-        each['vendor_cid'] == item['vendor_cid'] 
+        each['vendor_cid'] == item['vendor_cid']
         for each in tmp_vendor_objs
         ].count(True)
     sysloghdr = (
@@ -243,7 +248,7 @@ for n,item in enumerate(vendor_objs, 1):
         tmp_item['os'] = ''
         tmp_item['template'] = re.sub(
             '.*\{os\}.*\n',
-            '', 
+            '',
             tmp_item['template']
             )
     cf_path = ftp_explicit_path / config_folder
@@ -297,10 +302,12 @@ if tmp_vendor_objs:
     msg = '[INFO] Adding Vendor Class ID info to dhcpd.conf '
     print(msg)
     syslog(msg)
+    prov_enabled['vendor_class_id_method'] = True
 else:
     msg = '[INFO] Vendor Class ID info will not be added to dhcpd.conf '
     print(msg)
     syslog(msg)
+    prov_enabled['vendor_class_id_method'] = False
 
 dhcpd_text = dhcpd_tmp_config_file.read_text()
 dhcpd_sections = dhcpd_text.split('\n\n')
@@ -322,7 +329,7 @@ if not ztp_csv_file.exists():
     syslog(msg)
     ztp_objs = [] # we still need the program to run
 else:
-    # Read the CSV file, store it, get the headers, and close the file 
+    # Read the CSV file, store it, get the headers, and close the file
     with open(ztp_csv_file) as f:
         t = f.readlines()
     reader_dict = csv.DictReader(t, fieldnames=ztp_csv_columns)
@@ -336,8 +343,8 @@ tmp_ztp_objs = [] # new list to store valid data objects
 for n,item in enumerate(ztp_objs, start=1):
     while True:
         if any((
-            gateway == ip, 
-            file_server == ip, 
+            gateway == ip,
+            file_server == ip,
             mgmt_ip == ip
             )):
             ip += 1
@@ -439,7 +446,7 @@ for n,item in enumerate(ztp_objs, start=1):
         tmp_item['os'] = ''
         tmp_item['template'] = re.sub(
             '.*\{os\}.*\n',
-            '', 
+            '',
             tmp_item['template']
             )
     # Config file
@@ -486,7 +493,7 @@ for n,item in enumerate(ztp_objs, start=1):
             print(msg)
             syslog(sysloghdr + msg)
         else:
-            reportrow.update(item) 
+            reportrow.update(item)
             msg = (
                 f'No OS file nor configuration file were specified. '
                 'Skipping device. '
@@ -505,6 +512,7 @@ if tmp_ztp_objs:
     msg = '[INFO] Adding MAC ADDR method info from ztp.csv to dhcpd.conf '
     print(msg)
     syslog(msg)
+    prov_enabled['mac_addr_method'] = True
 else:
     msg = (
         '[INFO] MAC ADDR method info from ztp.csv will not be added to '
@@ -512,6 +520,7 @@ else:
         )
     print(msg)
     syslog(msg)
+    prov_enabled['mac_addr_method'] = False
 
 dhcpd_text = dhcpd_tmp_config_file.read_text()
 add_lines = [each['template'] for each in tmp_ztp_objs]
@@ -569,15 +578,15 @@ for n in dup_pos_macs:
     print(msg)
     syslog(msg)
 
-# Set IP after static hosts as the start of the dynamic range 
+# Set IP after static hosts as the start of the dynamic range
 # unless the range is already exhausted
 if ip >= dhcp_start:
     ip = dhcp_start
 else:
     dhcp_start = ip
     output = re.sub(
-        r'(range )(([0-9]{1,3}\.?){4})', 
-        f'\g<1>{dhcp_start}', 
+        r'(range )(([0-9]{1,3}\.?){4})',
+        f'\g<1>{dhcp_start}',
         dhcpd_tmp_config_file.read_text()
         )
     dhcpd_tmp_config_file.write_text(output)
@@ -593,6 +602,9 @@ def dhcp_report_write(report_objs, columns):
         writer.writeheader()
         writer.writerows(report_objs)
 dhcp_report_write(report_ztp, report_columns)
+
+# Write the enabled provisioning methods to json file
+prov_methods.write_text(json.dumps(prov_enabled))
 
 # Done. Ready to go
 msg = '[INFO] Finished reconfiguring files. Ready! '

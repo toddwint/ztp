@@ -1,10 +1,9 @@
 #!/usr/bin/env bash
 #set -x
 TS=$(date -Is | tr -d :)
-/opt/"$APPNAME"/scripts/generate_transfer_report.py
 
 REPORT_GLOB="/opt/$APPNAME/ftp/transfer_report-*.csv"
-XFER_REPORT="/opt/$APPNAME/ftp/transfer_report.csv"
+XFER_REPORT="/opt/$APPNAME/logs/transfer_report.csv"
 
 if [ ! -f "$XFER_REPORT" ]
     then

@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
 
-/opt/"$APPNAME"/scripts/generate_transfer_report.py
-
-FILE=/opt/"$APPNAME"/ftp/transfer_report.csv
+FILE=/opt/"$APPNAME"/logs/transfer_report.csv
 
 if [ ! -f "$FILE" ]
     then

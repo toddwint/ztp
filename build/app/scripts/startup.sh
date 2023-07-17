@@ -180,6 +180,10 @@ fi
 # Run the python script
 /opt/"$APPNAME"/scripts/generate-dhcpd-conf.py
 
+# Run the python daemon to update transfer report
+nohup /opt/"$APPNAME"/scripts/generate_transfer_report.py >> /opt/"$APPNAME"/logs/generate_transfer_report.log 2>&1 &
+echo $! > /opt/"$APPNAME"/logs/generate_transfer_report.pid
+
 # Remove service pid(s) if it exists.
 rm -rf /var/run/dhcpd.pid
 rm -rf /var/run/webfs/webfsd.pid
