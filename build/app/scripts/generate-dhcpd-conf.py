@@ -10,7 +10,7 @@ Script will replace the dhcpd, tftp, and ftp configuration files,
 and then restart the processes.
 """
 __version__ = '0.0.9'
-__date__ = '2023-07-19'
+__date__ = '2023-07-20'
 __author__ = 'Todd Wintermute'
 
 from syslog import syslog
@@ -529,8 +529,8 @@ if tmp_ztp_objs:
 # End of MAC ADDR method ztp.csv section
 
 # Now we search and notify the user of duplicates
-m = tuple(item['mac'] for item in ztp_objs)
-c = tuple(item['config'] for item in ztp_objs)
+m = tuple(item['mac'] for item in tmp_ztp_objs)
+c = tuple(item['config'] for item in tmp_ztp_objs)
 
 # Search for duplicate configs
 unique_configs = set()
@@ -596,7 +596,7 @@ dhcpd_config_file_loc.write_text(dhcpd_tmp_config_file.read_text())
 # Write the dhcp_report.csv file
 def dhcp_report_write(report_objs, columns):
     with open(dhcp_report, 'w') as f:
-        writer = csv.DictWriter(f, fieldnames=columns)
+        writer = csv.DictWriter(f, fieldnames=columns, extrasaction='ignore')
         writer.writeheader()
         writer.writerows(report_objs)
 dhcp_report_write(report_ztp, report_columns)
