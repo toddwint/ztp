@@ -10,7 +10,7 @@ Script will replace the dhcpd, tftp, and ftp configuration files,
 and then restart the processes.
 """
 __version__ = '0.0.9'
-__date__ = '2023-07-04'
+__date__ = '2023-07-19'
 __author__ = 'Todd Wintermute'
 
 from syslog import syslog
@@ -32,21 +32,22 @@ mgmt_ip = '192.168.1.253'
 gateway = '192.168.1.254'
 dhcp_start = '192.168.1.249'
 dhcp_end = '192.168.1.250'
+ftpdir = f'/opt/{appname}/ftp'
+logdir = f'/opt/{appname}/logs'
+confdir = f'/opt/{appname}/configs'
 ztp_csv_file = pathlib.Path('ztp.csv')
-ztp_csv_path = pathlib.Path(f'/opt/{appname}/ftp')
+ztp_csv_path = pathlib.Path(ftpdir)
 vendor_csv_file = pathlib.Path('vendor_class_defaults.csv')
-vendor_csv_path = pathlib.Path(f'/opt/{appname}/ftp')
-prov_methods = pathlib.Path(f'/opt/{appname}/logs/provisioning_methods.json')
-dhcp_report_template = pathlib.Path(
-    f'/opt/{appname}/configs/dhcp_report.csv.template'
-    )
-dhcp_report = pathlib.Path(f'/opt/{appname}/logs/dhcp_report.csv')
+vendor_csv_path = pathlib.Path(ftpdir)
+prov_methods = pathlib.Path(f'{logdir}/provisioning_methods.json')
+dhcp_report_template = pathlib.Path(f'{confdir}/dhcp_report.csv.template')
+dhcp_report = pathlib.Path(f'{logdir}/dhcp_report.csv')
 dhcpd_daemon_name = 'isc-dhcp-server'
-dhcpd_template = pathlib.Path(f'/opt/{appname}/configs/dhcpd.conf')
-dhcpd_tmp_config_file = pathlib.Path(f'/opt/{appname}/configs/dhcpd.py.conf')
+dhcpd_template = pathlib.Path(f'{confdir}/dhcpd.conf')
+dhcpd_tmp_config_file = pathlib.Path(f'{confdir}/dhcpd.py.conf')
 dhcpd_config_file_loc = pathlib.Path('/etc/dhcp/dhcpd.conf')
 root = pathlib.Path('/')
-ftp_explicit_path = pathlib.Path(f'/opt/{appname}/ftp')
+ftp_explicit_path = pathlib.Path(ftpdir)
 os_folder = 'os_images'
 config_folder = 'config_files'
 vendor_csv_columns = ['hardware','vendor_cid','os','config']
@@ -58,15 +59,12 @@ report_columns = ztp_csv_columns + [
     'msg'
     ]
 
-device_models_json = pathlib.Path(
-    f'/opt/{appname}/ftp/supported_device_models.json'
-    )
+supported_devices = 'supported_device_models.json'
+device_models_json = pathlib.Path(f'{ftpdir}/{supported_devices}')
 try:
     device_models = json.loads(device_models_json.read_text())
 except:
-    device_models_json = pathlib.Path(
-        f'/opt/{appname}/configs/supported_device_models.json'
-        )
+    device_models_json = pathlib.Path(f'{confdir}/{supported_devices}')
     device_models = json.loads(device_models_json.read_text())
 vendor_class = """\
 #Class to Match Option 60

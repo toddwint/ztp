@@ -6,7 +6,7 @@ file transfer messages.
 
 __version__ = '0.0.3'
 __author__ = 'Todd Wintermute'
-__date__ = '2023-07-16'
+__date__ = '2023-07-19'
 
 import csv
 import datetime as dt
@@ -74,7 +74,7 @@ def add_new_leases(dhcp_objs, dhcp_leases):
     return dhcp_objs
 
 def write_xfer_report(dhcp_objs, xfer_report, report_csv_columns):
-    with open(xfer_report, 'w') as f:
+    with open(xfer_report, 'w', newline='') as f:
         writer = csv.DictWriter(f, fieldnames=report_csv_columns)
         writer.writeheader()
         writer.writerows(dhcp_objs)
@@ -92,9 +92,6 @@ def hash_changed(obj, lasthash):
 def follow_log(logfile):
     global lastupdate
     global lasthash
-    global dhcp_objs
-    global ip_lut
-    global ips
     print(f'[{dt.datetime.now()}] Start reading log file.')
     while True:
         line = logfile.readline()
@@ -104,7 +101,6 @@ def follow_log(logfile):
                 lastupdate = dt.datetime.now()
                 if hash_a_list(dhcp_objs) != lasthash:
                     lasthash = hash_a_list(dhcp_objs)
-                    now = dt.datetime.now()
                     write_xfer_report(dhcp_objs, xfer_report, columns)
                     write_xfer_report(dhcp_objs, xfer_report2, columns)
                     print(f'[{now}] Wrote transfer report to file.')
@@ -208,8 +204,8 @@ v_conf = re.compile(f"(?P<config>{v_conf_set_alt})")
 
 xfer_oks_alt = '|'.join([re.escape(m) for m in xfer_oks])
 xfer_ok = re.compile(
-    f'(?P<time>.*) (?:{hostname}).*(?P<msg>{xfer_oks_alt}).*'
-    '(?P<type>config|os)(?:_files|_images)',
+    f'(?P<time>.*) (?:{hostname}).*(?P<fullmsg>(?P<msg>{xfer_oks_alt}).*'
+    '(?P<type>config|os)(?:_files|_images).*)',
     re.IGNORECASE
     )
 xfer_errors_alt = '|'.join([re.escape(m) for m in xfer_errors])
@@ -255,25 +251,40 @@ with ztp_log.open() as f:
                 if okmsg['type'] == 'config' and item['config'] in line:
                     if item['config_xfer_msg']:
                         # maybe repeated transfer
-                        item['config_xfer_msg'] += '. ' + okmsg['msg']
+                        item['config_xfer_msg'] += '\n' + okmsg['msg']
                     else:
                         item['config_xfer_msg'] = okmsg['msg']
                     if item['config_xfer_time']:
                         # maybe repeated transfer
-                        item['config_xfer_time'] += '. ' + okmsg['time']
+                        item['config_xfer_time'] += '\n' + okmsg['time']
                     else:
                         item['config_xfer_time'] = okmsg['time']
                 elif okmsg['type'] == 'os' and item['os'] in line:
                     if item['os_xfer_msg']:
                         # maybe repeated transfer
-                        item['os_xfer_msg'] += '. ' + okmsg['msg']
+                        item['os_xfer_msg'] += '\n' + okmsg['msg']
                     else:
                         item['os_xfer_msg'] = okmsg['msg']
                     if item['os_xfer_time']:
                         # maybe repeated transfer
-                        item['os_xfer_time'] += '. ' + okmsg['time']
+                        item['os_xfer_time'] += '\n' + okmsg['time']
                     else:
                         item['os_xfer_time'] = okmsg['time']
+                elif okmsg['type'] == 'config':
+                    if item['msg']:
+                        item['msg'] += '. ' + okmsg['fullmsg']
+                    else:
+                        item['msg'] = okmsg['fullmsg']
+                elif okmsg['type'] == 'os':
+                    if item['msg']:
+                        item['msg'] += '. ' + okmsg['fullmsg']
+                    else:
+                        item['msg'] = okmsg['fullmsg']
+                else:
+                    if item['msg']:
+                        item['msg'] += '. ' + okmsg['fullmsg']
+                    else:
+                        item['msg'] = okmsg['fullmsg']
             elif (errmsg := xfer_error.search(line)):
                 if (tmsg := xfer_type.search(errmsg['fullmsg'])):
                     # fill in mising info for vendor class dynamic dhcp
@@ -293,23 +304,23 @@ with ztp_log.open() as f:
                     if tmsg['type'] == 'config' and item['config'] in line:
                         if item['config_xfer_msg']:
                             # maybe repeated transfer
-                            item['config_xfer_msg'] += '. ' + errmsg['msg']
+                            item['config_xfer_msg'] += '\n' + errmsg['msg']
                         else:
                             item['config_xfer_msg'] = errmsg['msg']
                         if item['config_xfer_time']:
                             # maybe repeated transfer
-                            item['config_xfer_time'] += '. ' + errmsg['time']
+                            item['config_xfer_time'] += '\n' + errmsg['time']
                         else:
                             item['config_xfer_time'] = errmsg['time']
                     elif tmsg['type'] == 'os' and item['os'] in line:
                         if item['os_xfer_msg']:
                             # maybe repeated transfer
-                            item['os_xfer_msg'] += '. ' + errmsg['msg']
+                            item['os_xfer_msg'] += '\n' + errmsg['msg']
                         else:
                             item['os_xfer_msg'] = errmsg['msg']
                         if item['os_xfer_time']:
                             # maybe repeated transfer
-                            item['os_xfer_time'] += '. ' + errmsg['time']
+                            item['os_xfer_time'] += '\n' + errmsg['time']
                         else:
                             item['os_xfer_time'] = errmsg['time']
                     elif tmsg['type'] == 'config':
@@ -329,15 +340,15 @@ with ztp_log.open() as f:
                             item['msg'] = errmsg['fullmsg']
                 # tftp sends messages on multiple lines
                 # a bad file name will have the same time stamp
-                elif item['config_xfer_time'] == errmsg['time']:
+                elif re.search(errmsg['time'], item['config_xfer_time']):
                     # matches the previous config transfer message
-                    item['config_xfer_msg'] = 'Error'
-                    item['config_xfer_time'] = errmsg['time']
+                    item['config_xfer_msg'] += '\n' + 'Error'
+                    item['config_xfer_time'] += '\n' + errmsg['time']
                     item['msg'] += '. ' + errmsg['fullmsg']
-                elif item['os_xfer_time'] == errmsg['time']:
+                elif re.search(errmsg['time'], item['os_xfer_time']):
                     # matches the previous os transfer message
-                    item['os_xfer_msg'] = 'Error'
-                    item['os_xfer_time'] = errmsg['time']
+                    item['os_xfer_msg'] += '\n' + 'Error'
+                    item['os_xfer_time'] += '\n' + errmsg['time']
                     item['msg'] += '. ' + errmsg['fullmsg']
                 else:
                     # Not a config or os file in msg or previous complete
