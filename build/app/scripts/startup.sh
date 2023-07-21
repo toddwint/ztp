@@ -141,7 +141,7 @@ if [ -e /opt/"$APPNAME"/scripts/.firstrun ]; then
     # python generate-dhcpd-conf.py modifications
     sed -Ei 's/^(starting_ip =).*192.168.*/\1 '"'$IPSTART'"'/' /opt/"$APPNAME"/scripts/generate-dhcpd-conf.py
     sed -Ei 's/^(file_server =).*192.168.*/\1 '"'$IP'"'/' /opt/"$APPNAME"/scripts/generate-dhcpd-conf.py
-    sed -Ei 's/^(mgmt_ip =).*192.168.*/\1 '"'$MGMTIP'"'/' /opt/"$APPNAME"/scripts/generate-dhcpd-conf.py 
+    sed -Ei 's/^(mgmt_ip =).*192.168.*/\1 '"'$MGMTIP'"'/' /opt/"$APPNAME"/scripts/generate-dhcpd-conf.py
     sed -Ei 's/^(gateway =).*192.168.*/\1 '"'$GATEWAY'"'/' /opt/"$APPNAME"/scripts/generate-dhcpd-conf.py
     sed -Ei 's/^(dhcp_start =).*192.168.*/\1 '"'$DHCPSTART'"'/' /opt/"$APPNAME"/scripts/generate-dhcpd-conf.py
     sed -Ei 's/^(dhcp_end =).*192.168.*/\1 '"'$DHCPEND'"'/' /opt/"$APPNAME"/scripts/generate-dhcpd-conf.py

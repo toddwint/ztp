@@ -17,17 +17,17 @@ import sys
 device_models_json = pathlib.Path('supported_device_models.json')
 
 parser = argparse.ArgumentParser(
-    description=__doc__, 
+    description=__doc__,
     epilog='You got this!',
     )
 parser.add_argument(
-    '-v', '--version', 
-    help='show the version number and exit', 
-    action='version', 
+    '-v', '--version',
+    help='show the version number and exit',
+    action='version',
     version=f'Version: {__version__}',
     )
 parser.add_argument(
-    'filename', 
+    'filename',
     nargs='?',
     type=pathlib.Path,
     default='ztp.csv',

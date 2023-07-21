@@ -54,7 +54,7 @@ sed -Ei 's/\bIPADDR:80\b/'"$IPADDR"':80/g' "$htmlfile"
 echo 'Open webadmin.html to use this application (`firefox webadmin.html &`)'
 read -rp 'Would you like me to open that now? [Y/n]: ' answer
 if [ -z ${answer} ]; then answer='y'; fi
-if [[ ${answer,,} =~ ^y ]] 
+if [[ ${answer,,} =~ ^y ]]
 then
     firefox "$htmlfile" > /dev/null 2>&1 &
 fi

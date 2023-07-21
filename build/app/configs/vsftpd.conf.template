@@ -6,7 +6,7 @@
 # If enabled, vsftpd will run in standalone mode. This means that vsftpd must not be run from an inetd of some kind. Instead, the vsftpd executable is run once directly. vsftpd itself will then take care of listening for and handling incoming connections.
 # Default: YES
 listen=YES
- 
+
 # Like the listen parameter, except vsftpd will listen on an IPv6 socket instead of an IPv4 one. This parameter and the listen parameter are mutually exclusive.
 # Default: NO
 listen_ipv6=NO
@@ -71,11 +71,11 @@ xferlog_enable=YES
 # Default: /var/log/xferlog
 xferlog_file=/opt/ztp/logs/vsftpd_xfers.log
 
-# When enabled, all FTP requests and responses are logged, providing the option xferlog_std_format is not enabled. Useful for debugging. 
+# When enabled, all FTP requests and responses are logged, providing the option xferlog_std_format is not enabled. Useful for debugging.
 # Default: NO
 #log_ftp_protocol=YES
 
-# If enabled, two log files are generated in parallel, going by default to /var/log/xferlog and /var/log/vsftpd.log. The former is a wu-ftpd style transfer log, parseable by standard tools. The latter is vsftpd's own style log. 
+# If enabled, two log files are generated in parallel, going by default to /var/log/xferlog and /var/log/vsftpd.log. The former is a wu-ftpd style transfer log, parseable by standard tools. The latter is vsftpd's own style log.
 # Default: NO
 dual_log_enable=YES
 
@@ -150,6 +150,6 @@ allow_writeable_chroot=YES
 # Default: /etc/vsftpd.user_list
 #userlist_file=/etc/vsftpd/vsftpd.users
 
-#  If enabled, vsftpd will try and show session status information in the system process listing. In other words, the reported name of the process will change to reflect what a vsftpd session is doing (idle, downloading etc). You probably want to leave this off for security purposes. 
+#  If enabled, vsftpd will try and show session status information in the system process listing. In other words, the reported name of the process will change to reflect what a vsftpd session is doing (idle, downloading etc). You probably want to leave this off for security purposes.
 # Default: NO
 setproctitle_enable=YES

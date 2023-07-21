@@ -3,7 +3,7 @@
 
 __version__ = '0.0.1'
 __author__ = 'Todd Wintermute'
-__date__ = '2023-07-15'
+__date__ = '2023-07-20'
 
 import csv
 import datetime as dt
@@ -17,7 +17,7 @@ appname = os.environ['APPNAME']
 xfer_report = pathlib.Path(f"/opt/{appname}/logs/transfer_report.csv")
 report_csv_columns = [
     'hardware', 'mac', 'os', 'config', 'ip',
-    'os_xfer_msg', 'os_xfer_time', 'config_xfer_msg', 'config_xfer_time', 
+    'os_xfer_msg', 'os_xfer_time', 'config_xfer_msg', 'config_xfer_time',
     'msg'
     ]
 prov_methods = pathlib.Path(f'/opt/{appname}/logs/provisioning_methods.json')
@@ -60,7 +60,7 @@ def print_report():
         universal_newlines=True
         )
     if not ret.returncode:
-        ret = subprocess.run('tmux clear-history', shell=True)
+        ret = subprocess.run('tmux clear-history -t 1', shell=True)
     ret = subprocess.run(
         f'column.py {xfer_report}',
         shell=True,
@@ -71,7 +71,7 @@ def print_report():
         print(ret.stdout)
     else:
         print('Some error occurred')
-    
+
 def main():
     global lasthash
     global lastupdate

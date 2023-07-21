@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 """
-Use information in the syslog to update `transfer_report.csv` with 
+Use information in the syslog to update `transfer_report.csv` with
 file transfer messages.
 """
 
 __version__ = '0.0.3'
 __author__ = 'Todd Wintermute'
-__date__ = '2023-07-19'
+__date__ = '2023-07-20'
 
 import csv
 import datetime as dt
@@ -73,12 +73,15 @@ def add_new_leases(dhcp_objs, dhcp_leases):
             dhcp_objs.append(tmp_dict)
     return dhcp_objs
 
-def write_xfer_report(dhcp_objs, xfer_report, report_csv_columns):
+def write_xfer_report(dhcp_objs, xfer_report, columns):
     with open(xfer_report, 'w', newline='') as f:
-        writer = csv.DictWriter(f, fieldnames=report_csv_columns)
+        writer = csv.DictWriter(f, fieldnames=columns, extrasaction='ignore')
         writer.writeheader()
         writer.writerows(dhcp_objs)
-    rval = subprocess.run(f"chown $HUID:$HGID {str(xfer_report)}", shell=True)
+    rval = subprocess.run(
+        f"chown $HUID:$HGID {str(xfer_report)}",
+        shell=True
+        )
 
 def hash_a_list(list_obj):
    return hash(json.dumps(list_obj))

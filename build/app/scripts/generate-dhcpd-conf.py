@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 """
-Input a ztp.csv that has the Hardware,MAC,OS,Config and output a modified 
+Input a ztp.csv that has the Hardware,MAC,OS,Config and output a modified
 dhcpd.conf file based on a template.
-Optionally, input a vendor class defaults CSV file with the fields 
+Optionally, input a vendor class defaults CSV file with the fields
 Hardware,Vendor Class ID, OS, Config and modify the dhcpd.conf file.
-Also, generate a dhcp_report.csv file to be used later to monitor 
+Also, generate a dhcp_report.csv file to be used later to monitor
 the progress of the file transfers.
-Script will replace the dhcpd, tftp, and ftp configuration files, 
+Script will replace the dhcpd, tftp, and ftp configuration files,
 and then restart the processes.
 """
 __version__ = '0.0.9'
@@ -142,10 +142,10 @@ if ztp_csv_file == args.ztp_csv:
     ztp_csv_file = ztp_csv_path / args.ztp_csv
 else:
     ztp_csv_file = args.ztp_csv
-if vendor_csv_file == pathlib.Path(args.vendor_csv):
+if vendor_csv_file == args.vendor_csv:
     vendor_csv_file = vendor_csv_path / args.vendor_csv
 else:
-    vendor_csv_file = pathlib.Path(args.vendor_csv)
+    vendor_csv_file = args.vendor_csv
 
 ip = ipaddress.IPv4Address(starting_ip)
 mgmt_ip = ipaddress.IPv4Address(mgmt_ip)
@@ -174,7 +174,7 @@ else:
     with open(vendor_csv_file) as f:
         t = f.readlines()
     reader_dict = csv.DictReader(t, fieldnames=vendor_csv_columns)
-    original_vendor_columns = reader_dict.__next__() # remove original header
+    original_vendor_columns = next(reader_dict) # remove original header
     # List of the data objects
     vendor_objs = [row for row in reader_dict]
 
@@ -307,11 +307,11 @@ else:
     syslog(msg)
     prov_enabled['vendor_class_id_method'] = False
 
-dhcpd_text = dhcpd_tmp_config_file.read_text()
-dhcpd_sections = dhcpd_text.split('\n\n')
-add_lines = [each['template'] for each in tmp_vendor_objs]
-add_text = '\n'.join(add_lines) + '\n}\n'
 if tmp_vendor_objs:
+    dhcpd_text = dhcpd_tmp_config_file.read_text()
+    dhcpd_sections = dhcpd_text.split('\n\n')
+    add_lines = [each['template'] for each in tmp_vendor_objs]
+    add_text = '\n'.join(add_lines) + '\n}\n'
     dhcpd_sections.insert(2, vendor_class)
     ztp_section = dhcpd_sections.pop(4)
     endbrkt = ztp_section.index('}')
@@ -331,7 +331,7 @@ else:
     with open(ztp_csv_file) as f:
         t = f.readlines()
     reader_dict = csv.DictReader(t, fieldnames=ztp_csv_columns)
-    original_ztp_columns = reader_dict.__next__() # remove original header
+    original_ztp_columns = next(reader_dict) # remove original header
     # List of the data objects
     ztp_objs = [row for row in reader_dict]
 
@@ -529,14 +529,14 @@ if tmp_ztp_objs:
 # End of MAC ADDR method ztp.csv section
 
 # Now we search and notify the user of duplicates
-m = tuple(item['mac'] for item in tmp_ztp_objs)
-c = tuple(item['config'] for item in tmp_ztp_objs)
+m = tuple(item['mac'].strip() for item in ztp_objs)
+c = tuple(item['config'].strip() for item in ztp_objs)
 
-# Search for duplicate configs
+# Search for duplicate configs (Before MACs as dup configs sometimes is ok)
 unique_configs = set()
 dup_pos_configs = []
 for n, v in enumerate(c):
-    if v == '':
+    if not v:
         continue
     if not v in unique_configs:
         unique_configs.add(v)
@@ -554,11 +554,11 @@ for n in dup_pos_configs:
     print(msg)
     syslog(msg)
 
-# Search for duplicate MACs
+# Search for duplicate MACs (Do last so it's recent in syslog & user sees it)
 unique_macs = set()
 dup_pos_macs = []
 for n, v in enumerate(m):
-    if v == '':
+    if not v:
         continue
     if not v in unique_macs:
         unique_macs.add(v)

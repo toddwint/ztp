@@ -78,7 +78,7 @@ MGMTIP=172.21.255.253
 # The IP subnet in the form NETWORK/PREFIX
 SUBNET=172.21.0.0/16
 
-# The IP of the gateway. 
+# The IP of the gateway.
 # Don't leave blank. Enter a valid ip from the subnet range
 # The last 4 IPs in the subnet are available for use.
 GATEWAY=172.21.255.254
@@ -145,7 +145,7 @@ docker run -dit \
 
 Open the `webadmin.html` file.
 
-- Or just type in your browser: 
+- Or just type in your browser:
   - `http://<ip_address>:<port1>` or
   - `http://<ip_address>:<port2>` or
   - `http://<ip_address>:<port3>`

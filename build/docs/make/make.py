@@ -13,7 +13,7 @@ import pathlib
 import subprocess
 
 input_files = list(pathlib.Path('../markdown/').glob('*.md'))
-output_folder = pathlib.Path('../output') 
+output_folder = pathlib.Path('../output')
 move_folder = pathlib.Path('../../../') #.resolve()
 labels = [
     'all', 'html', 'pdf', 'docx', 'rtf', 'epub', 'clean', 'move', 'cleanall'

@@ -43,12 +43,12 @@ def csvfile_to_list(filename):
     return list(csv.reader(csvtext))
 
 def sanitize_for_newlines(csvlist):
-    """If newlines are found within a cell, we're taking the item 
-    on the last line and prefixing it with the characters "..." to show 
+    """If newlines are found within a cell, we're taking the item
+    on the last line and prefixing it with the characters "..." to show
     additional information is present in the cell.
     """
     csvlist = [
-        [re.sub('(?:.*\n)+', '...', item) for item in row] 
+        [re.sub('(?:.*\n)+', '...', item) for item in row]
         for row in csvlist
     ]
     return csvlist

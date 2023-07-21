@@ -20,5 +20,5 @@ header-includes:
       \expandafter\origfigure\expandafter[H]
       }{
       \endorigfigure
-      } 
+      }
 ---

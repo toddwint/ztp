@@ -15,7 +15,7 @@ variables:
   linkcolor: blue
   monobackgroundcolor: whitesmoke
   mainfont: Helvetica,Verdana,Sans-serif
-  geometry: 
+  geometry:
     - margin=0.75in
 #  fontsize: 10pt
 #  fontcolor: white

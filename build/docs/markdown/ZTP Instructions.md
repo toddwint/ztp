@@ -14,7 +14,7 @@ ZTP stands for Zero-Touch Provisioning. It is a way of provisioning telecommunic
 
 ## What is this software package?
 
-This tool is a Docker image and set of GitHub files. 
+This tool is a Docker image and set of GitHub files.
 
 The Docker image contains a server application which can be used in two different methods to provision devices including update the Operating System and/or load a configuration file.
 
@@ -37,7 +37,7 @@ The reason Windows and MacOS are not supported is because this application makes
 
 ## How does it work?
 
-First, the device vendor has to include the option for provisioning their devices via ZTP. Juniper and Aruba do. So do other vendors like Cisco, but this tool only includes the DHCP options and code for Juniper and Aruba. 
+First, the device vendor has to include the option for provisioning their devices via ZTP. Juniper and Aruba do. So do other vendors like Cisco, but this tool only includes the DHCP options and code for Juniper and Aruba.
 
 When the ZTP capable device boots up from a factory default configuration, it looks for a DHCP message which includes certain options telling it the location of the file server and the file names it needs to download. It can also include the transfer protocol to use such as ftp or tftp. It uses these options to download the files. Then it installs these files all by itself.
 
@@ -66,7 +66,7 @@ Devices send a vendor class identifier string in DHCP requests to the DHCP serve
 
 This option is a good idea if you want to load the same OS and/or a starting configuration to many of the same device types.
 
-On Aruba devices you can obtain this string with the command `show dhcp client vendor-specific`. 
+On Aruba devices you can obtain this string with the command `show dhcp client vendor-specific`.
 
 On Juniper devices, a zeroized device or device with factory defaults should have this string listed in the configuration under the interfaces section on the interfaces configured for DHCP.
 
@@ -260,7 +260,7 @@ Let's look at one entry and explain what the fields do.
 ```
 
 - "srx345"
-    - The unique model for the device. Use this value in the `hardware` column in `ztp.csv` and `vendor_class_defaults.csv`. 
+    - The unique model for the device. Use this value in the `hardware` column in `ztp.csv` and `vendor_class_defaults.csv`.
 - "vendor": "juniper"
     - Choices are either `juniper` or `aruba`. Tells the application which DHCP codes to use and which transfer protocol to use (ftp vs tftp).
 - "incr_mac": 1
@@ -316,24 +316,24 @@ On a Linux computer, install Docker.
 
 If you are using Ubuntu Linux, follow these instructions:
 
-[Install Docker Engine on Ubuntu](https://docs.docker.com/engine/install/ubuntu/) 
+[Install Docker Engine on Ubuntu](https://docs.docker.com/engine/install/ubuntu/)
 
 To run Docker without requiring root, follow the following instructions:
 
-[Manage Docker as a non-root user](https://docs.docker.com/engine/install/linux-postinstall/#manage-docker-as-a-non-root-user) 
+[Manage Docker as a non-root user](https://docs.docker.com/engine/install/linux-postinstall/#manage-docker-as-a-non-root-user)
 
 _The steps can also be found in this document near the end in [Installing Docker on Ubuntu Linux](#installing-docker-on-ubuntu-linux)_
 
 
 ### Install git (optional, but recommended)
 
-Git is usually already installed. 
+Git is usually already installed.
 
 Use the following command to install `git` on Ubuntu Linux:
 
 ``` bash
 sudo apt install git
-``` 
+```
 
 
 ### Give user root access to `ip` command (optional)
@@ -367,8 +367,8 @@ docker pull toddwint/ztp
 Download the GitHub project to the current folder with the following command:
 
 ```bash
-git clone https://github.com/toddwint/ztp 
-``` 
+git clone https://github.com/toddwint/ztp
+```
 
 There are two main folders in the GitHub project. Here is a brief description:
 
@@ -413,7 +413,7 @@ The script does a few things more than just create the container. It sets up som
 
 At this point, the ZTP Docker image you downloaded is now a Docker container instance. Also, the folder `ftp` should exist which is the Docker volume for this container.
 
-Since at this point the container won't be doing anything useful as it does not have _your_ information, I recommend stopping the container. 
+Since at this point the container won't be doing anything useful as it does not have _your_ information, I recommend stopping the container.
 
 Run this command:
 
@@ -462,8 +462,8 @@ Inside of the `webadmin.html` launch page, there are several options. Here is a 
         - Window 3 displays the completed ftp transfers log
         - Window 4 displays the log file filtered for ftp traffic
         - Window 5 displays the log file filtered for tftp traffic
-        - Window 6 is access to the terminal. 
-            - You can run commands from inside the Docker container. Alternatively, you can press `CTRL-C` on any other windows to gain access to the terminal. 
+        - Window 6 is access to the terminal.
+            - You can run commands from inside the Docker container. Alternatively, you can press `CTRL-C` on any other windows to gain access to the terminal.
             - There are several scripts available in the starting directory (`debug`). Run `ls` to see them. Run them by typing `./` followed by the script name.
 - frontail
     - Displays the log file and has filtering capability.
@@ -475,8 +475,8 @@ Inside of the `webadmin.html` launch page, there are several options. Here is a 
 You can also interact with the Docker container by using the scripts inside the `exec` folder. Here is a description:
 
 - `bash.sh`
-    - Access to the terminal. 
-        - You can run commands from inside the Docker container. Alternatively, you can press `CTRL-C` on any other windows to gain access to the terminal. 
+    - Access to the terminal.
+        - You can run commands from inside the Docker container. Alternatively, you can press `CTRL-C` on any other windows to gain access to the terminal.
         - There are several scripts available in the starting directory (`debug`). Run `ls` to see them. Run them by typing `./` followed by the script name.
 - `tail.sh`
     - Displays the log file.
@@ -512,7 +512,7 @@ Do not be afraid of deleting the container. The files in the `ftp` folder will n
 
 ## Links in `webadmin.html` display the message _"The connection has timed out"_ or _"This Site Can't Be Reached"_
 
-Check that your Ethernet adapter link's status is _UP_ or connect your Ethernet adapter to a network device. 
+Check that your Ethernet adapter link's status is _UP_ or connect your Ethernet adapter to a network device.
 
 Because of the way `MACVLAN` works, you cannot access the host directly. To work around this, a second `MACVLAN` interface is created on the same Ethernet adapter and a route to the Docker container is added. However, if that physical Ethernet adapter's link status is _DOWN_, then it will not use that adapter. Rather than having a cable plugged in to view the management page, another option is to purchase a USB-to-Ethernet adapter with a built in 4-Port Ethernet switch. See [Running inside a Virtual Machine](#running-inside-a-virtual-machine) for more information.
 
@@ -568,7 +568,7 @@ It is possible to run more than one container at a time. To do so follow these s
 
 ## Changing the default IP scheme
 
-Different size subnets should be fine (/16, /20, /22, etc). Don't put anything smaller than a `/28` network. 
+Different size subnets should be fine (/16, /20, /22, etc). Don't put anything smaller than a `/28` network.
 
 The image will reserve the last 4 IPs for the container IP, management host IP, spare IP, and the gateway IP. It will reserve 2 IPs lower than that range for the DHCP range of unknown hosts, but after running the python script will expand that to the IP after your last device.
 
@@ -600,7 +600,7 @@ git clone https://github.com/toddwint/ztp
 
 ## Running inside a Virtual Machine
 
-Using a virtual machine is a good way to use this application if you currently run Windows or MacOS. 
+Using a virtual machine is a good way to use this application if you currently run Windows or MacOS.
 
 Configure your networking to `bridge` mode will yield the best results. However, I suggest using a USB-to-Ethernet adapter and attaching it directly to your virtual machine. Even better, _Cable Matters_ makes a USB-to-4-Port-Gigabit-Ethernet-Switch in both standard [USB type A](https://a.co/d/6krs6f4) and [USB type C](https://a.co/d/dCDJ9Oy) connectors. The nice thing about these adapters (other than having 4 Ethernet ports directly connected to your laptop) is that it has an internal switch which means the Ethernet interface will always show link status of _UP_.
 

@@ -73,10 +73,10 @@ def print_subnet_info(subnet, filters):
     total_hosts = network.num_addresses - 2
     items = {
         'network': f'Network:      {network}',
-        'netmask': f'Netmask:      {netmask}', 
-        'netmaskbits': f'Netmask_Bits: {netmaskbits}', 
+        'netmask': f'Netmask:      {netmask}',
+        'netmaskbits': f'Netmask_Bits: {netmaskbits}',
         'networkaddr': f'Network_Addr: {networkaddr}',
-        'hostmin': f'Host_Min:     {hostmin}', 
+        'hostmin': f'Host_Min:     {hostmin}',
         'hostmax': f'Host_Max:     {hostmax}',
         'broadcast': f'Broadcast:    {broadcast}',
         'numhosts': f'Total_Hosts:  {total_hosts}',
