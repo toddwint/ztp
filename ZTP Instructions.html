@@ -5,7 +5,7 @@
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <meta name="author" content="Todd Wintermute" />
-  <meta name="dcterms.date" content="2023-07-04" />
+  <meta name="dcterms.date" content="2023-08-26" />
   <title>ZTP Instructions</title>
   <style>
 html {
@@ -249,7 +249,7 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; }
 <header id="title-block-header">
 <h1 class="title">ZTP Instructions</h1>
 <p class="author">Todd Wintermute</p>
-<p class="date">2023-07-04</p>
+<p class="date">2023-08-26</p>
 </header>
 <nav id="TOC" role="doc-toc">
 <ul>
@@ -300,8 +300,6 @@ cables</a></li>
 <li><a href="#install-docker" id="toc-install-docker"><span class="toc-section-number">2.1.1</span> Install Docker</a></li>
 <li><a href="#install-git-optional-but-recommended" id="toc-install-git-optional-but-recommended"><span class="toc-section-number">2.1.2</span> Install git (optional, but
 recommended)</a></li>
-<li><a href="#give-user-root-access-to-ip-command-optional" id="toc-give-user-root-access-to-ip-command-optional"><span class="toc-section-number">2.1.3</span> Give user root access to
-<code>ip</code> command (optional)</a></li>
 </ul></li>
 <li><a href="#download-the-files" id="toc-download-the-files"><span class="toc-section-number">2.2</span> Download the files</a></li>
 <li><a href="#create-the-docker-container" id="toc-create-the-docker-container"><span class="toc-section-number">2.3</span> Create the Docker container</a>
@@ -333,19 +331,26 @@ loading</a></li>
 </ul></li>
 <li><a href="#additional-information" id="toc-additional-information"><span class="toc-section-number">4</span> Additional Information</a>
 <ul>
-<li><a href="#running-more-than-one-container-at-a-time." id="toc-running-more-than-one-container-at-a-time."><span class="toc-section-number">4.1</span> Running more than one container at
-a time.</a></li>
-<li><a href="#changing-the-default-ip-scheme" id="toc-changing-the-default-ip-scheme"><span class="toc-section-number">4.2</span> Changing the default IP
-scheme</a></li>
-<li><a href="#updating-to-a-new-version" id="toc-updating-to-a-new-version"><span class="toc-section-number">4.3</span> Updating to a new version</a></li>
-<li><a href="#running-inside-a-virtual-machine" id="toc-running-inside-a-virtual-machine"><span class="toc-section-number">4.4</span> Running inside a Virtual
-Machine</a></li>
-<li><a href="#links-to-docker-and-github-pages" id="toc-links-to-docker-and-github-pages"><span class="toc-section-number">4.5</span> Links to Docker and GitHub
+<li><a href="#links-to-docker-and-github-pages" id="toc-links-to-docker-and-github-pages"><span class="toc-section-number">4.1</span> Links to Docker and GitHub
 pages</a></li>
-<li><a href="#installing-docker-on-ubuntu-linux" id="toc-installing-docker-on-ubuntu-linux"><span class="toc-section-number">4.6</span> Installing Docker on Ubuntu
+<li><a href="#running-inside-a-virtual-machine" id="toc-running-inside-a-virtual-machine"><span class="toc-section-number">4.2</span> Running inside a Virtual
+Machine</a></li>
+<li><a href="#installing-docker-on-ubuntu-linux" id="toc-installing-docker-on-ubuntu-linux"><span class="toc-section-number">4.3</span> Installing Docker on Ubuntu
 Linux</a></li>
-<li><a href="#renaming-predictable-interface-names-to-user-defined-values" id="toc-renaming-predictable-interface-names-to-user-defined-values"><span class="toc-section-number">4.7</span> Renaming predictable interface
-names to user defined values</a></li>
+<li><a href="#install-git-on-ubuntu-linux" id="toc-install-git-on-ubuntu-linux"><span class="toc-section-number">4.4</span> Install git on Ubuntu
+Linux</a></li>
+<li><a href="#download-the-ztp-docker-image" id="toc-download-the-ztp-docker-image"><span class="toc-section-number">4.5</span> Download the ZTP Docker
+image</a></li>
+<li><a href="#download-the-github-files" id="toc-download-the-github-files"><span class="toc-section-number">4.6</span> Download the GitHub files</a></li>
+<li><a href="#give-the-current-user-access-to-ip-command-without-requiring-a-password-optional" id="toc-give-the-current-user-access-to-ip-command-without-requiring-a-password-optional"><span class="toc-section-number">4.7</span> Give the current user access to
+<code>ip</code> command without requiring a password (optional)</a></li>
+<li><a href="#updating-to-a-new-version" id="toc-updating-to-a-new-version"><span class="toc-section-number">4.8</span> Updating to a new version</a></li>
+<li><a href="#running-more-than-one-container-at-a-time." id="toc-running-more-than-one-container-at-a-time."><span class="toc-section-number">4.9</span> Running more than one container at
+a time.</a></li>
+<li><a href="#changing-the-default-ip-scheme" id="toc-changing-the-default-ip-scheme"><span class="toc-section-number">4.10</span> Changing the default IP
+scheme</a></li>
+<li><a href="#renaming-predictable-network-interface-names-to-user-defined-values" id="toc-renaming-predictable-network-interface-names-to-user-defined-values"><span class="toc-section-number">4.11</span> Renaming predictable network
+interface names to user defined values</a></li>
 </ul></li>
 </ul>
 </nav>
@@ -836,42 +841,32 @@ the container to receive a fresh copy of all the files.</li>
 <h3 data-number="2.1.1" id="install-docker"><span class="header-section-number">2.1.1</span> Install Docker</h3>
 <p>On a Linux computer, install Docker.</p>
 <p>If you are using Ubuntu Linux, follow these instructions:</p>
-<p><a href="https://docs.docker.com/engine/install/ubuntu/">Install
-Docker Engine on Ubuntu</a></p>
+<p><a href="https://docs.docker.com/engine/install/ubuntu/">Docker.com:
+Install Docker Engine on Ubuntu</a></p>
 <p>To run Docker without requiring root, follow the following
 instructions:</p>
-<p><a href="https://docs.docker.com/engine/install/linux-postinstall/#manage-docker-as-a-non-root-user">Manage
-Docker as a non-root user</a></p>
-<p><em>The steps can also be found in this document near the end in <a href="#installing-docker-on-ubuntu-linux">Installing Docker on Ubuntu
+<p><a href="https://docs.docker.com/engine/install/linux-postinstall/#manage-docker-as-a-non-root-user">Docker.com:
+Manage Docker as a non-root user</a></p>
+<p><em>These steps can also be found in this document near the end in <a href="#installing-docker-on-ubuntu-linux">Installing Docker on Ubuntu
 Linux</a></em></p>
 <h3 data-number="2.1.2" id="install-git-optional-but-recommended"><span class="header-section-number">2.1.2</span> Install git (optional, but
 recommended)</h3>
 <p>Git is usually already installed.</p>
-<p>Use the following command to install <code>git</code> on Ubuntu
-Linux:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt install git</span></code></pre></div>
-<h3 data-number="2.1.3" id="give-user-root-access-to-ip-command-optional"><span class="header-section-number">2.1.3</span> Give user root access to
-<code>ip</code> command (optional)</h3>
-<p>For Ubuntu Linux, add these commands if you do not wish to enter a
-password when the container starts and creates the network.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> touch /etc/sudoers.d/ip_cmd</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> chmod 0440 /etc/sudoers.d/ip_cmd</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> tee <span class="at">-a</span> /etc/sudoers.d/ip_cmd <span class="op">&gt;</span> /dev/null <span class="op">&lt;&lt; EOF</span></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="st">Cmnd_Alias IP_CMD=/usr/sbin/ip,/usr/bin/link,/usr/sbin/route</span></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="va">$USER</span><span class="st">   ALL=(ALL:ALL) NOPASSWD:IP_CMD</span></span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="st">%</span><span class="va">$USER</span><span class="st">  ALL=(ALL:ALL) NOPASSWD:IP_CMD</span></span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="op">EOF</span></span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> visudo <span class="at">-c</span></span></code></pre></div>
+<p>For instructions for specific platforms, see GitHub’s page on
+installing git: <a href="https://github.com/git-guides/install-git">GitHub.com: Install
+Git</a>.</p>
+<p>For Ubuntu, see the section <a href="#install-git-on-ubuntu-linux">Install git on Ubuntu Linux</a></p>
 <h2 data-number="2.2" id="download-the-files"><span class="header-section-number">2.2</span> Download the files</h2>
 <p>The Docker image contains everything to run the application.</p>
-<p>The git files are optional, but recommended as it makes it easier to
-run and manage.</p>
-<p>Download the Docker image to your Docker image files folder with the
-following command:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> pull toddwint/ztp</span></code></pre></div>
+<p>Download the Docker image with the following command:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> pull toddwint/ztp</span></code></pre></div>
+<p>To verify the image has downloaded please view the section <a href="#download-the-ztp-docker-image">Download the ZTP Docker
+image</a>.</p>
+<p>The GitHub files are optional, but recommended as it makes it easier
+to run and manage.</p>
 <p>Download the GitHub project to the current folder with the following
 command:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone https://github.com/toddwint/ztp </span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone https://github.com/toddwint/ztp</span></code></pre></div>
 <p>There are two main folders in the GitHub project. Here is a brief
 description:</p>
 <ul>
@@ -893,6 +888,16 @@ and moving it to a location on your computer which is easy to
 access.</li>
 </ul></li>
 </ul>
+<p>NOTE: If you do not require the <code>ztp/build</code> folder and
+files, I recommend reorganizing the folder structure as such:</p>
+<ul>
+<li>Remove the directory <code>ztp/build</code></li>
+<li>Rename the <code>ztp/run</code> folder
+(e.g. <code>ztp01</code>)</li>
+<li>Create a docs folder and copy the <code>README</code> and
+<code>ZTP Instructions</code> files to it.</li>
+</ul>
+<p>For example commands, see the section <a href="#download-the-github-files">Download the GitHub files</a>.</p>
 <h2 data-number="2.3" id="create-the-docker-container"><span class="header-section-number">2.3</span> Create the Docker
 container</h2>
 <p>All the files from here on will be found in the <code>run</code>
@@ -901,9 +906,17 @@ folder.</p>
 configuration parameters: <code>config.txt</code></h3>
 <p>Before creating the container, it is important to review the default
 settings in <code>config.txt</code>. Each option has a description above
-it. Most of the defaults should be fine, but you will need to specify
-the name of your Ethernet adapter.</p>
-<p>That looks like this:</p>
+it. Most of the defaults should be fine.</p>
+<p>You will probably want to update the timezone. This will make the
+syslog messages match your local timezone. That section looks like
+this:</p>
+<pre><code># To get a list of timezones view the files in `/usr/share/zoneinfo`
+TZ=UTC</code></pre>
+<p>As an example, for my location I enter
+<code>America/Chicago</code>.</p>
+<p>The most important variable is <code>INTERFACE</code>. Record the
+name of your Ethernet adapter in Linux and change the variable in this
+section:</p>
 <pre><code># The interface on which to set the IP. Run `ip -br a` to see a list
 INTERFACE=eth0</code></pre>
 <p><strong>NOTE:</strong> The script will take care of setting the IP
@@ -915,7 +928,7 @@ container: <code>create_container.sh</code></h3>
 <p>After configuring the options in <code>config.txt</code>, you are
 ready to create the container.</p>
 <p>To create the container run the following command:</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="ex">./create_container.sh</span></span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ex">./create_container.sh</span></span></code></pre></div>
 <p>The script does a few things more than just create the container. It
 sets up some environmental variables and loads the parameter in
 <code>config.txt</code> so that those parameters can be passed to the
@@ -931,7 +944,7 @@ is the Docker volume for this container.</p>
 it does not have <em>your</em> information, I recommend stopping the
 container.</p>
 <p>Run this command:</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="ex">./stop.sh</span></span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="ex">./stop.sh</span></span></code></pre></div>
 <p>Inside of the newly created <code>ftp</code> folder, you should see
 the files as explained already in <a href="#files-and-folders-inside-the-ftp-foldervolume">Files and folders
 inside the <code>ftp</code> folder/volume</a>. Modify these files with
@@ -943,11 +956,11 @@ and/or configuration files for your devices to the appropriate folders,
 it is time to see it work.</p>
 <h2 data-number="2.4" id="restart-the-container"><span class="header-section-number">2.4</span> Restart the container</h2>
 <p>Now that we have everything set up for our devices, it is time to
-start the container and let it provision all your devices.</p>
+start the container, and let it provision all your devices.</p>
 <p>Run this command:</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="ex">./start.sh</span></span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="ex">./start.sh</span></span></code></pre></div>
 <p>If you did not stop the container from before, run this command:</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="ex">./restart.sh</span></span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="ex">./restart.sh</span></span></code></pre></div>
 <p>The container starts. If the cables are plugged in and your devices
 powered on with a factory default configuration, it should be
 provisioning them.</p>
@@ -1031,9 +1044,9 @@ instead of the web browser.</li>
 <p>Hopefully, your devices are loaded now. If not, skip ahead to the
 section <a href="#common-issues">Common issues</a>.</p>
 <p>To stop the container, run this command:</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="ex">./stop.sh</span></span></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="ex">./stop.sh</span></span></code></pre></div>
 <p>If you are finished with the container, run this command:</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="ex">./delete_container.sh</span></span></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="ex">./delete_container.sh</span></span></code></pre></div>
 <p>Both of these commands will stop the container and copy a timestamped
 version of the transfer report to your <code>ftp</code> folder. Deleting
 the container will additionally delete the container and remove the
@@ -1117,31 +1130,109 @@ file for all the issues it finds.</li>
 about viewing the log file.</li>
 </ul>
 <h1 data-number="4" id="additional-information"><span class="header-section-number">4</span> Additional Information</h1>
-<h2 data-number="4.1" id="running-more-than-one-container-at-a-time."><span class="header-section-number">4.1</span> Running more than one container
-at a time.</h2>
-<p>It is possible to run more than one container at a time. To do so
-follow these steps.</p>
-<ul>
-<li><p>Make a copy of the <code>run</code> folder which I often rename
-to my container hostname such as <code>ztp01</code>.</p></li>
-<li><p>In <code>config.txt</code> change the Ethernet adapter to a new
-name (you won’t be able to use the same Ethernet adapter) and the
-hostname. Also, change the IP addresses. I would increment the 2nd
-octet.</p></li>
-</ul>
-<h2 data-number="4.2" id="changing-the-default-ip-scheme"><span class="header-section-number">4.2</span> Changing the default IP
-scheme</h2>
-<p>Different size subnets should be fine (/16, /20, /22, etc). Don’t put
-anything smaller than a <code>/28</code> network.</p>
-<p>The image will reserve the last 4 IPs for the container IP,
-management host IP, spare IP, and the gateway IP. It will reserve 2 IPs
-lower than that range for the DHCP range of unknown hosts, but after
-running the python script will expand that to the IP after your last
-device.</p>
-<p>If you do want to use the first IPs in the subnet range, it should be
-fine. It will check and skip the static DHCP assignments if those IPs
-are set.</p>
-<h2 data-number="4.3" id="updating-to-a-new-version"><span class="header-section-number">4.3</span> Updating to a new version</h2>
+<h2 data-number="4.1" id="links-to-docker-and-github-pages"><span class="header-section-number">4.1</span> Links to Docker and GitHub
+pages</h2>
+<p>Docker: <a href="https://hub.docker.com/r/toddwint/ztp" class="uri">https://hub.docker.com/r/toddwint/ztp</a></p>
+<p>GitHub: <a href="https://github.com/toddwint/ztp" class="uri">https://github.com/toddwint/ztp</a></p>
+<h2 data-number="4.2" id="running-inside-a-virtual-machine"><span class="header-section-number">4.2</span> Running inside a Virtual
+Machine</h2>
+<p>Using a virtual machine is a good way to use this application if you
+currently run Windows or MacOS.</p>
+<p>Configure your networking to <code>bridge</code> mode will yield the
+best results. However, I suggest using a USB-to-Ethernet adapter and
+attaching it directly to your virtual machine. Even better, <em>Cable
+Matters</em> makes a USB-to-4-Port-Gigabit-Ethernet-Switch in both
+standard <a href="https://a.co/d/6krs6f4">USB type A</a> and <a href="https://a.co/d/dCDJ9Oy">USB type C</a> connectors. The nice thing
+about these adapters (other than having 4 Ethernet ports directly
+connected to your laptop) is that it has an internal switch which means
+the Ethernet interface will always show link status of <em>UP</em>.</p>
+<h2 data-number="4.3" id="installing-docker-on-ubuntu-linux"><span class="header-section-number">4.3</span> Installing Docker on Ubuntu
+Linux</h2>
+<p>Below are the commands taken from Docker’s website (<a href="https://docs.docker.com/engine/install/ubuntu/">here</a> and <a href="https://docs.docker.com/engine/install/linux-postinstall/#manage-docker-as-a-non-root-user">here</a>)
+how to install Docker on Ubuntu Linux.</p>
+<ol type="1">
+<li>Update the <code>apt</code> package index and install packages to
+allow <code>apt</code> to use a repository over HTTPS:</li>
+</ol>
+<div class="sourceCode" id="cb15"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt-get update</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt-get install <span class="at">-y</span> ca-certificates curl gnupg lsb-release</span></code></pre></div>
+<ol start="2" type="1">
+<li>Add Docker’s official GPG key:</li>
+</ol>
+<div class="sourceCode" id="cb16"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> mkdir <span class="at">-p</span> /etc/apt/keyrings</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-fsSL</span> https://download.docker.com/linux/ubuntu/gpg <span class="kw">|</span> <span class="dt">\</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sudo</span> gpg <span class="at">--dearmor</span> <span class="at">-o</span> /etc/apt/keyrings/docker.gpg</span></code></pre></div>
+<ol start="3" type="1">
+<li>Set up the repository:</li>
+</ol>
+<div class="sourceCode" id="cb17"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="dt">\</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;deb [arch=</span><span class="va">$(</span><span class="ex">dpkg</span> <span class="at">--print-architecture</span><span class="va">)</span><span class="st"> &quot;</span> <span class="dt">\</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;signed-by=/etc/apt/keyrings/docker.gpg] &quot;</span> <span class="dt">\</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;https://download.docker.com/linux/ubuntu </span><span class="dt">\</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="st">  </span><span class="va">$(</span><span class="ex">lsb_release</span> <span class="at">-cs</span><span class="va">)</span><span class="st"> stable&quot;</span> <span class="kw">|</span> <span class="dt">\</span></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sudo</span> tee /etc/apt/sources.list.d/docker.list <span class="op">&gt;</span> /dev/null</span></code></pre></div>
+<ol start="4" type="1">
+<li>Update the apt package index:</li>
+</ol>
+<div class="sourceCode" id="cb18"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt-get update</span></code></pre></div>
+<ol start="5" type="1">
+<li>Install Docker Engine, containerd, and Docker Compose.</li>
+</ol>
+<div class="sourceCode" id="cb19"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt-get install <span class="at">-y</span> <span class="dt">\</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>    docker-ce <span class="dt">\</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>    docker-ce-cli <span class="dt">\</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>    containerd.io <span class="dt">\</span></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>    docker-compose-plugin</span></code></pre></div>
+<ol start="6" type="1">
+<li>Add your user to the <code>docker</code> group to manage Docker as a
+non-root user</li>
+</ol>
+<div class="sourceCode" id="cb20"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> usermod <span class="at">-aG</span> docker <span class="va">$USER</span></span></code></pre></div>
+<ol start="7" type="1">
+<li>Log out and log back in so that your group membership is
+re-evaluated.</li>
+</ol>
+<h2 data-number="4.4" id="install-git-on-ubuntu-linux"><span class="header-section-number">4.4</span> Install git on Ubuntu
+Linux</h2>
+<p>Use the following command to install <code>git</code> on Ubuntu
+Linux:</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt update</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt install git</span></code></pre></div>
+<h2 data-number="4.5" id="download-the-ztp-docker-image"><span class="header-section-number">4.5</span> Download the ZTP Docker
+image</h2>
+<p>Download the Docker image to your Docker image files folder with the
+following command:</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> pull toddwint/ztp</span></code></pre></div>
+<p>The docker image downloads to your computer. Verify with the
+following command:</p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> image ls</span></code></pre></div>
+<p>Example output:</p>
+<pre><code>REPOSITORY             TAG       IMAGE ID       CREATED         SIZE
+toddwint/ztp           latest    dfe47ddf7ccf   5 weeks ago     150MB</code></pre>
+<h2 data-number="4.6" id="download-the-github-files"><span class="header-section-number">4.6</span> Download the GitHub files</h2>
+<p>Download the GitHub project to the current folder with the following
+command:</p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone https://github.com/toddwint/ztp</span></code></pre></div>
+<p>For users that want to run the docker image and never build it from
+source, the following commands can be used to remove the source files
+make the directories easier to mange:</p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mv</span> ztp/run/ ztp01</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> ztp01/docs</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="fu">mv</span> ztp/<span class="pp">@(</span>README<span class="pp">|</span>ZTP Instructions<span class="pp">)*</span> ztp01/docs/</span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span> <span class="at">-rf</span> ztp/</span></code></pre></div>
+<h2 data-number="4.7" id="give-the-current-user-access-to-ip-command-without-requiring-a-password-optional"><span class="header-section-number">4.7</span> Give the current user access to
+<code>ip</code> command without requiring a password (optional)</h2>
+<p>For Ubuntu Linux, add these commands if you do not wish to enter a
+password when the container starts and creates the network.</p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> touch /etc/sudoers.d/ip_cmd</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> chmod 0440 /etc/sudoers.d/ip_cmd</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> tee /etc/sudoers.d/ip_cmd <span class="op">&gt;</span> /dev/null <span class="op">&lt;&lt; EOF</span></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a><span class="st">Cmnd_Alias IP_CMD=/usr/sbin/ip,/usr/bin/link,/usr/sbin/route</span></span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a><span class="va">$USER</span><span class="st">   ALL=(ALL:ALL) NOPASSWD:IP_CMD</span></span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a><span class="st">%</span><span class="va">$USER</span><span class="st">  ALL=(ALL:ALL) NOPASSWD:IP_CMD</span></span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a><span class="op">EOF</span></span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> visudo <span class="at">-c</span></span></code></pre></div>
+<h2 data-number="4.8" id="updating-to-a-new-version"><span class="header-section-number">4.8</span> Updating to a new version</h2>
 <p>If you wish to download the latest Docker container and GitHub files,
 perform the following steps:</p>
 <ol type="1">
@@ -1158,105 +1249,77 @@ with these commands:
 the command <code>docker image ls</code></li>
 </ul></li>
 </ol>
-<div class="sourceCode" id="cb16"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> rmi toddwint/ztp</span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> pull toddwint/ztp</span></code></pre></div>
+<div class="sourceCode" id="cb28"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> rmi toddwint/ztp</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> pull toddwint/ztp</span></code></pre></div>
 <ol start="3" type="1">
 <li>Delete the current <code>ztp</code> directory, and download the
 latest ones. Don’t forget to copy any important files elsewhere before
 deleting it. Here are some example commands to do that:</li>
 </ol>
-<div class="sourceCode" id="cb17"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span> <span class="at">-rf</span> ztp/</span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone https://github.com/toddwint/ztp</span></code></pre></div>
-<h2 data-number="4.4" id="running-inside-a-virtual-machine"><span class="header-section-number">4.4</span> Running inside a Virtual
-Machine</h2>
-<p>Using a virtual machine is a good way to use this application if you
-currently run Windows or MacOS.</p>
-<p>Configure your networking to <code>bridge</code> mode will yield the
-best results. However, I suggest using a USB-to-Ethernet adapter and
-attaching it directly to your virtual machine. Even better, <em>Cable
-Matters</em> makes a USB-to-4-Port-Gigabit-Ethernet-Switch in both
-standard <a href="https://a.co/d/6krs6f4">USB type A</a> and <a href="https://a.co/d/dCDJ9Oy">USB type C</a> connectors. The nice thing
-about these adapters (other than having 4 Ethernet ports directly
-connected to your laptop) is that it has an internal switch which means
-the Ethernet interface will always show link status of <em>UP</em>.</p>
-<h2 data-number="4.5" id="links-to-docker-and-github-pages"><span class="header-section-number">4.5</span> Links to Docker and GitHub
-pages</h2>
-<p>Docker: <a href="https://hub.docker.com/r/toddwint/ztp" class="uri">https://hub.docker.com/r/toddwint/ztp</a></p>
-<p>GitHub: <a href="https://github.com/toddwint/ztp" class="uri">https://github.com/toddwint/ztp</a></p>
-<h2 data-number="4.6" id="installing-docker-on-ubuntu-linux"><span class="header-section-number">4.6</span> Installing Docker on Ubuntu
-Linux</h2>
-<p>Below are the commands taken from Docker’s website (<a href="https://docs.docker.com/engine/install/ubuntu/">here</a> and <a href="https://docs.docker.com/engine/install/linux-postinstall/#manage-docker-as-a-non-root-user">here</a>)
-how to install Docker on Ubuntu Linux.</p>
-<ol type="1">
-<li>Update the <code>apt</code> package index and install packages to
-allow <code>apt</code> to use a repository over HTTPS:</li>
-</ol>
-<div class="sourceCode" id="cb18"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt-get update</span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt-get install <span class="at">-y</span> ca-certificates curl gnupg lsb-release</span></code></pre></div>
-<ol start="2" type="1">
-<li>Add Docker’s official GPG key:</li>
-</ol>
-<div class="sourceCode" id="cb19"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> mkdir <span class="at">-p</span> /etc/apt/keyrings</span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-fsSL</span> https://download.docker.com/linux/ubuntu/gpg <span class="kw">|</span> <span class="dt">\</span></span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sudo</span> gpg <span class="at">--dearmor</span> <span class="at">-o</span> /etc/apt/keyrings/docker.gpg</span></code></pre></div>
-<ol start="3" type="1">
-<li>Set up the repository:</li>
-</ol>
-<div class="sourceCode" id="cb20"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="dt">\</span></span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;deb [arch=</span><span class="va">$(</span><span class="ex">dpkg</span> <span class="at">--print-architecture</span><span class="va">)</span><span class="st"> &quot;</span> <span class="dt">\</span></span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;signed-by=/etc/apt/keyrings/docker.gpg] &quot;</span> <span class="dt">\</span></span>
-<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;https://download.docker.com/linux/ubuntu </span><span class="dt">\</span></span>
-<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a><span class="st">  </span><span class="va">$(</span><span class="ex">lsb_release</span> <span class="at">-cs</span><span class="va">)</span><span class="st"> stable&quot;</span> <span class="kw">|</span> <span class="dt">\</span></span>
-<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sudo</span> tee /etc/apt/sources.list.d/docker.list <span class="op">&gt;</span> /dev/null</span></code></pre></div>
-<ol start="4" type="1">
-<li>Update the apt package index:</li>
-</ol>
-<div class="sourceCode" id="cb21"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt-get update</span></code></pre></div>
-<ol start="5" type="1">
-<li>Install Docker Engine, containerd, and Docker Compose.</li>
-</ol>
-<div class="sourceCode" id="cb22"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt-get install <span class="at">-y</span> <span class="dt">\</span></span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>    docker-ce <span class="dt">\</span></span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>    docker-ce-cli <span class="dt">\</span></span>
-<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>    containerd.io <span class="dt">\</span></span>
-<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>    docker-compose-plugin</span></code></pre></div>
-<ol start="6" type="1">
-<li>Add your user to the <code>docker</code> group to manage Docker as a
-non-root user</li>
-</ol>
-<div class="sourceCode" id="cb23"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> usermod <span class="at">-aG</span> docker <span class="va">$USER</span></span></code></pre></div>
-<ol start="7" type="1">
-<li>Log out and log back in so that your group membership is
-re-evaluated.</li>
-</ol>
-<h2 data-number="4.7" id="renaming-predictable-interface-names-to-user-defined-values"><span class="header-section-number">4.7</span> Renaming predictable interface
-names to user defined values</h2>
-<p>Predictable interface names look like <code>ens33</code>,
+<div class="sourceCode" id="cb29"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span> <span class="at">-rf</span> ztp/</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone https://github.com/toddwint/ztp</span></code></pre></div>
+<h2 data-number="4.9" id="running-more-than-one-container-at-a-time."><span class="header-section-number">4.9</span> Running more than one container
+at a time.</h2>
+<p>It is possible to run more than one container at a time. To do so
+follow these steps.</p>
+<ul>
+<li><p>Make a copy of the <code>run</code> folder which I often rename
+to my container hostname such as <code>ztp01</code>.</p></li>
+<li><p>In <code>config.txt</code> change the Ethernet adapter to a new
+name (you won’t be able to use the same Ethernet adapter) and the
+hostname. Also, change the IP addresses. I would increment the 2nd
+octet.</p></li>
+</ul>
+<h2 data-number="4.10" id="changing-the-default-ip-scheme"><span class="header-section-number">4.10</span> Changing the default IP
+scheme</h2>
+<p>Different size subnets should be fine (/16, /20, /22, etc). Don’t put
+anything smaller than a <code>/28</code> network.</p>
+<p>The image will reserve the last 4 IPs for the container IP,
+management host IP, spare IP, and the gateway IP. It will reserve 2 IPs
+lower than that range for the DHCP range of unknown hosts, but after
+running the python script will expand that to the IP after your last
+device.</p>
+<p>If you do want to use the first IPs in the subnet range, it should be
+fine. It will check and skip the static DHCP assignments if those IPs
+are set.</p>
+<h2 data-number="4.11" id="renaming-predictable-network-interface-names-to-user-defined-values"><span class="header-section-number">4.11</span> Renaming predictable network
+interface names to user defined values</h2>
+<p><a href="https://github.com/systemd/systemd/blob/main/docs/PREDICTABLE_INTERFACE_NAMES.md">Predictable
+network interface names</a> look like <code>ens33</code>,
 <code>eno1</code>, <code>enp1s0</code>, <code>enx78e7d1ea46da</code></p>
 <p>If you wish to change this behavior and rename them to names like
 <code>lan0</code> or <code>lan1</code>, follow these steps.</p>
 <p><strong>NOTE:</strong> Do not use kernel reserved names like
 <code>eth0</code> or <code>wlan0</code>. Those names are reserved. If
 you run into issues, that is why.</p>
+<p>In this example the Ethernet adapter name is: <code>eno1</code>.
+Replace <code>eno1</code> with the name of your adapter.</p>
+<p>Example: <code>eno1</code></p>
+<div class="sourceCode" id="cb30"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="va">INTF</span><span class="op">=</span>eno1</span></code></pre></div>
 <p>Find the pci path of the device. Use <code>grep</code> to filter for
-<code>ID_PATH</code></p>
-<div class="sourceCode" id="cb24"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="ex">udevadm</span> info /sys/class/net/eno1 <span class="kw">|</span> <span class="fu">grep</span> ID_PATH=</span></code></pre></div>
+<code>ID_PATH</code> and awk to grab the value.</p>
+<div class="sourceCode" id="cb31"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="ex">udevadm</span> info /sys/class/net/<span class="va">$INTF</span> <span class="kw">|</span> <span class="fu">grep</span> ID_PATH= <span class="kw">|</span> <span class="fu">awk</span> <span class="at">-F</span><span class="op">=</span> <span class="st">&#39;{print $2}&#39;</span></span></code></pre></div>
 <p>Sample output:</p>
-<pre><code>E: ID_PATH=pci-0000:03:00.0</code></pre>
-<p>Create the following by substituting your ID_PATH obtained from the
-output of the previous udev command:</p>
-<div class="sourceCode" id="cb26"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> tee <span class="at">-a</span> /etc/systemd/network/11-lan1.link <span class="op">&gt;</span> /dev/null <span class="op">&lt;&lt; EOF</span></span>
-<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="st">[Match]</span></span>
-<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="st">Path=pci-0000:03:00.0</span></span>
-<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a><span class="st">[Link]</span></span>
-<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a><span class="st">Name=lan1</span></span>
-<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a><span class="st">Description=Network adatper 1</span></span>
-<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a><span class="op">EOF</span></span></code></pre></div>
+<pre><code>pci-0000:03:00.0</code></pre>
+<p>Save the ID_PATH value to a variable.</p>
+<div class="sourceCode" id="cb33"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="va">IDPATH</span><span class="op">=</span><span class="va">$(</span><span class="ex">udevadm</span> info /sys/class/net/<span class="va">$INTF</span> <span class="kw">|</span> <span class="fu">grep</span> ID_PATH= <span class="kw">|</span> <span class="fu">awk</span> <span class="at">-F</span><span class="op">=</span> <span class="st">&#39;{print $2}&#39;</span><span class="va">)</span></span></code></pre></div>
+<p>Decide a new name for the interface and save that name to a
+variable.</p>
+<p>Example: <code>lan1</code></p>
+<div class="sourceCode" id="cb34"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="va">INTFNAME</span><span class="op">=</span>lan1</span></code></pre></div>
+<p>Run the following command to create the configuration file using the
+variables created in the previous steps.</p>
+<div class="sourceCode" id="cb35"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> tee /etc/systemd/network/10-<span class="va">${INTFNAME}</span>.link <span class="op">&gt;</span> /dev/null <span class="op">&lt;&lt; EOF</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a><span class="st">[Match]</span></span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a><span class="st">Path=</span><span class="va">$IDPATH</span></span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a><span class="st">[Link]</span></span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a><span class="st">Name=</span><span class="va">$INTFNAME</span></span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a><span class="op">EOF</span></span></code></pre></div>
 <p>Reboot and verify the names.</p>
 <p>Don’t see the change? Verify which rule is being used with:</p>
-<div class="sourceCode" id="cb27"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="ex">udevadm</span> info /sys/class/net/eno1</span></code></pre></div>
+<div class="sourceCode" id="cb36"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="ex">udevadm</span> info /sys/class/net/eno1</span></code></pre></div>
 <p>If it looks correct, then perform:</p>
-<div class="sourceCode" id="cb28"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> update-initramfs <span class="at">-u</span></span></code></pre></div>
+<div class="sourceCode" id="cb37"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> update-initramfs <span class="at">-u</span></span></code></pre></div>
 <p>Reboot and check again.</p>
 </body>
 </html>

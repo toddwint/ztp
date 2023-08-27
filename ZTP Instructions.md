@@ -1,6 +1,6 @@
 ---
 title: ZTP Instructions
-date: 2023-07-04
+date: 2023-08-26
 ---
 
 
@@ -309,60 +309,44 @@ Use the following ports on the devices when connecting to the ZTP application.
 
 ## Install the requirements
 
-
 ### Install Docker
 
 On a Linux computer, install Docker.
 
 If you are using Ubuntu Linux, follow these instructions:
 
-[Install Docker Engine on Ubuntu](https://docs.docker.com/engine/install/ubuntu/)
+[Docker.com: Install Docker Engine on Ubuntu](https://docs.docker.com/engine/install/ubuntu/)
 
 To run Docker without requiring root, follow the following instructions:
 
-[Manage Docker as a non-root user](https://docs.docker.com/engine/install/linux-postinstall/#manage-docker-as-a-non-root-user)
+[Docker.com: Manage Docker as a non-root user](https://docs.docker.com/engine/install/linux-postinstall/#manage-docker-as-a-non-root-user)
 
-_The steps can also be found in this document near the end in [Installing Docker on Ubuntu Linux](#installing-docker-on-ubuntu-linux)_
+_These steps can also be found in this document near the end in [Installing Docker on Ubuntu Linux](#installing-docker-on-ubuntu-linux)_
 
 
 ### Install git (optional, but recommended)
 
 Git is usually already installed.
 
-Use the following command to install `git` on Ubuntu Linux:
+For instructions for specific platforms, see GitHub's page on installing git: [GitHub.com: Install Git](https://github.com/git-guides/install-git).
 
-``` bash
-sudo apt install git
-```
-
-
-### Give user root access to `ip` command (optional)
-
-For Ubuntu Linux, add these commands if you do not wish to enter a password when the container starts and creates the network.
-
-```bash
-sudo touch /etc/sudoers.d/ip_cmd
-sudo chmod 0440 /etc/sudoers.d/ip_cmd
-sudo tee -a /etc/sudoers.d/ip_cmd > /dev/null << EOF
-Cmnd_Alias IP_CMD=/usr/sbin/ip,/usr/bin/link,/usr/sbin/route
-$USER	ALL=(ALL:ALL) NOPASSWD:IP_CMD
-%$USER	ALL=(ALL:ALL) NOPASSWD:IP_CMD
-EOF
-sudo visudo -c
-```
+For Ubuntu, see the section [Install git on Ubuntu Linux](#install-git-on-ubuntu-linux)
 
 
 ## Download the files
 
 The Docker image contains everything to run the application.
 
-The git files are optional, but recommended as it makes it easier to run and manage.
-
-Download the Docker image to your Docker image files folder with the following command:
+Download the Docker image with the following command:
 
 ```bash
 docker pull toddwint/ztp
 ```
+
+To verify the image has downloaded please view the section [Download the ZTP Docker image](#download-the-ztp-docker-image).
+
+
+The GitHub files are optional, but recommended as it makes it easier to run and manage.
 
 Download the GitHub project to the current folder with the following command:
 
@@ -381,6 +365,14 @@ There are two main folders in the GitHub project. Here is a brief description:
     - I recommend renaming this folder to the hostname of your ZTP server (as configured in `config.txt`) such as `ztp01` and moving it to a location on your computer which is easy to access.
 
 
+NOTE: If you do not require the `ztp/build` folder and files, I recommend reorganizing the folder structure as such:
+
+- Remove the directory `ztp/build`
+- Rename the `ztp/run` folder (e.g. `ztp01`)
+- Create a docs folder and copy the `README` and `ZTP Instructions` files to it.
+
+For example commands, see the section [Download the GitHub files](#download-the-github-files).
+
 ## Create the Docker container
 
 All the files from here on will be found in the `run` folder.
@@ -388,9 +380,19 @@ All the files from here on will be found in the `run` folder.
 
 ### Modify container configuration parameters: `config.txt`
 
-Before creating the container, it is important to review the default settings in `config.txt`. Each option has a description above it. Most of the defaults should be fine, but you will need to specify the name of your Ethernet adapter.
+Before creating the container, it is important to review the default settings in `config.txt`. Each option has a description above it. Most of the defaults should be fine.
 
-That looks like this:
+You will probably want to update the timezone. This will make the syslog messages match your local timezone. That section looks like this:
+
+```
+# To get a list of timezones view the files in `/usr/share/zoneinfo`
+TZ=UTC
+```
+
+As an example, for my location I enter `America/Chicago`.
+
+The most important variable is `INTERFACE`. Record the name of your Ethernet adapter in Linux and change the variable in this section:
+
 ```
 # The interface on which to set the IP. Run `ip -br a` to see a list
 INTERFACE=eth0
@@ -430,7 +432,7 @@ Once you have modified your provisioning files and copied the OS and/or configur
 
 ## Restart the container
 
-Now that we have everything set up for our devices, it is time to start the container and let it provision all your devices.
+Now that we have everything set up for our devices, it is time to start the container, and let it provision all your devices.
 
 Run this command:
 
@@ -557,45 +559,11 @@ If so, Aruba LAN switches will try to download the file 5 or 6 times before movi
 # Additional Information
 
 
-## Running more than one container at a time.
+## Links to Docker and GitHub pages
 
-It is possible to run more than one container at a time. To do so follow these steps.
+Docker: <https://hub.docker.com/r/toddwint/ztp>
 
-- Make a copy of the `run` folder which I often rename to my container hostname such as `ztp01`.
-
-- In `config.txt` change the Ethernet adapter to a new name (you won't be able to use the same Ethernet adapter) and the hostname. Also, change the IP addresses. I would increment the 2nd octet.
-
-
-## Changing the default IP scheme
-
-Different size subnets should be fine (/16, /20, /22, etc). Don't put anything smaller than a `/28` network.
-
-The image will reserve the last 4 IPs for the container IP, management host IP, spare IP, and the gateway IP. It will reserve 2 IPs lower than that range for the DHCP range of unknown hosts, but after running the python script will expand that to the IP after your last device.
-
-If you do want to use the first IPs in the subnet range, it should be fine. It will check and skip the static DHCP assignments if those IPs are set.
-
-
-## Updating to a new version
-
-If you wish to download the latest Docker container and GitHub files, perform the following steps:
-
-1. Stop and delete the current container.
-    - You can view all the currently running Docker containers by running the command `docker ps` or `docker container ls`
-
-2. Remove the current Docker file image and download the latest one with these commands:
-    - You can view all the Docker file images on your system by running the command `docker image ls`
-
-```bash
-docker rmi toddwint/ztp
-docker pull toddwint/ztp
-```
-
-3. Delete the current `ztp` directory, and download the latest ones. Don't forget to copy any important files elsewhere before deleting it. Here are some example commands to do that:
-
-```bash
-rm -rf ztp/
-git clone https://github.com/toddwint/ztp
-```
+GitHub: <https://github.com/toddwint/ztp>
 
 
 ## Running inside a Virtual Machine
@@ -603,13 +571,6 @@ git clone https://github.com/toddwint/ztp
 Using a virtual machine is a good way to use this application if you currently run Windows or MacOS.
 
 Configure your networking to `bridge` mode will yield the best results. However, I suggest using a USB-to-Ethernet adapter and attaching it directly to your virtual machine. Even better, _Cable Matters_ makes a USB-to-4-Port-Gigabit-Ethernet-Switch in both standard [USB type A](https://a.co/d/6krs6f4) and [USB type C](https://a.co/d/dCDJ9Oy) connectors. The nice thing about these adapters (other than having 4 Ethernet ports directly connected to your laptop) is that it has an internal switch which means the Ethernet interface will always show link status of _UP_.
-
-
-## Links to Docker and GitHub pages
-
-Docker: <https://hub.docker.com/r/toddwint/ztp>
-
-GitHub: <https://github.com/toddwint/ztp>
 
 
 ## Installing Docker on Ubuntu Linux
@@ -667,35 +628,161 @@ sudo usermod -aG docker $USER
 7. Log out and log back in so that your group membership is re-evaluated.
 
 
-## Renaming predictable interface names to user defined values
+## Install git on Ubuntu Linux
 
-Predictable interface names look like `ens33`, `eno1`, `enp1s0`, `enx78e7d1ea46da`
+Use the following command to install `git` on Ubuntu Linux:
+
+``` bash
+sudo apt update
+sudo apt install git
+```
+
+
+## Download the ZTP Docker image
+
+Download the Docker image to your Docker image files folder with the following command:
+
+```bash
+docker pull toddwint/ztp
+```
+
+The docker image downloads to your computer. Verify with the following command:
+
+```bash
+docker image ls
+```
+
+Example output:
+```
+REPOSITORY             TAG       IMAGE ID       CREATED         SIZE
+toddwint/ztp           latest    dfe47ddf7ccf   5 weeks ago     150MB
+```
+
+
+## Download the GitHub files
+
+Download the GitHub project to the current folder with the following command:
+
+```bash
+git clone https://github.com/toddwint/ztp
+```
+
+For users that want to run the docker image and never build it from source, the following commands can be used to remove the source files make the directories easier to mange:
+
+```bash
+mv ztp/run/ ztp01
+mkdir ztp01/docs
+mv ztp/@(README|ZTP Instructions)* ztp01/docs/
+rm -rf ztp/
+```
+
+
+## Give the current user access to `ip` command without requiring a password (optional)
+
+For Ubuntu Linux, add these commands if you do not wish to enter a password when the container starts and creates the network.
+
+```bash
+sudo touch /etc/sudoers.d/ip_cmd
+sudo chmod 0440 /etc/sudoers.d/ip_cmd
+sudo tee /etc/sudoers.d/ip_cmd > /dev/null << EOF
+Cmnd_Alias IP_CMD=/usr/sbin/ip,/usr/bin/link,/usr/sbin/route
+$USER	ALL=(ALL:ALL) NOPASSWD:IP_CMD
+%$USER	ALL=(ALL:ALL) NOPASSWD:IP_CMD
+EOF
+sudo visudo -c
+```
+
+
+## Updating to a new version
+
+If you wish to download the latest Docker container and GitHub files, perform the following steps:
+
+1. Stop and delete the current container.
+    - You can view all the currently running Docker containers by running the command `docker ps` or `docker container ls`
+
+2. Remove the current Docker file image and download the latest one with these commands:
+    - You can view all the Docker file images on your system by running the command `docker image ls`
+
+```bash
+docker rmi toddwint/ztp
+docker pull toddwint/ztp
+```
+
+3. Delete the current `ztp` directory, and download the latest ones. Don't forget to copy any important files elsewhere before deleting it. Here are some example commands to do that:
+
+```bash
+rm -rf ztp/
+git clone https://github.com/toddwint/ztp
+```
+
+
+## Running more than one container at a time.
+
+It is possible to run more than one container at a time. To do so follow these steps.
+
+- Make a copy of the `run` folder which I often rename to my container hostname such as `ztp01`.
+
+- In `config.txt` change the Ethernet adapter to a new name (you won't be able to use the same Ethernet adapter) and the hostname. Also, change the IP addresses. I would increment the 2nd octet.
+
+
+## Changing the default IP scheme
+
+Different size subnets should be fine (/16, /20, /22, etc). Don't put anything smaller than a `/28` network.
+
+The image will reserve the last 4 IPs for the container IP, management host IP, spare IP, and the gateway IP. It will reserve 2 IPs lower than that range for the DHCP range of unknown hosts, but after running the python script will expand that to the IP after your last device.
+
+If you do want to use the first IPs in the subnet range, it should be fine. It will check and skip the static DHCP assignments if those IPs are set.
+
+
+## Renaming predictable network interface names to user defined values
+
+[Predictable network interface names](https://github.com/systemd/systemd/blob/main/docs/PREDICTABLE_INTERFACE_NAMES.md) look like `ens33`, `eno1`, `enp1s0`, `enx78e7d1ea46da`
 
 If you wish to change this behavior and rename them to names like `lan0` or `lan1`, follow these steps.
 
 **NOTE:** Do not use kernel reserved names like `eth0` or `wlan0`. Those names are reserved. If you run into issues, that is why.
 
-Find the pci path of the device. Use `grep` to filter for `ID_PATH`
+In this example the Ethernet adapter name is: `eno1`. Replace `eno1` with the name of your adapter.
+
+Example: `eno1`
 
 ```bash
-udevadm info /sys/class/net/eno1 | grep ID_PATH=
+INTF=eno1
+```
+
+Find the pci path of the device. Use `grep` to filter for `ID_PATH` and awk to grab the value.
+
+```bash
+udevadm info /sys/class/net/$INTF | grep ID_PATH= | awk -F= '{print $2}'
 ```
 
 Sample output:
 
 ```
-E: ID_PATH=pci-0000:03:00.0
+pci-0000:03:00.0
 ```
 
-Create the following by substituting your ID_PATH obtained from the output of the previous udev command:
+Save the ID_PATH value to a variable.
 
 ```bash
-sudo tee -a /etc/systemd/network/11-lan1.link > /dev/null << EOF
+IDPATH=$(udevadm info /sys/class/net/$INTF | grep ID_PATH= | awk -F= '{print $2}')
+```
+
+Decide a new name for the interface and save that name to a variable.
+
+Example: `lan1`
+```bash
+INTFNAME=lan1
+```
+
+Run the following command to create the configuration file using the variables created in the previous steps.
+
+```bash
+sudo tee /etc/systemd/network/10-${INTFNAME}.link > /dev/null << EOF
 [Match]
-Path=pci-0000:03:00.0
+Path=$IDPATH
 [Link]
-Name=lan1
-Description=Network adatper 1
+Name=$INTFNAME
 EOF
 ```
 

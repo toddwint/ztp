@@ -91,11 +91,15 @@ def clean():
 def move():
     output_files = sorted(output_folder.glob('*'))
     for file in output_files:
+        if not file.suffix:
+            continue
         newloc = move_folder / file.name
         print(f'`{file}` moved to `{newloc}`')
         file.replace(newloc)
     # copy source files too
     for file in input_files:
+        if not file.suffix:
+            continue
         newloc = move_folder / file.name
         print(f'`{file}` copied to `{newloc}`')
         newloc.write_text(file.read_text())
