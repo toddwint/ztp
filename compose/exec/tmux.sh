@@ -2,11 +2,11 @@
 SCRIPTDIR="$(dirname "$(dirname "$(realpath "$0")")")"
 
 # Check that files exist first
-FILES=(".env")
+FILES=(".env" "compose.yaml")
 for FILE in "${FILES[@]}"; do
     if [ ! -f "${SCRIPTDIR}/${FILE}" ]; then
             echo "File not found: ${FILE}"
-            echo "Run create_container.sh first."
+            echo "Run create_project.sh first."
             exit 1
     fi
 done
@@ -15,4 +15,4 @@ done
 source "${SCRIPTDIR}"/.env
 set -x
 
-docker exec -it "${HOSTNAME}" bash
+docker compose exec -it "${APPNAME}" bash -c '/opt/"${APPNAME}"/scripts/tmux.sh'

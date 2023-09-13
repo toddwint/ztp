@@ -2,11 +2,11 @@
 SCRIPTDIR="$(dirname "$(realpath "$0")")"
 
 # Check that files exist first
-FILES=(".env")
+FILES=(".env" "compose.yaml")
 for FILE in "${FILES[@]}"; do
     if [ ! -f "${SCRIPTDIR}/${FILE}" ]; then
             echo "File not found: ${FILE}"
-            echo "Run create_container.sh first."
+            echo "Run create_project.sh first."
             exit 1
     fi
 done
@@ -16,12 +16,11 @@ source "${SCRIPTDIR}"/.env
 
 # Backup log files
 echo "Copying transfer report to host."
-docker exec -it "${HOSTNAME}" bash -c '/opt/"${APPNAME}"/debug/save_transfer_report.sh'
+docker compose exec -it ztp bash -c '/opt/"${APPNAME}"/debug/save_transfer_report.sh'
 
-# Stop and remove the container
-echo "Stopping and removing the container: ${HOSTNAME}"
-docker container stop "${HOSTNAME}"
-docker container rm "${HOSTNAME}"
+# Stop the docker project
+echo "Stopping the container: ${HOSTNAME}"
+docker compose down
 
 # Remove the docker networking interface
 echo '- - - - -'
@@ -36,8 +35,12 @@ if [ ! ${RC} -eq 0 ]; then exit; fi
 echo "Removing management network: ${INTERFACE}-macvlan"
 sudo ip link del "${INTERFACE}-macvlan"
 
-# Remove the webadmin.html customized files
+# Remove the docker compose.yaml customized files
 echo '- - - - -'
+echo -e "Removing docker compose file: compose.yaml"
+rm -rf "${SCRIPTDIR}"/compose.yaml
+
+# Remove the webadmin.html customized files
 echo -e "Removing webadmin file: webadmin.html"
 rm -rf "${SCRIPTDIR}"/webadmin.html
 

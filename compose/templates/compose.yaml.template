@@ -1,0 +1,36 @@
+name: ${HOSTNAME}
+
+services:
+  ztp:
+    image: toddwint/ztp
+    hostname: ${HOSTNAME}
+    ports:
+        - "${IPADDR}:${HTTPPORT1}:${HTTPPORT1}"
+        - "${IPADDR}:${HTTPPORT2}:${HTTPPORT2}"
+        - "${IPADDR}:${HTTPPORT3}:${HTTPPORT3}"
+        - "${IPADDR}:${HTTPPORT4}:${HTTPPORT4}"
+    networks:
+        default:
+            ipv4_address: ${IPADDR}
+    environment:
+        - HUID=${HUID}
+        - HGID=${HGID}
+        - HOSTNAME=${HOSTNAME}
+        - TZ=${TZ}
+        - MGMTIP=${MGMTIP}
+        - GATEWAY=${GATEWAY}
+        - HTTPPORT1=${HTTPPORT1}
+        - HTTPPORT2=${HTTPPORT2}
+        - HTTPPORT3=${HTTPPORT3}
+        - HTTPPORT4=${HTTPPORT4}
+    privileged: true
+    cap_add:
+      - NET_ADMIN
+    volumes:
+      - "${PWD}/ftp:/opt/ztp/ftp"
+    tty: true
+
+networks:
+    default:
+        name: "${INTERFACE}-macvlan"
+        external: true

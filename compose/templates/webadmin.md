@@ -1,4 +1,4 @@
-# Launch page for webadmin
+# Launch page for webadmin - HOSTNAME
 
 ## ttyd webadmin page
 <http://IPADDR:HTTPPORT1>

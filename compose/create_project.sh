@@ -2,7 +2,7 @@
 SCRIPTDIR="$(dirname "$(realpath "$0")")"
 
 # Check that files exist first
-FILES=("config.txt" "templates/webadmin.html.template")
+FILES=("config.txt" "templates/compose.yaml.template" "templates/webadmin.html.template")
 for FILE in "${FILES[@]}"; do
     if [ ! -f "${SCRIPTDIR}/${FILE}" ]; then
             echo "File not found: ${FILE}"
@@ -14,8 +14,10 @@ done
 # Then start by importing environment file
 source "${SCRIPTDIR}"/config.txt
 
-# Copy config.txt to .env
-echo "Creating container: ${HOSTNAME}"
+# Copy the docker compose files. Copy config.txt to .env
+echo "Creating project: ${HOSTNAME}"
+cp "${SCRIPTDIR}/templates/compose.yaml.template" "${SCRIPTDIR}/compose.yaml"
+echo "Added file: compose.yaml"
 cp "${SCRIPTDIR}/config.txt" "${SCRIPTDIR}/.env"
 echo "Copied config.txt to .env"
 
@@ -39,7 +41,7 @@ echo -e "${USERINFO}" >> "${SCRIPTDIR}/.env"
 echo '- - - - -'
 echo "Creating docker network: ${INTERFACE}-macvlan"
 docker network create -d macvlan --subnet=${SUBNET} --gateway=${GATEWAY} \
-    --aux-address="mgmt_ip=${MGMTIP}" -o parent="${INTERFACE}" \
+    --aux-address="mgmt_ip_${SUBNET}=${MGMTIP}" -o parent="${INTERFACE}" \
     --attachable "${INTERFACE}-macvlan"
 echo "Creating management network: ${INTERFACE}-macvlan"
 sudo ip link add "${INTERFACE}-macvlan" link "${INTERFACE}" type macvlan mode bridge
@@ -48,30 +50,9 @@ sudo ip addr add "${MGMTIP}/32" dev "${INTERFACE}-macvlan"
 sudo ip route add "${SUBNET}" dev "${INTERFACE}-macvlan"
 echo "Added routes from management network to docker network"
 
-# Create the docker container
+# Start the project (containers plus network interface)
 echo '- - - - -'
-echo "Starting container: ${HOSTNAME}"
-docker run -dit \
-    --name "${HOSTNAME}" \
-    --network "${INTERFACE}-macvlan" \
-    --ip "${IPADDR}" \
-    -h "${HOSTNAME}" \
-    ` # Volume can be changed to another folder. For Example: ` \
-    ` # -v "/home/${USER}/Desktop/ftp:/opt/${APPNAME}/ftp" \ ` \
-    -v "${SCRIPTDIR}/ftp:/opt/${APPNAME}/ftp" \
-    -e TZ="${TZ}" \
-    -e MGMTIP="${MGMTIP}" \
-    -e GATEWAY="${GATEWAY}" \
-    -e HUID="${HUID}" \
-    -e HGID="${HGID}" \
-    -e HTTPPORT1="${HTTPPORT1}" \
-    -e HTTPPORT2="${HTTPPORT2}" \
-    -e HTTPPORT3="${HTTPPORT3}" \
-    -e HTTPPORT4="${HTTPPORT4}" \
-    -e HOSTNAME="${HOSTNAME}" \
-    -e APPNAME="${APPNAME}" \
-    `# --cap-add=NET_ADMIN \ ` \
-    "toddwint/${APPNAME}"
+docker compose up -d
 
 # Create the webadmin html file from template
 echo '- - - - -'

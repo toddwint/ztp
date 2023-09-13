@@ -1,2 +1,7 @@
-run/ftp
 run/webadmin.html
+compose/webadmin.html
+run/.env
+compose/.env
+compose/compose.yaml
+run/ftp
+compose/ftp
