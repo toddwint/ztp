@@ -5,7 +5,7 @@
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <meta name="author" content="Todd Wintermute" />
-  <meta name="dcterms.date" content="2023-09-13" />
+  <meta name="dcterms.date" content="2023-11-03" />
   <title>README</title>
   <style>
     html {
@@ -234,7 +234,7 @@
 <header id="title-block-header">
 <h1 class="title">README</h1>
 <p class="author">Todd Wintermute</p>
-<p class="date">2023-09-13</p>
+<p class="date">2023-11-03</p>
 </header>
 <nav id="TOC" role="doc-toc">
 <ul>
@@ -317,17 +317,17 @@
 <p>Create the docker macvlan interface.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> network create <span class="at">-d</span> macvlan <span class="at">--subnet</span><span class="op">=</span>172.21.0.0/16 <span class="at">--gateway</span><span class="op">=</span>172.21.255.254 <span class="dt">\</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">--aux-address</span><span class="op">=</span><span class="st">&quot;mgmt_ip=172.21.255.253&quot;</span> <span class="at">-o</span> parent=<span class="st">&quot;eth0&quot;</span> <span class="dt">\</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">--attachable</span> <span class="st">&quot;eth0-macvlan&quot;</span></span></code></pre></div>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">--attachable</span> <span class="st">&quot;ztp01&quot;</span></span></code></pre></div>
 <p>Create a management macvlan interface.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> ip link add <span class="st">&quot;eth0-macvlan&quot;</span> link <span class="st">&quot;eth0&quot;</span> type macvlan mode bridge</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> ip link set <span class="st">&quot;eth0-macvlan&quot;</span> up</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> ip link add <span class="st">&quot;ztp01&quot;</span> link <span class="st">&quot;eth0&quot;</span> type macvlan mode bridge</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> ip link set <span class="st">&quot;ztp01&quot;</span> up</span></code></pre></div>
 <p>Assign an IP on the management macvlan interface plus add routes to the docker container.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> ip addr add <span class="st">&quot;172.21.255.253/32&quot;</span> dev <span class="st">&quot;eth0-macvlan&quot;</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> ip route add <span class="st">&quot;172.21.0.0/16&quot;</span> dev <span class="st">&quot;eth0-macvlan&quot;</span></span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> ip addr add <span class="st">&quot;172.21.255.253/32&quot;</span> dev <span class="st">&quot;ztp01&quot;</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> ip route add <span class="st">&quot;172.21.0.0/16&quot;</span> dev <span class="st">&quot;ztp01&quot;</span></span></code></pre></div>
 <h2 data-number="1.5" id="sample-docker-run-command"><span class="header-section-number">1.5</span> Sample <code>docker run</code> command</h2>
 <div class="sourceCode" id="cb4"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">-dit</span> <span class="dt">\</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">--name</span> <span class="st">&quot;ztp01&quot;</span> <span class="dt">\</span></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">--network</span> <span class="st">&quot;eth0-macvlan&quot;</span> <span class="dt">\</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">--network</span> <span class="st">&quot;ztp01&quot;</span> <span class="dt">\</span></span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">--ip</span> <span class="st">&quot;172.21.255.252&quot;</span> <span class="dt">\</span></span>
 <span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">-h</span> <span class="st">&quot;ztp01&quot;</span> <span class="dt">\</span></span>
 <span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">-v</span> <span class="st">&quot;</span><span class="va">${PWD}</span><span class="st">/ftp:/opt/ztp/ftp&quot;</span> <span class="dt">\</span></span>
@@ -378,7 +378,7 @@
 <span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a><span class="fu">networks</span><span class="kw">:</span></span>
 <span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">default</span><span class="kw">:</span></span>
-<span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">name</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;eth0-macvlan&quot;</span></span>
+<span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">name</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;ztp01&quot;</span></span>
 <span id="cb5-36"><a href="#cb5-36" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">external</span><span class="kw">:</span><span class="at"> </span><span class="ch">true</span></span></code></pre></div>
 </body>
 </html>

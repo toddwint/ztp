@@ -39,15 +39,15 @@ echo -e "${USERINFO}" >> "${SCRIPTDIR}/.env"
 
 # Create the docker network and management macvlan interface
 echo '- - - - -'
-echo "Creating docker network: ${INTERFACE}-macvlan"
+echo "Creating docker network: ${HOSTNAME}"
 docker network create -d macvlan --subnet=${SUBNET} --gateway=${GATEWAY} \
-    --aux-address="mgmt_ip_${SUBNET}=${MGMTIP}" -o parent="${INTERFACE}" \
-    --attachable "${INTERFACE}-macvlan"
-echo "Creating management network: ${INTERFACE}-macvlan"
-sudo ip link add "${INTERFACE}-macvlan" link "${INTERFACE}" type macvlan mode bridge
-sudo ip link set "${INTERFACE}-macvlan" up
-sudo ip addr add "${MGMTIP}/32" dev "${INTERFACE}-macvlan"
-sudo ip route add "${SUBNET}" dev "${INTERFACE}-macvlan"
+    --aux-address="mgmt_ip=${MGMTIP}" -o parent="${INTERFACE}" \
+    --attachable "${HOSTNAME}"
+echo "Creating management network: ${HOSTNAME::15}@${INTERFACE}"
+sudo ip link add "${HOSTNAME::15}" link "${INTERFACE}" type macvlan mode bridge
+sudo ip link set "${HOSTNAME::15}" up
+sudo ip addr add "${MGMTIP}/32" dev "${HOSTNAME::15}"
+sudo ip route add "${SUBNET}" dev "${HOSTNAME::15}"
 echo "Added routes from management network to docker network"
 
 # Start the project (containers plus network interface)

@@ -1,6 +1,6 @@
 ---
 title: README
-date: 2023-09-13
+date: 2023-11-03
 ---
 
 # toddwint/ztp
@@ -81,21 +81,21 @@ Create the docker macvlan interface.
 ```bash
 docker network create -d macvlan --subnet=172.21.0.0/16 --gateway=172.21.255.254 \
     --aux-address="mgmt_ip=172.21.255.253" -o parent="eth0" \
-    --attachable "eth0-macvlan"
+    --attachable "ztp01"
 ```
 
 Create a management macvlan interface.
 
 ```bash
-sudo ip link add "eth0-macvlan" link "eth0" type macvlan mode bridge
-sudo ip link set "eth0-macvlan" up
+sudo ip link add "ztp01" link "eth0" type macvlan mode bridge
+sudo ip link set "ztp01" up
 ```
 
 Assign an IP on the management macvlan interface plus add routes to the docker container.
 
 ```bash
-sudo ip addr add "172.21.255.253/32" dev "eth0-macvlan"
-sudo ip route add "172.21.0.0/16" dev "eth0-macvlan"
+sudo ip addr add "172.21.255.253/32" dev "ztp01"
+sudo ip route add "172.21.0.0/16" dev "ztp01"
 ```
 
 ## Sample `docker run` command
@@ -103,7 +103,7 @@ sudo ip route add "172.21.0.0/16" dev "eth0-macvlan"
 ```bash
 docker run -dit \
     --name "ztp01" \
-    --network "eth0-macvlan" \
+    --network "ztp01" \
     --ip "172.21.255.252" \
     -h "ztp01" \
     -v "${PWD}/ftp:/opt/ztp/ftp" \
@@ -159,6 +159,6 @@ services:
 
 networks:
     default:
-        name: "eth0-macvlan"
+        name: "ztp01"
         external: true
 ```

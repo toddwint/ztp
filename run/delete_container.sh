@@ -25,16 +25,16 @@ docker container rm "${HOSTNAME}"
 
 # Remove the docker networking interface
 echo '- - - - -'
-echo "Removing docker network: ${INTERFACE}-macvlan"
-docker network rm "${INTERFACE}-macvlan"
+echo "Removing docker network: ${HOSTNAME}"
+docker network rm "${HOSTNAME}"
 
 # test if previous command ran without errors
 RC=$?
 if [ ! ${RC} -eq 0 ]; then exit; fi
 
 # Remove the management networking interface
-echo "Removing management network: ${INTERFACE}-macvlan"
-sudo ip link del "${INTERFACE}-macvlan"
+echo "Removing management network: ${HOSTNAME::15}@${INTERFACE}"
+sudo ip link del "${HOSTNAME::15}"
 
 # Remove the webadmin.html customized files
 echo '- - - - -'
