@@ -1,0 +1,76 @@
+#!/usr/bin/env python3
+"""Create a menu to run scripts"""
+
+__version__ = '0.0.1'
+__date__ = '2023-12-22'
+__author__ = 'Todd Wintermute'
+
+import argparse
+import json
+import os
+import pathlib
+import subprocess
+import sys
+
+def parse_arguments():
+    parser = argparse.ArgumentParser(
+        description=__doc__,
+        epilog='Have a great day!',
+        )
+    parser.add_argument(
+        '-v', '--version',
+        help='show the version number and exit',
+        action='version',
+        version=f'Version: %(prog)s  {__version__}  ({__date__})',
+        )
+    parser.add_argument(
+        'infile',
+        nargs='?',
+        type=pathlib.Path,
+        default=f'/opt/{appname}/scripts/menu.json',
+        help=(
+            f'Optional location where to read the json file. '
+            f'Default is `/opt/{appname}/scripts/menu.json`'
+            ),
+        )
+    return parser
+
+def display_menu(menu, title):
+    header = f"Menu for {appname} docker image."
+    print('\n' + header + '\n' + '-' * len(header))
+    print(f"[{title}]")
+    for n, (item, _ ) in enumerate(menu):
+        print(f"{n+1}) {item}")
+    sel = input("Select a number, 'q' to quit to a shell, 'b' to go back: ")
+    if sel.isalpha() and sel[0].lower() == 'b':
+        return
+    elif not selection_is_valid(sel, menu):
+        print('**Incorrent selection. Try again.**')
+        display_menu(menu, title)
+        return
+    description, command = menu[int(sel)-1]
+    if type(command) == str:
+        print(f"\n+ {command}\n")
+        subprocess.run(command, shell=True)
+        display_menu(menu, title)
+    elif type(command) == list:
+        display_menu(command, description)
+
+def selection_is_valid(sel, menu):
+    if sel.isdigit() and int(sel) > 0 and int(sel) <= len(menu):
+        return True
+    elif sel.isalpha() and sel[0].lower() == 'q':
+        print('\nTo return to the menu, type `menu`\n')
+        sys.exit()
+    else:
+        return False
+
+if __name__ == '__main__':
+    appname = os.environ['APPNAME']
+    parser = parse_arguments()
+    args = parser.parse_args()
+    with open(args.infile) as f:
+        menu = json.load(f)
+    while True:
+        title = f"Main menu"
+        display_menu(menu, title)

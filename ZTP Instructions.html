@@ -8,227 +8,242 @@
   <meta name="dcterms.date" content="2023-08-26" />
   <title>ZTP Instructions</title>
   <style>
-    html {
-      line-height: 1.5;
-      font-family: Helvetica,Verdana,Sans-serif;
-      font-size: 20px;
-      color: #1a1a1a;
-      background-color: #fdfdfd;
-    }
-    body {
-      margin: 0 auto;
-      max-width: 36em;
-      padding-left: 50px;
-      padding-right: 50px;
-      padding-top: 50px;
-      padding-bottom: 50px;
-      hyphens: auto;
-      word-wrap: break-word;
-      text-rendering: optimizeLegibility;
-      font-kerning: normal;
-    }
-    @media (max-width: 600px) {
-      body {
-        font-size: 0.9em;
-        padding: 1em;
-      }
-    }
-    @media print {
-      body {
-        background-color: transparent;
-        color: black;
-        font-size: 12pt;
-      }
-      p, h2, h3 {
-        orphans: 3;
-        widows: 3;
-      }
-      h2, h3, h4 {
-        page-break-after: avoid;
-      }
-    }
-    p {
-      margin: 1em 0;
-    }
-    a {
-      color: blue;
-    }
-    a:visited {
-      color: blue;
-    }
-    img {
-      max-width: 100%;
-    }
-    h1, h2, h3, h4, h5, h6 {
-      margin-top: 1.4em;
-    }
-    h5, h6 {
-      font-size: 1em;
-      font-style: italic;
-    }
-    h6 {
-      font-weight: normal;
-    }
-    ol, ul {
-      padding-left: 1.7em;
-      margin-top: 1em;
-    }
-    li > ol, li > ul {
-      margin-top: 0;
-    }
-    blockquote {
-      margin: 1em 0 1em 1.7em;
-      padding-left: 1em;
-      border-left: 2px solid #e6e6e6;
-      color: #606060;
-    }
-    code {
-      font-family: Menlo, Monaco, 'Lucida Console', Consolas, monospace;
-      background-color: whitesmoke;
-      padding: .2em .4em;
-      font-size: 85%;
-      margin: 0;
-    }
-    pre {
-      margin: 1em 0;
-      background-color: whitesmoke;
-      padding: 1em;
-      overflow: auto;
-    }
-    pre code {
-      padding: 0;
-      overflow: visible;
-    }
-    .sourceCode {
-     background-color: transparent;
-     overflow: visible;
-    }
-    hr {
-      background-color: #1a1a1a;
-      border: none;
-      height: 1px;
-      margin: 1em 0;
-    }
-    table {
-      margin: 1em 0;
-      border-collapse: collapse;
-      width: 100%;
-      overflow-x: auto;
-      display: block;
-      font-variant-numeric: lining-nums tabular-nums;
-    }
-    table caption {
-      margin-bottom: 0.75em;
-    }
-    tbody {
-      margin-top: 0.5em;
-      border-top: 1px solid #1a1a1a;
-      border-bottom: 1px solid #1a1a1a;
-    }
-    th {
-      border-top: 1px solid #1a1a1a;
-      padding: 0.25em 0.5em 0.25em 0.5em;
-    }
-    td {
-      padding: 0.125em 0.5em 0.25em 0.5em;
-    }
-    header {
-      margin-bottom: 4em;
-      text-align: center;
-    }
-    #TOC li {
-      list-style: none;
-    }
-    #TOC a:not(:hover) {
-      text-decoration: none;
-    }
-    code{white-space: pre-wrap;}
-    span.smallcaps{font-variant: small-caps;}
-    span.underline{text-decoration: underline;}
-    div.column{display: inline-block; vertical-align: top; width: 50%;}
-    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
-    ul.task-list{list-style: none;}
-    pre > code.sourceCode { white-space: pre; position: relative; }
-    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-    pre > code.sourceCode > span:empty { height: 1.2em; }
-    .sourceCode { overflow: visible; }
-    code.sourceCode > span { color: inherit; text-decoration: inherit; }
-    div.sourceCode { margin: 1em 0; }
-    pre.sourceCode { margin: 0; }
-    @media screen {
-    div.sourceCode { overflow: auto; }
-    }
-    @media print {
-    pre > code.sourceCode { white-space: pre-wrap; }
-    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-    }
-    pre.numberSource code
-      { counter-reset: source-line 0; }
-    pre.numberSource code > span
-      { position: relative; left: -4em; counter-increment: source-line; }
-    pre.numberSource code > span > a:first-child::before
-      { content: counter(source-line);
-        position: relative; left: -1em; text-align: right; vertical-align: baseline;
-        border: none; display: inline-block;
-        -webkit-touch-callout: none; -webkit-user-select: none;
-        -khtml-user-select: none; -moz-user-select: none;
-        -ms-user-select: none; user-select: none;
-        padding: 0 4px; width: 4em;
-        color: #aaaaaa;
-      }
-    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
-    div.sourceCode
-      {  background-color: #f8f8f8; }
-    @media screen {
-    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
-    }
-    code span.al { color: #ef2929; } /* Alert */
-    code span.an { color: #8f5902; font-weight: bold; font-style: italic; } /* Annotation */
-    code span.at { color: #c4a000; } /* Attribute */
-    code span.bn { color: #0000cf; } /* BaseN */
-    code span.cf { color: #204a87; font-weight: bold; } /* ControlFlow */
-    code span.ch { color: #4e9a06; } /* Char */
-    code span.cn { color: #000000; } /* Constant */
-    code span.co { color: #8f5902; font-style: italic; } /* Comment */
-    code span.cv { color: #8f5902; font-weight: bold; font-style: italic; } /* CommentVar */
-    code span.do { color: #8f5902; font-weight: bold; font-style: italic; } /* Documentation */
-    code span.dt { color: #204a87; } /* DataType */
-    code span.dv { color: #0000cf; } /* DecVal */
-    code span.er { color: #a40000; font-weight: bold; } /* Error */
-    code span.ex { } /* Extension */
-    code span.fl { color: #0000cf; } /* Float */
-    code span.fu { color: #000000; } /* Function */
-    code span.im { } /* Import */
-    code span.in { color: #8f5902; font-weight: bold; font-style: italic; } /* Information */
-    code span.kw { color: #204a87; font-weight: bold; } /* Keyword */
-    code span.op { color: #ce5c00; font-weight: bold; } /* Operator */
-    code span.ot { color: #8f5902; } /* Other */
-    code span.pp { color: #8f5902; font-style: italic; } /* Preprocessor */
-    code span.sc { color: #000000; } /* SpecialChar */
-    code span.ss { color: #4e9a06; } /* SpecialString */
-    code span.st { color: #4e9a06; } /* String */
-    code span.va { color: #000000; } /* Variable */
-    code span.vs { color: #4e9a06; } /* VerbatimString */
-    code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warning */
-    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
-  </style>
+html {
+line-height: 1.5;
+font-family: Helvetica,Verdana,Sans-serif;
+font-size: 20px;
+color: #1a1a1a;
+background-color: #fdfdfd;
+}
+body {
+margin: 0 auto;
+max-width: 36em;
+padding-left: 50px;
+padding-right: 50px;
+padding-top: 50px;
+padding-bottom: 50px;
+hyphens: auto;
+overflow-wrap: break-word;
+text-rendering: optimizeLegibility;
+font-kerning: normal;
+}
+@media (max-width: 600px) {
+body {
+font-size: 0.9em;
+padding: 1em;
+}
+h1 {
+font-size: 1.8em;
+}
+}
+@media print {
+body {
+background-color: transparent;
+color: black;
+font-size: 12pt;
+}
+p, h2, h3 {
+orphans: 3;
+widows: 3;
+}
+h2, h3, h4 {
+page-break-after: avoid;
+}
+}
+p {
+margin: 1em 0;
+}
+a {
+color: blue;
+}
+a:visited {
+color: blue;
+}
+img {
+max-width: 100%;
+}
+h1, h2, h3, h4, h5, h6 {
+margin-top: 1.4em;
+}
+h5, h6 {
+font-size: 1em;
+font-style: italic;
+}
+h6 {
+font-weight: normal;
+}
+ol, ul {
+padding-left: 1.7em;
+margin-top: 1em;
+}
+li > ol, li > ul {
+margin-top: 0;
+}
+blockquote {
+margin: 1em 0 1em 1.7em;
+padding-left: 1em;
+border-left: 2px solid #e6e6e6;
+color: #606060;
+}
+code {
+font-family: Menlo, Monaco, 'Lucida Console', Consolas, monospace;
+background-color: whitesmoke;
+padding: .2em .4em;
+font-size: 85%;
+margin: 0;
+}
+pre {
+margin: 1em 0;
+background-color: whitesmoke;
+padding: 1em;
+overflow: auto;
+}
+pre code {
+padding: 0;
+overflow: visible;
+overflow-wrap: normal;
+}
+.sourceCode {
+background-color: transparent;
+overflow: visible;
+}
+hr {
+background-color: #1a1a1a;
+border: none;
+height: 1px;
+margin: 1em 0;
+}
+table {
+margin: 1em 0;
+border-collapse: collapse;
+width: 100%;
+overflow-x: auto;
+display: block;
+font-variant-numeric: lining-nums tabular-nums;
+}
+table caption {
+margin-bottom: 0.75em;
+}
+tbody {
+margin-top: 0.5em;
+border-top: 1px solid #1a1a1a;
+border-bottom: 1px solid #1a1a1a;
+}
+th {
+border-top: 1px solid #1a1a1a;
+padding: 0.25em 0.5em 0.25em 0.5em;
+}
+td {
+padding: 0.125em 0.5em 0.25em 0.5em;
+}
+header {
+margin-bottom: 4em;
+text-align: center;
+}
+#TOC li {
+list-style: none;
+}
+#TOC ul {
+padding-left: 1.3em;
+}
+#TOC > ul {
+padding-left: 0;
+}
+#TOC a:not(:hover) {
+text-decoration: none;
+}
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+width: 0.8em;
+margin: 0 0.8em 0.2em -1.6em;
+vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ background-color: #f8f8f8; }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ef2929; } 
+code span.an { color: #8f5902; font-weight: bold; font-style: italic; } 
+code span.at { color: #c4a000; } 
+code span.bn { color: #0000cf; } 
+code span.cf { color: #204a87; font-weight: bold; } 
+code span.ch { color: #4e9a06; } 
+code span.cn { color: #000000; } 
+code span.co { color: #8f5902; font-style: italic; } 
+code span.cv { color: #8f5902; font-weight: bold; font-style: italic; } 
+code span.do { color: #8f5902; font-weight: bold; font-style: italic; } 
+code span.dt { color: #204a87; } 
+code span.dv { color: #0000cf; } 
+code span.er { color: #a40000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #0000cf; } 
+code span.fu { color: #000000; } 
+code span.im { } 
+code span.in { color: #8f5902; font-weight: bold; font-style: italic; } 
+code span.kw { color: #204a87; font-weight: bold; } 
+code span.op { color: #ce5c00; font-weight: bold; } 
+code span.ot { color: #8f5902; } 
+code span.pp { color: #8f5902; font-style: italic; } 
+code span.sc { color: #000000; } 
+code span.ss { color: #4e9a06; } 
+code span.st { color: #4e9a06; } 
+code span.va { color: #000000; } 
+code span.vs { color: #4e9a06; } 
+code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } 
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
   <!--[if lt IE 9]>
     <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
   <![endif]-->
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
 </head>
 <body>
 <header id="title-block-header">
@@ -238,95 +253,160 @@
 </header>
 <nav id="TOC" role="doc-toc">
 <ul>
-<li><a href="#overview"><span class="toc-section-number">1</span> Overview</a>
+<li><a href="#overview" id="toc-overview"><span class="toc-section-number">1</span> Overview</a>
 <ul>
-<li><a href="#what-is-ztp"><span class="toc-section-number">1.1</span> What is ZTP</a></li>
-<li><a href="#what-is-this-software-package"><span class="toc-section-number">1.2</span> What is this software package?</a></li>
-<li><a href="#who-is-this-for"><span class="toc-section-number">1.3</span> Who is this for?</a></li>
-<li><a href="#what-pc-platforms-are-supported"><span class="toc-section-number">1.4</span> What PC platforms are supported?</a></li>
-<li><a href="#how-does-it-work"><span class="toc-section-number">1.5</span> How does it work?</a>
+<li><a href="#what-is-ztp" id="toc-what-is-ztp"><span class="toc-section-number">1.1</span> What is ZTP</a></li>
+<li><a href="#what-is-this-software-package" id="toc-what-is-this-software-package"><span class="toc-section-number">1.2</span> What is this software
+package?</a></li>
+<li><a href="#who-is-this-for" id="toc-who-is-this-for"><span class="toc-section-number">1.3</span> Who is this for?</a></li>
+<li><a href="#what-pc-platforms-are-supported" id="toc-what-pc-platforms-are-supported"><span class="toc-section-number">1.4</span> What PC platforms are
+supported?</a></li>
+<li><a href="#how-does-it-work" id="toc-how-does-it-work"><span class="toc-section-number">1.5</span> How does it work?</a>
 <ul>
-<li><a href="#two-provisioning-methods"><span class="toc-section-number">1.5.1</span> Two provisioning methods</a>
+<li><a href="#two-provisioning-methods" id="toc-two-provisioning-methods"><span class="toc-section-number">1.5.1</span> Two provisioning methods</a>
 <ul>
-<li><a href="#provisioning-method-1-vendor-class-identifier"><span class="toc-section-number">1.5.1.1</span> Provisioning method 1: Vendor Class Identifier</a>
+<li><a href="#provisioning-method-1-vendor-class-identifier" id="toc-provisioning-method-1-vendor-class-identifier"><span class="toc-section-number">1.5.1.1</span> Provisioning method 1: Vendor
+Class Identifier</a>
 <ul>
-<li><a href="#vendor-class-id-file-vendor_class_defaults.csv"><span class="toc-section-number">1.5.1.1.1</span> Vendor Class ID file: <code>vendor_class_defaults.csv</code></a></li>
+<li><a href="#vendor-class-id-file-vendor_class_defaults.csv" id="toc-vendor-class-id-file-vendor_class_defaults.csv"><span class="toc-section-number">1.5.1.1.1</span> Vendor Class ID file:
+<code>vendor_class_defaults.csv</code></a></li>
 </ul></li>
-<li><a href="#provisioning-method-2-mac-addresses"><span class="toc-section-number">1.5.1.2</span> Provisioning method 2: MAC addresses</a>
+<li><a href="#provisioning-method-2-mac-addresses" id="toc-provisioning-method-2-mac-addresses"><span class="toc-section-number">1.5.1.2</span> Provisioning method 2: MAC
+addresses</a>
 <ul>
-<li><a href="#mac-method-file-ztp.csv"><span class="toc-section-number">1.5.1.2.1</span> MAC method file: <code>ztp.csv</code></a></li>
+<li><a href="#mac-method-file-ztp.csv" id="toc-mac-method-file-ztp.csv"><span class="toc-section-number">1.5.1.2.1</span> MAC method file:
+<code>ztp.csv</code></a></li>
 </ul></li>
-<li><a href="#how-to-specify-which-provisioning-method-you-want-to-use"><span class="toc-section-number">1.5.1.3</span> How to specify which provisioning method you want to use</a></li>
+<li><a href="#how-to-specify-which-provisioning-method-you-want-to-use" id="toc-how-to-specify-which-provisioning-method-you-want-to-use"><span class="toc-section-number">1.5.1.3</span> How to specify which
+provisioning method you want to use</a></li>
 </ul></li>
-<li><a href="#supported-devices"><span class="toc-section-number">1.5.2</span> Supported devices</a></li>
-<li><a href="#expanding-the-devices-supported"><span class="toc-section-number">1.5.3</span> Expanding the devices supported</a>
+<li><a href="#supported-devices" id="toc-supported-devices"><span class="toc-section-number">1.5.2</span> Supported devices</a></li>
+<li><a href="#expanding-the-devices-supported" id="toc-expanding-the-devices-supported"><span class="toc-section-number">1.5.3</span> Expanding the devices
+supported</a>
 <ul>
-<li><a href="#viewing-supported-devices-or-expanding-the-list-supported_device_models.json"><span class="toc-section-number">1.5.3.1</span> Viewing supported devices or expanding the list: <code>supported_device_models.json</code></a></li>
+<li><a href="#viewing-supported-devices-or-expanding-the-list-supported_device_models.json" id="toc-viewing-supported-devices-or-expanding-the-list-supported_device_models.json"><span class="toc-section-number">1.5.3.1</span> Viewing supported devices or
+expanding the list: <code>supported_device_models.json</code></a></li>
 </ul></li>
-<li><a href="#where-to-plug-in-the-cables"><span class="toc-section-number">1.5.4</span> Where to plug in the cables</a></li>
-<li><a href="#files-and-folders-inside-the-ftp-foldervolume"><span class="toc-section-number">1.5.5</span> Files and folders inside the <code>ftp</code> folder/volume</a></li>
+<li><a href="#where-to-plug-in-the-cables" id="toc-where-to-plug-in-the-cables"><span class="toc-section-number">1.5.4</span> Where to plug in the
+cables</a></li>
+<li><a href="#files-and-folders-inside-the-ftp-foldervolume" id="toc-files-and-folders-inside-the-ftp-foldervolume"><span class="toc-section-number">1.5.5</span> Files and folders inside the
+<code>ftp</code> folder/volume</a></li>
 </ul></li>
 </ul></li>
-<li><a href="#running-ztp"><span class="toc-section-number">2</span> Running ZTP</a>
+<li><a href="#running-ztp" id="toc-running-ztp"><span class="toc-section-number">2</span> Running ZTP</a>
 <ul>
-<li><a href="#install-the-requirements"><span class="toc-section-number">2.1</span> Install the requirements</a>
+<li><a href="#install-the-requirements" id="toc-install-the-requirements"><span class="toc-section-number">2.1</span> Install the requirements</a>
 <ul>
-<li><a href="#install-docker"><span class="toc-section-number">2.1.1</span> Install Docker</a></li>
-<li><a href="#install-git-optional-but-recommended"><span class="toc-section-number">2.1.2</span> Install git (optional, but recommended)</a></li>
+<li><a href="#install-docker" id="toc-install-docker"><span class="toc-section-number">2.1.1</span> Install Docker</a></li>
+<li><a href="#install-git-optional-but-recommended" id="toc-install-git-optional-but-recommended"><span class="toc-section-number">2.1.2</span> Install git (optional, but
+recommended)</a></li>
 </ul></li>
-<li><a href="#download-the-files"><span class="toc-section-number">2.2</span> Download the files</a></li>
-<li><a href="#create-the-docker-container"><span class="toc-section-number">2.3</span> Create the Docker container</a>
+<li><a href="#download-the-files" id="toc-download-the-files"><span class="toc-section-number">2.2</span> Download the files</a></li>
+<li><a href="#create-the-docker-container" id="toc-create-the-docker-container"><span class="toc-section-number">2.3</span> Create the Docker container</a>
 <ul>
-<li><a href="#modify-container-configuration-parameters-config.txt"><span class="toc-section-number">2.3.1</span> Modify container configuration parameters: <code>config.txt</code></a></li>
-<li><a href="#run-the-script-to-create-the-container-create_container.sh"><span class="toc-section-number">2.3.2</span> Run the script to create the container: <code>create_container.sh</code></a></li>
+<li><a href="#modify-container-configuration-parameters-config.txt" id="toc-modify-container-configuration-parameters-config.txt"><span class="toc-section-number">2.3.1</span> Modify container configuration
+parameters: <code>config.txt</code></a></li>
+<li><a href="#run-the-script-to-create-the-container-create_container.sh" id="toc-run-the-script-to-create-the-container-create_container.sh"><span class="toc-section-number">2.3.2</span> Run the script to create the
+container: <code>create_container.sh</code></a></li>
 </ul></li>
-<li><a href="#restart-the-container"><span class="toc-section-number">2.4</span> Restart the container</a></li>
-<li><a href="#view-the-progress"><span class="toc-section-number">2.5</span> View the progress</a></li>
-<li><a href="#stop-the-container"><span class="toc-section-number">2.6</span> Stop the container</a></li>
+<li><a href="#restart-the-container" id="toc-restart-the-container"><span class="toc-section-number">2.4</span> Restart the container</a></li>
+<li><a href="#view-the-progress" id="toc-view-the-progress"><span class="toc-section-number">2.5</span> View the progress</a></li>
+<li><a href="#stop-the-container" id="toc-stop-the-container"><span class="toc-section-number">2.6</span> Stop the container</a></li>
 </ul></li>
-<li><a href="#common-issues"><span class="toc-section-number">3</span> Common issues</a>
+<li><a href="#common-issues" id="toc-common-issues"><span class="toc-section-number">3</span> Common issues</a>
 <ul>
-<li><a href="#links-in-webadmin.html-display-the-message-the-connection-has-timed-out-or-this-site-cant-be-reached"><span class="toc-section-number">3.1</span> Links in <code>webadmin.html</code> display the message <em>“The connection has timed out”</em> or <em>“This Site Can’t Be Reached”</em></a></li>
-<li><a href="#you-receive-errors-when-running-start.sh-restart.sh-stop.sh"><span class="toc-section-number">3.2</span> You receive errors when running <code>start.sh</code>, <code>restart.sh</code>, <code>stop.sh</code></a></li>
-<li><a href="#you-receive-errors-when-running-create_container.sh-or-delete_container.sh"><span class="toc-section-number">3.3</span> You receive errors when running <code>create_container.sh</code> or <code>delete_container.sh</code></a></li>
-<li><a href="#my-aruba-device-says-connection-refused."><span class="toc-section-number">3.4</span> My Aruba device says <em>“Connection Refused”</em>.</a></li>
-<li><a href="#my-device-doesnt-appear-to-be-loading"><span class="toc-section-number">3.5</span> My device doesn’t appear to be loading</a></li>
+<li><a href="#links-in-webadmin.html-display-the-message-the-connection-has-timed-out-or-this-site-cant-be-reached" id="toc-links-in-webadmin.html-display-the-message-the-connection-has-timed-out-or-this-site-cant-be-reached"><span class="toc-section-number">3.1</span> Links in
+<code>webadmin.html</code> display the message <em>“The connection has
+timed out”</em> or <em>“This Site Can’t Be Reached”</em></a></li>
+<li><a href="#you-receive-errors-when-running-start.sh-restart.sh-stop.sh" id="toc-you-receive-errors-when-running-start.sh-restart.sh-stop.sh"><span class="toc-section-number">3.2</span> You receive errors when running
+<code>start.sh</code>, <code>restart.sh</code>,
+<code>stop.sh</code></a></li>
+<li><a href="#you-receive-errors-when-running-create_container.sh-or-delete_container.sh" id="toc-you-receive-errors-when-running-create_container.sh-or-delete_container.sh"><span class="toc-section-number">3.3</span> You receive errors when running
+<code>create_container.sh</code> or
+<code>delete_container.sh</code></a></li>
+<li><a href="#my-aruba-device-says-connection-refused." id="toc-my-aruba-device-says-connection-refused."><span class="toc-section-number">3.4</span> My Aruba device says
+<em>“Connection Refused”</em>.</a></li>
+<li><a href="#my-device-doesnt-appear-to-be-loading" id="toc-my-device-doesnt-appear-to-be-loading"><span class="toc-section-number">3.5</span> My device doesn’t appear to be
+loading</a></li>
 </ul></li>
-<li><a href="#additional-information"><span class="toc-section-number">4</span> Additional Information</a>
+<li><a href="#additional-information" id="toc-additional-information"><span class="toc-section-number">4</span> Additional Information</a>
 <ul>
-<li><a href="#links-to-docker-and-github-pages"><span class="toc-section-number">4.1</span> Links to Docker and GitHub pages</a></li>
-<li><a href="#running-inside-a-virtual-machine"><span class="toc-section-number">4.2</span> Running inside a Virtual Machine</a></li>
-<li><a href="#installing-docker-on-ubuntu-linux"><span class="toc-section-number">4.3</span> Installing Docker on Ubuntu Linux</a></li>
-<li><a href="#install-git-on-ubuntu-linux"><span class="toc-section-number">4.4</span> Install git on Ubuntu Linux</a></li>
-<li><a href="#download-the-ztp-docker-image"><span class="toc-section-number">4.5</span> Download the ZTP Docker image</a></li>
-<li><a href="#download-the-github-files"><span class="toc-section-number">4.6</span> Download the GitHub files</a></li>
-<li><a href="#give-the-current-user-access-to-ip-command-without-requiring-a-password-optional"><span class="toc-section-number">4.7</span> Give the current user access to <code>ip</code> command without requiring a password (optional)</a></li>
-<li><a href="#updating-to-a-new-version"><span class="toc-section-number">4.8</span> Updating to a new version</a></li>
-<li><a href="#running-more-than-one-container-at-a-time."><span class="toc-section-number">4.9</span> Running more than one container at a time.</a></li>
-<li><a href="#changing-the-default-ip-scheme"><span class="toc-section-number">4.10</span> Changing the default IP scheme</a></li>
-<li><a href="#renaming-predictable-network-interface-names-to-user-defined-values"><span class="toc-section-number">4.11</span> Renaming predictable network interface names to user defined values</a></li>
+<li><a href="#links-to-docker-and-github-pages" id="toc-links-to-docker-and-github-pages"><span class="toc-section-number">4.1</span> Links to Docker and GitHub
+pages</a></li>
+<li><a href="#running-inside-a-virtual-machine" id="toc-running-inside-a-virtual-machine"><span class="toc-section-number">4.2</span> Running inside a Virtual
+Machine</a></li>
+<li><a href="#installing-docker-on-ubuntu-linux" id="toc-installing-docker-on-ubuntu-linux"><span class="toc-section-number">4.3</span> Installing Docker on Ubuntu
+Linux</a></li>
+<li><a href="#install-git-on-ubuntu-linux" id="toc-install-git-on-ubuntu-linux"><span class="toc-section-number">4.4</span> Install git on Ubuntu
+Linux</a></li>
+<li><a href="#download-the-ztp-docker-image" id="toc-download-the-ztp-docker-image"><span class="toc-section-number">4.5</span> Download the ZTP Docker
+image</a></li>
+<li><a href="#download-the-github-files" id="toc-download-the-github-files"><span class="toc-section-number">4.6</span> Download the GitHub files</a></li>
+<li><a href="#give-the-current-user-access-to-ip-command-without-requiring-a-password-optional" id="toc-give-the-current-user-access-to-ip-command-without-requiring-a-password-optional"><span class="toc-section-number">4.7</span> Give the current user access to
+<code>ip</code> command without requiring a password (optional)</a></li>
+<li><a href="#updating-to-a-new-version" id="toc-updating-to-a-new-version"><span class="toc-section-number">4.8</span> Updating to a new version</a></li>
+<li><a href="#running-more-than-one-container-at-a-time." id="toc-running-more-than-one-container-at-a-time."><span class="toc-section-number">4.9</span> Running more than one container at
+a time.</a></li>
+<li><a href="#changing-the-default-ip-scheme" id="toc-changing-the-default-ip-scheme"><span class="toc-section-number">4.10</span> Changing the default IP
+scheme</a></li>
+<li><a href="#renaming-predictable-network-interface-names-to-user-defined-values" id="toc-renaming-predictable-network-interface-names-to-user-defined-values"><span class="toc-section-number">4.11</span> Renaming predictable network
+interface names to user defined values</a></li>
 </ul></li>
 </ul>
 </nav>
 <h1 data-number="1" id="overview"><span class="header-section-number">1</span> Overview</h1>
 <h2 data-number="1.1" id="what-is-ztp"><span class="header-section-number">1.1</span> What is ZTP</h2>
-<p>ZTP stands for Zero-Touch Provisioning. It is a way of provisioning telecommunications devices without the need of manual intervention.</p>
-<h2 data-number="1.2" id="what-is-this-software-package"><span class="header-section-number">1.2</span> What is this software package?</h2>
+<p>ZTP stands for Zero-Touch Provisioning. It is a way of provisioning
+telecommunications devices without the need of manual intervention.</p>
+<h2 data-number="1.2" id="what-is-this-software-package"><span class="header-section-number">1.2</span> What is this software
+package?</h2>
 <p>This tool is a Docker image and set of GitHub files.</p>
-<p>The Docker image contains a server application which can be used in two different methods to provision devices including update the Operating System and/or load a configuration file.</p>
-<p>The GitHub files contain scripts used to make managing the Docker image easier as well as the source code of the Docker image.</p>
+<p>The Docker image contains a server application which can be used in
+two different methods to provision devices including update the
+Operating System and/or load a configuration file.</p>
+<p>The GitHub files contain scripts used to make managing the Docker
+image easier as well as the source code of the Docker image.</p>
 <h2 data-number="1.3" id="who-is-this-for"><span class="header-section-number">1.3</span> Who is this for?</h2>
-<p>This tool if for anyone who has a need to update the operating system and/or load a configuration on a factory default Juniper or Aruba networking device.</p>
-<h2 data-number="1.4" id="what-pc-platforms-are-supported"><span class="header-section-number">1.4</span> What PC platforms are supported?</h2>
-<p>This ZTP Docker image is designed to work using a Linux operating system. Specifically, it was designed and tested on Ubuntu 22.04 Jammy Jellyfish.</p>
-<p>It is also required to install <code>Docker</code>. It is recommended to have <code>Git</code> installed, but not required. On many Linux systems <code>Git</code> is already installed. For instructions on installing Docker, please see the section <a href="#install-docker">Install Docker</a>.</p>
-<p>The reason Windows and MacOS are not supported is because this application makes use of the Docker <code>MACVLAN</code> network feature which Docker only supports on Linux. If you would like to try to get it to work on Windows or MacOS, you might have some success using Docker <code>host networking</code>. For more information about the different types of Docker network drivers see this <a href="https://docs.docker.com/network/drivers/">Docker page</a>. Another option is running a Linux Virtual Machine on these platforms. See the section <a href="#running-inside-a-virtual-machine">Running inside a Virtual Machine</a></p>
+<p>This tool if for anyone who has a need to update the operating system
+and/or load a configuration on a factory default Juniper or Aruba
+networking device.</p>
+<h2 data-number="1.4" id="what-pc-platforms-are-supported"><span class="header-section-number">1.4</span> What PC platforms are
+supported?</h2>
+<p>This ZTP Docker image is designed to work using a Linux operating
+system. Specifically, it was designed and tested on Ubuntu 22.04 Jammy
+Jellyfish.</p>
+<p>It is also required to install <code>Docker</code>. It is recommended
+to have <code>Git</code> installed, but not required. On many Linux
+systems <code>Git</code> is already installed. For instructions on
+installing Docker, please see the section <a href="#install-docker">Install Docker</a>.</p>
+<p>The reason Windows and MacOS are not supported is because this
+application makes use of the Docker <code>MACVLAN</code> network feature
+which Docker only supports on Linux. If you would like to try to get it
+to work on Windows or MacOS, you might have some success using Docker
+<code>host networking</code>. For more information about the different
+types of Docker network drivers see this <a href="https://docs.docker.com/network/drivers/">Docker page</a>. Another
+option is running a Linux Virtual Machine on these platforms. See the
+section <a href="#running-inside-a-virtual-machine">Running inside a
+Virtual Machine</a></p>
 <h2 data-number="1.5" id="how-does-it-work"><span class="header-section-number">1.5</span> How does it work?</h2>
-<p>First, the device vendor has to include the option for provisioning their devices via ZTP. Juniper and Aruba do. So do other vendors like Cisco, but this tool only includes the DHCP options and code for Juniper and Aruba.</p>
-<p>When the ZTP capable device boots up from a factory default configuration, it looks for a DHCP message which includes certain options telling it the location of the file server and the file names it needs to download. It can also include the transfer protocol to use such as ftp or tftp. It uses these options to download the files. Then it installs these files all by itself.</p>
-<p>This Docker image contains a DHCP, FTP, and TFTP server as well as scripts to put everything together. It contains additional applications and scripts so that you can view the transfers in your web browser and monitor the progress.</p>
-<p>Be aware, although a file transfer might be complete, the device might still need 15 or 20 minutes to finish installing.</p>
-<p>So it sounds interesting. You want to try it out, but how do you get the information into ZTP? Well, there are two methods…</p>
+<p>First, the device vendor has to include the option for provisioning
+their devices via ZTP. Juniper and Aruba do. So do other vendors like
+Cisco, but this tool only includes the DHCP options and code for Juniper
+and Aruba.</p>
+<p>When the ZTP capable device boots up from a factory default
+configuration, it looks for a DHCP message which includes certain
+options telling it the location of the file server and the file names it
+needs to download. It can also include the transfer protocol to use such
+as ftp or tftp. It uses these options to download the files. Then it
+installs these files all by itself.</p>
+<p>This Docker image contains a DHCP, FTP, and TFTP server as well as
+scripts to put everything together. It contains additional applications
+and scripts so that you can view the transfers in your web browser and
+monitor the progress.</p>
+<p>Be aware, although a file transfer might be complete, the device
+might still need 15 or 20 minutes to finish installing.</p>
+<p>So it sounds interesting. You want to try it out, but how do you get
+the information into ZTP? Well, there are two methods…</p>
 <h3 data-number="1.5.1" id="two-provisioning-methods"><span class="header-section-number">1.5.1</span> Two provisioning methods</h3>
 <p>This tool supports two different methods to provision devices.</p>
 <ol type="1">
@@ -339,17 +419,32 @@
 <li><code>ztp.csv</code></li>
 </ul></li>
 </ol>
-<p>Samples of each of these files are created and put in the <code>ftp</code> folder/volume the first time the container is started.</p>
-<h4 data-number="1.5.1.1" id="provisioning-method-1-vendor-class-identifier"><span class="header-section-number">1.5.1.1</span> Provisioning method 1: Vendor Class Identifier</h4>
-<p>Devices send a vendor class identifier string in DHCP requests to the DHCP server. This string can be used to provide the OS and/or configuration file to that specific type of device.</p>
-<p>This option is a good idea if you want to load the same OS and/or a starting configuration to many of the same device types.</p>
-<p>On Aruba devices you can obtain this string with the command <code>show dhcp client vendor-specific</code>.</p>
-<p>On Juniper devices, a zeroized device or device with factory defaults should have this string listed in the configuration under the interfaces section on the interfaces configured for DHCP.</p>
-<p>To use this method, fill out the information in <code>vendor_class_defaults.csv</code></p>
-<h5 data-number="1.5.1.1.1" id="vendor-class-id-file-vendor_class_defaults.csv"><span class="header-section-number">1.5.1.1.1</span> Vendor Class ID file: <code>vendor_class_defaults.csv</code></h5>
-<p>A default file is created and put in the <code>ftp</code> folder/volume the first time the container is started.</p>
-<p>You can edit it using a text editor or using a program like Microsoft Excel or LibreOffice Calc. Just remember to save it as a CSV file as it might prompt you to save it in a different format.</p>
-<p>Here is a look at the example <code>vendor_class_defaults.csv</code>:</p>
+<p>Samples of each of these files are created and put in the
+<code>ftp</code> folder/volume the first time the container is
+started.</p>
+<h4 data-number="1.5.1.1" id="provisioning-method-1-vendor-class-identifier"><span class="header-section-number">1.5.1.1</span> Provisioning method 1:
+Vendor Class Identifier</h4>
+<p>Devices send a vendor class identifier string in DHCP requests to the
+DHCP server. This string can be used to provide the OS and/or
+configuration file to that specific type of device.</p>
+<p>This option is a good idea if you want to load the same OS and/or a
+starting configuration to many of the same device types.</p>
+<p>On Aruba devices you can obtain this string with the command
+<code>show dhcp client vendor-specific</code>.</p>
+<p>On Juniper devices, a zeroized device or device with factory defaults
+should have this string listed in the configuration under the interfaces
+section on the interfaces configured for DHCP.</p>
+<p>To use this method, fill out the information in
+<code>vendor_class_defaults.csv</code></p>
+<h5 data-number="1.5.1.1.1" id="vendor-class-id-file-vendor_class_defaults.csv"><span class="header-section-number">1.5.1.1.1</span> Vendor Class ID file:
+<code>vendor_class_defaults.csv</code></h5>
+<p>A default file is created and put in the <code>ftp</code>
+folder/volume the first time the container is started.</p>
+<p>You can edit it using a text editor or using a program like Microsoft
+Excel or LibreOffice Calc. Just remember to save it as a CSV file as it
+might prompt you to save it in a different format.</p>
+<p>Here is a look at the example
+<code>vendor_class_defaults.csv</code>:</p>
 <pre class="csv"><code>hardware,vendor_class_string,os,config
 srx345,Juniper-srx345,,
 srx1500,Juniper-srx1500,,
@@ -361,7 +456,13 @@ srx1500,Juniper-srx1500,,
 2930f,Aruba JL263A 2930F-24G-PoE+-4SFP+-TAA Switch dslforum.org,,
 2930f,Aruba JL264A 2930F-48G-PoE+-4SFP+-TAA Switch dslforum.org,,</code></pre>
 <p>Or in an human viewable way</p>
-<table>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 12%" />
+<col style="width: 71%" />
+<col style="width: 6%" />
+<col style="width: 9%" />
+</colgroup>
 <thead>
 <tr class="header">
 <th>hardware</th>
@@ -431,29 +532,51 @@ srx1500,Juniper-srx1500,,
 <ul>
 <li>hardware
 <ul>
-<li>A unique string that identifies the specific make and model of the device. This string is used to determine whether the device is Juniper or Aruba and use the appropriate DHCP option codes as well as the transfer protocol for the device i.e. ftp or tftp.</li>
+<li>A unique string that identifies the specific make and model of the
+device. This string is used to determine whether the device is Juniper
+or Aruba and use the appropriate DHCP option codes as well as the
+transfer protocol for the device i.e. ftp or tftp.</li>
 </ul></li>
 <li>vendor_class_string
 <ul>
-<li>The vendor-id the device(s) will provide to the DHCP server in a DHCP request.</li>
+<li>The vendor-id the device(s) will provide to the DHCP server in a
+DHCP request.</li>
 </ul></li>
 <li>os_image
 <ul>
-<li>The operating system file for the device(s). Junipers usually use <code>.tgz</code> and Aruba usually uses <code>.swi</code> files.</li>
+<li>The operating system file for the device(s). Junipers usually use
+<code>.tgz</code> and Aruba usually uses <code>.swi</code> files.</li>
 </ul></li>
 <li>config_file
 <ul>
-<li>The configuration file for the device(s). Note that Aruba devices must include a specific string in the header as well as the correct module. Also, Aruba LAN switches will continue to perform ZTP on themselves unless the following commands are added to the configuration file: <code>no dhcp config-file-update</code> and <code>no dhcp image-file-update</code></li>
+<li>The configuration file for the device(s). Note that Aruba devices
+must include a specific string in the header as well as the correct
+module. Also, Aruba LAN switches will continue to perform ZTP on
+themselves unless the following commands are added to the configuration
+file: <code>no dhcp config-file-update</code> and
+<code>no dhcp image-file-update</code></li>
 </ul></li>
 </ul>
-<h4 data-number="1.5.1.2" id="provisioning-method-2-mac-addresses"><span class="header-section-number">1.5.1.2</span> Provisioning method 2: MAC addresses</h4>
-<p>The device’s MAC address is a unique identifier which can be used to provide the OS and/or configuration file to that specific device.</p>
-<p>This option is a good idea if you want to load a specific configuration and OS per device.</p>
-<p>The MAC addresses can be obtained from the rear sticker on the device. An affordable Bluetooth barcode scanner from Amazon.com and a Google Sheet open on your phone can be very handy in making this task a lot easier. Another good option is using a smartphone barcode scanner application.</p>
-<p>To use this method, fill out the information in <code>ztp.csv</code>.</p>
-<h5 data-number="1.5.1.2.1" id="mac-method-file-ztp.csv"><span class="header-section-number">1.5.1.2.1</span> MAC method file: <code>ztp.csv</code></h5>
-<p>A default file is created and put in the <code>ftp</code> folder/volume the first time the container is started.</p>
-<p>You can edit it using a text editor or using a program like Microsoft Excel or LibreOffice Calc. Just remember to save it as a CSV file as it might prompt you to save it in a different format.</p>
+<h4 data-number="1.5.1.2" id="provisioning-method-2-mac-addresses"><span class="header-section-number">1.5.1.2</span> Provisioning method 2: MAC
+addresses</h4>
+<p>The device’s MAC address is a unique identifier which can be used to
+provide the OS and/or configuration file to that specific device.</p>
+<p>This option is a good idea if you want to load a specific
+configuration and OS per device.</p>
+<p>The MAC addresses can be obtained from the rear sticker on the
+device. An affordable Bluetooth barcode scanner from Amazon.com and a
+Google Sheet open on your phone can be very handy in making this task a
+lot easier. Another good option is using a smartphone barcode scanner
+application.</p>
+<p>To use this method, fill out the information in
+<code>ztp.csv</code>.</p>
+<h5 data-number="1.5.1.2.1" id="mac-method-file-ztp.csv"><span class="header-section-number">1.5.1.2.1</span> MAC method file:
+<code>ztp.csv</code></h5>
+<p>A default file is created and put in the <code>ftp</code>
+folder/volume the first time the container is started.</p>
+<p>You can edit it using a text editor or using a program like Microsoft
+Excel or LibreOffice Calc. Just remember to save it as a CSV file as it
+might prompt you to save it in a different format.</p>
 <p>Here is a look at the example <code>ztp.csv</code>:</p>
 <pre class="csv"><code>hardware,mac,os,config
 2930f,888888eeeee1,aruba-2930f.swi,switch1.cfg
@@ -515,25 +638,43 @@ acx7024,888888eeeee6,junos-acx7024.tgz,router3.cfg</code></pre>
 <ul>
 <li>hardware
 <ul>
-<li>A unique string that identifies the specific make and model of the device. This string is used to determine whether the device is Juniper or Aruba and use the appropriate DHCP option codes as well as the transfer protocol for the device i.e. ftp or tftp.</li>
+<li>A unique string that identifies the specific make and model of the
+device. This string is used to determine whether the device is Juniper
+or Aruba and use the appropriate DHCP option codes as well as the
+transfer protocol for the device i.e. ftp or tftp.</li>
 </ul></li>
 <li>mac
 <ul>
-<li>The MAC address of the device. Specifically the MAC obtained from the rear sticker. This tool includes an increment amount for some devices to increment the base MAC of the device and configure the DHCP server for the MAC address of the first port on the device.</li>
+<li>The MAC address of the device. Specifically the MAC obtained from
+the rear sticker. This tool includes an increment amount for some
+devices to increment the base MAC of the device and configure the DHCP
+server for the MAC address of the first port on the device.</li>
 </ul></li>
 <li>os_image
 <ul>
-<li>The operating system file for the device(s). Junipers usually use <code>.tgz</code> and Aruba usually uses <code>.swi</code> files.</li>
+<li>The operating system file for the device(s). Junipers usually use
+<code>.tgz</code> and Aruba usually uses <code>.swi</code> files.</li>
 </ul></li>
 <li>config_file
 <ul>
-<li>The configuration file for the device(s). Note that Aruba devices must include a specific string in the header as well as the correct module. Also, Aruba LAN switches will continue to perform ZTP on themselves unless the following commands are added to the configuration file: <code>no dhcp config-file-update</code> and <code>no dhcp image-file-update</code></li>
+<li>The configuration file for the device(s). Note that Aruba devices
+must include a specific string in the header as well as the correct
+module. Also, Aruba LAN switches will continue to perform ZTP on
+themselves unless the following commands are added to the configuration
+file: <code>no dhcp config-file-update</code> and
+<code>no dhcp image-file-update</code></li>
 </ul></li>
 </ul>
-<h4 data-number="1.5.1.3" id="how-to-specify-which-provisioning-method-you-want-to-use"><span class="header-section-number">1.5.1.3</span> How to specify which provisioning method you want to use</h4>
-<p>Both methods will be checked when the application starts, and they can both be used at the same time.</p>
-<p>There is a default precedence to choose the more specific entry over the more generic ones. That means if you specify a configuration file using the MAC method and the Vendor Class method, the file listed in the MAC method (<code>ztp.csv</code>) will be loaded to the device.</p>
-<p>If you only want to use one method, do not specify the OS file, configuration file, etc. in the other file and it will not be used.</p>
+<h4 data-number="1.5.1.3" id="how-to-specify-which-provisioning-method-you-want-to-use"><span class="header-section-number">1.5.1.3</span> How to specify which
+provisioning method you want to use</h4>
+<p>Both methods will be checked when the application starts, and they
+can both be used at the same time.</p>
+<p>There is a default precedence to choose the more specific entry over
+the more generic ones. That means if you specify a configuration file
+using the MAC method and the Vendor Class method, the file listed in the
+MAC method (<code>ztp.csv</code>) will be loaded to the device.</p>
+<p>If you only want to use one method, do not specify the OS file,
+configuration file, etc. in the other file and it will not be used.</p>
 <h3 data-number="1.5.2" id="supported-devices"><span class="header-section-number">1.5.2</span> Supported devices</h3>
 <p>Currently only Juniper and Aruba are supported.</p>
 <p>Not all Juniper and Aruba devices are supported either.</p>
@@ -555,11 +696,16 @@ acx7024,888888eeeee6,junos-acx7024.tgz,router3.cfg</code></pre>
 <li>Juniper EX2300</li>
 <li>Juniper EX4100</li>
 </ol>
-<h3 data-number="1.5.3" id="expanding-the-devices-supported"><span class="header-section-number">1.5.3</span> Expanding the devices supported</h3>
-<p>If your device is not in the list, it still might be possible to use this tool on it.</p>
-<p>However, only DHCP codes for Juniper and Aruba are supported by this tool.</p>
-<h4 data-number="1.5.3.1" id="viewing-supported-devices-or-expanding-the-list-supported_device_models.json"><span class="header-section-number">1.5.3.1</span> Viewing supported devices or expanding the list: <code>supported_device_models.json</code></h4>
-<p>You can view the currently supported devices by opening the file <code>supported_device_models.json</code></p>
+<h3 data-number="1.5.3" id="expanding-the-devices-supported"><span class="header-section-number">1.5.3</span> Expanding the devices
+supported</h3>
+<p>If your device is not in the list, it still might be possible to use
+this tool on it.</p>
+<p>However, only DHCP codes for Juniper and Aruba are supported by this
+tool.</p>
+<h4 data-number="1.5.3.1" id="viewing-supported-devices-or-expanding-the-list-supported_device_models.json"><span class="header-section-number">1.5.3.1</span> Viewing supported devices
+or expanding the list: <code>supported_device_models.json</code></h4>
+<p>You can view the currently supported devices by opening the file
+<code>supported_device_models.json</code></p>
 <p>It looks like this:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a> <span class="dt">&quot;srx345&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
@@ -587,8 +733,11 @@ acx7024,888888eeeee6,junos-acx7024.tgz,router3.cfg</code></pre>
 <span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;incr_mac&quot;</span><span class="fu">:</span> <span class="kw">null</span></span>
 <span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a> <span class="fu">}</span></span>
 <span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
-<p>If you have a Juniper or Aruba device not in the list, you can try adding it to the list. Chances are it will work.</p>
-<p>Make sure to add the item in correct <code>json</code> format including the comma after the previous entry’s <code>}</code> (close curly brace).</p>
+<p>If you have a Juniper or Aruba device not in the list, you can try
+adding it to the list. Chances are it will work.</p>
+<p>Make sure to add the item in correct <code>json</code> format
+including the comma after the previous entry’s <code>}</code> (close
+curly brace).</p>
 <p>Let’s look at one entry and explain what the fields do.</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a> <span class="er">&quot;srx345&quot;:</span> <span class="fu">{</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;vendor&quot;</span><span class="fu">:</span> <span class="st">&quot;juniper&quot;</span><span class="fu">,</span></span>
@@ -597,22 +746,31 @@ acx7024,888888eeeee6,junos-acx7024.tgz,router3.cfg</code></pre>
 <ul>
 <li>“srx345”
 <ul>
-<li>The unique model for the device. Use this value in the <code>hardware</code> column in <code>ztp.csv</code> and <code>vendor_class_defaults.csv</code>.</li>
+<li>The unique model for the device. Use this value in the
+<code>hardware</code> column in <code>ztp.csv</code> and
+<code>vendor_class_defaults.csv</code>.</li>
 </ul></li>
 <li>“vendor”: “juniper”
 <ul>
-<li>Choices are either <code>juniper</code> or <code>aruba</code>. Tells the application which DHCP codes to use and which transfer protocol to use (ftp vs tftp).</li>
+<li>Choices are either <code>juniper</code> or <code>aruba</code>. Tells
+the application which DHCP codes to use and which transfer protocol to
+use (ftp vs tftp).</li>
 </ul></li>
 <li>“incr_mac”: 1
 <ul>
-<li>Tells the application if it needs to increment the MAC address entered (usually scanned from the rear sticker) for the specific Ethernet port on the device being used.
+<li>Tells the application if it needs to increment the MAC address
+entered (usually scanned from the rear sticker) for the specific
+Ethernet port on the device being used.
 <ul>
-<li>On Juniper srx345 this means enter the MAC from the sticker on the back and use port <code>ge-0/0/0</code>.</li>
+<li>On Juniper srx345 this means enter the MAC from the sticker on the
+back and use port <code>ge-0/0/0</code>.</li>
 </ul></li>
 </ul></li>
 </ul>
-<h3 data-number="1.5.4" id="where-to-plug-in-the-cables"><span class="header-section-number">1.5.4</span> Where to plug in the cables</h3>
-<p>Use the following ports on the devices when connecting to the ZTP application.</p>
+<h3 data-number="1.5.4" id="where-to-plug-in-the-cables"><span class="header-section-number">1.5.4</span> Where to plug in the
+cables</h3>
+<p>Use the following ports on the devices when connecting to the ZTP
+application.</p>
 <ol type="1">
 <li>Aruba 2930F LAN switches
 <ul>
@@ -639,23 +797,29 @@ acx7024,888888eeeee6,junos-acx7024.tgz,router3.cfg</code></pre>
 <li>any port</li>
 </ul></li>
 </ol>
-<h3 data-number="1.5.5" id="files-and-folders-inside-the-ftp-foldervolume"><span class="header-section-number">1.5.5</span> Files and folders inside the <code>ftp</code> folder/volume</h3>
+<h3 data-number="1.5.5" id="files-and-folders-inside-the-ftp-foldervolume"><span class="header-section-number">1.5.5</span> Files and folders inside the
+<code>ftp</code> folder/volume</h3>
 <ul>
 <li>vendor_class_defaults.csv
 <ul>
-<li>See <a href="#provisioning-method-1-vendor-class-identifier">Provisioning method 1: Vendor Class Identifier</a></li>
+<li>See <a href="#provisioning-method-1-vendor-class-identifier">Provisioning
+method 1: Vendor Class Identifier</a></li>
 </ul></li>
 <li>ztp.csv
 <ul>
-<li>See <a href="#provisioning-method-2-mac-addresses">Provisioning method 2: MAC addresses</a></li>
+<li>See <a href="#provisioning-method-2-mac-addresses">Provisioning
+method 2: MAC addresses</a></li>
 </ul></li>
 <li>supported_device_models.json
 <ul>
-<li>See <a href="#expanding-the-devices-supported">Expanding the devices supported</a></li>
+<li>See <a href="#expanding-the-devices-supported">Expanding the devices
+supported</a></li>
 </ul></li>
 <li>csv_filter.py
 <ul>
-<li>A python script which can be used to create additional CSV files filtered by make and model. Run <code>csv_filter.py -h</code> for more info.</li>
+<li>A python script which can be used to create additional CSV files
+filtered by make and model. Run <code>csv_filter.py -h</code> for more
+info.</li>
 </ul></li>
 <li>os_images/
 <ul>
@@ -667,7 +831,9 @@ acx7024,888888eeeee6,junos-acx7024.tgz,router3.cfg</code></pre>
 </ul></li>
 <li>.exists
 <ul>
-<li>This file is added automatically and tells ZTP not to override the files inside the <code>ftp</code> folder. Erase this file and restart the container to receive a fresh copy of all the files.</li>
+<li>This file is added automatically and tells ZTP not to override the
+files inside the <code>ftp</code> folder. Erase this file and restart
+the container to receive a fresh copy of all the files.</li>
 </ul></li>
 </ul>
 <h1 data-number="2" id="running-ztp"><span class="header-section-number">2</span> Running ZTP</h1>
@@ -675,77 +841,136 @@ acx7024,888888eeeee6,junos-acx7024.tgz,router3.cfg</code></pre>
 <h3 data-number="2.1.1" id="install-docker"><span class="header-section-number">2.1.1</span> Install Docker</h3>
 <p>On a Linux computer, install Docker.</p>
 <p>If you are using Ubuntu Linux, follow these instructions:</p>
-<p><a href="https://docs.docker.com/engine/install/ubuntu/">Docker.com: Install Docker Engine on Ubuntu</a></p>
-<p>To run Docker without requiring root, follow the following instructions:</p>
-<p><a href="https://docs.docker.com/engine/install/linux-postinstall/#manage-docker-as-a-non-root-user">Docker.com: Manage Docker as a non-root user</a></p>
-<p><em>These steps can also be found in this document near the end in <a href="#installing-docker-on-ubuntu-linux">Installing Docker on Ubuntu Linux</a></em></p>
-<h3 data-number="2.1.2" id="install-git-optional-but-recommended"><span class="header-section-number">2.1.2</span> Install git (optional, but recommended)</h3>
+<p><a href="https://docs.docker.com/engine/install/ubuntu/">Docker.com:
+Install Docker Engine on Ubuntu</a></p>
+<p>To run Docker without requiring root, follow the following
+instructions:</p>
+<p><a href="https://docs.docker.com/engine/install/linux-postinstall/#manage-docker-as-a-non-root-user">Docker.com:
+Manage Docker as a non-root user</a></p>
+<p><em>These steps can also be found in this document near the end in <a href="#installing-docker-on-ubuntu-linux">Installing Docker on Ubuntu
+Linux</a></em></p>
+<h3 data-number="2.1.2" id="install-git-optional-but-recommended"><span class="header-section-number">2.1.2</span> Install git (optional, but
+recommended)</h3>
 <p>Git is usually already installed.</p>
-<p>For instructions for specific platforms, see GitHub’s page on installing git: <a href="https://github.com/git-guides/install-git">GitHub.com: Install Git</a>.</p>
+<p>For instructions for specific platforms, see GitHub’s page on
+installing git: <a href="https://github.com/git-guides/install-git">GitHub.com: Install
+Git</a>.</p>
 <p>For Ubuntu, see the section <a href="#install-git-on-ubuntu-linux">Install git on Ubuntu Linux</a></p>
 <h2 data-number="2.2" id="download-the-files"><span class="header-section-number">2.2</span> Download the files</h2>
 <p>The Docker image contains everything to run the application.</p>
 <p>Download the Docker image with the following command:</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> pull toddwint/ztp</span></code></pre></div>
-<p>To verify the image has downloaded please view the section <a href="#download-the-ztp-docker-image">Download the ZTP Docker image</a>.</p>
-<p>The GitHub files are optional, but recommended as it makes it easier to run and manage.</p>
-<p>Download the GitHub project to the current folder with the following command:</p>
+<p>To verify the image has downloaded please view the section <a href="#download-the-ztp-docker-image">Download the ZTP Docker
+image</a>.</p>
+<p>The GitHub files are optional, but recommended as it makes it easier
+to run and manage.</p>
+<p>Download the GitHub project to the current folder with the following
+command:</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone https://github.com/toddwint/ztp</span></code></pre></div>
-<p>There are two main folders in the GitHub project. Here is a brief description:</p>
+<p>There are two main folders in the GitHub project. Here is a brief
+description:</p>
 <ul>
 <li>build
 <ul>
-<li>Contains the source code and Docker files which is everything you need if you want to build the application offline.</li>
-<li>You are also free to modify the code and tailor it to your own needs.</li>
+<li>Contains the source code and Docker files which is everything you
+need if you want to build the application offline.</li>
+<li>You are also free to modify the code and tailor it to your own
+needs.</li>
 <li>Most users won’t need these files. They can be discarded.</li>
 </ul></li>
 <li>run
 <ul>
-<li>Contains files to assist in creating and managing the container.</li>
-<li>I recommend renaming this folder to the hostname of your ZTP server (as configured in <code>config.txt</code>) such as <code>ztp01</code> and moving it to a location on your computer which is easy to access.</li>
+<li>Contains files to assist in creating and managing the
+container.</li>
+<li>I recommend renaming this folder to the hostname of your ZTP server
+(as configured in <code>config.txt</code>) such as <code>ztp01</code>
+and moving it to a location on your computer which is easy to
+access.</li>
 </ul></li>
 </ul>
-<p>NOTE: If you do not require the <code>ztp/build</code> folder and files, I recommend reorganizing the folder structure as such:</p>
+<p>NOTE: If you do not require the <code>ztp/build</code> folder and
+files, I recommend reorganizing the folder structure as such:</p>
 <ul>
 <li>Remove the directory <code>ztp/build</code></li>
-<li>Rename the <code>ztp/run</code> folder (e.g. <code>ztp01</code>)</li>
-<li>Create a docs folder and copy the <code>README</code> and <code>ZTP Instructions</code> files to it.</li>
+<li>Rename the <code>ztp/run</code> folder
+(e.g. <code>ztp01</code>)</li>
+<li>Create a docs folder and copy the <code>README</code> and
+<code>ZTP Instructions</code> files to it.</li>
 </ul>
 <p>For example commands, see the section <a href="#download-the-github-files">Download the GitHub files</a>.</p>
-<h2 data-number="2.3" id="create-the-docker-container"><span class="header-section-number">2.3</span> Create the Docker container</h2>
-<p>All the files from here on will be found in the <code>run</code> folder.</p>
-<h3 data-number="2.3.1" id="modify-container-configuration-parameters-config.txt"><span class="header-section-number">2.3.1</span> Modify container configuration parameters: <code>config.txt</code></h3>
-<p>Before creating the container, it is important to review the default settings in <code>config.txt</code>. Each option has a description above it. Most of the defaults should be fine.</p>
-<p>You will probably want to update the timezone. This will make the syslog messages match your local timezone. That section looks like this:</p>
+<h2 data-number="2.3" id="create-the-docker-container"><span class="header-section-number">2.3</span> Create the Docker
+container</h2>
+<p>All the files from here on will be found in the <code>run</code>
+folder.</p>
+<h3 data-number="2.3.1" id="modify-container-configuration-parameters-config.txt"><span class="header-section-number">2.3.1</span> Modify container
+configuration parameters: <code>config.txt</code></h3>
+<p>Before creating the container, it is important to review the default
+settings in <code>config.txt</code>. Each option has a description above
+it. Most of the defaults should be fine.</p>
+<p>You will probably want to update the timezone. This will make the
+syslog messages match your local timezone. That section looks like
+this:</p>
 <pre><code># To get a list of timezones view the files in `/usr/share/zoneinfo`
 TZ=UTC</code></pre>
-<p>As an example, for my location I enter <code>America/Chicago</code>.</p>
-<p>The most important variable is <code>INTERFACE</code>. Record the name of your Ethernet adapter in Linux and change the variable in this section:</p>
+<p>As an example, for my location I enter
+<code>America/Chicago</code>.</p>
+<p>The most important variable is <code>INTERFACE</code>. Record the
+name of your Ethernet adapter in Linux and change the variable in this
+section:</p>
 <pre><code># The interface on which to set the IP. Run `ip -br a` to see a list
 INTERFACE=eth0</code></pre>
-<p><strong>NOTE:</strong> The script will take care of setting the IP address on your Ethernet adapter so that you can communicate with the Docker container. It is not recommended to set an IP on your Ethernet adapter, and it can actually cause issues.</p>
-<h3 data-number="2.3.2" id="run-the-script-to-create-the-container-create_container.sh"><span class="header-section-number">2.3.2</span> Run the script to create the container: <code>create_container.sh</code></h3>
-<p>After configuring the options in <code>config.txt</code>, you are ready to create the container.</p>
+<p><strong>NOTE:</strong> The script will take care of setting the IP
+address on your Ethernet adapter so that you can communicate with the
+Docker container. It is not recommended to set an IP on your Ethernet
+adapter, and it can actually cause issues.</p>
+<h3 data-number="2.3.2" id="run-the-script-to-create-the-container-create_container.sh"><span class="header-section-number">2.3.2</span> Run the script to create the
+container: <code>create_container.sh</code></h3>
+<p>After configuring the options in <code>config.txt</code>, you are
+ready to create the container.</p>
 <p>To create the container run the following command:</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ex">./create_container.sh</span></span></code></pre></div>
-<p>The script does a few things more than just create the container. It sets up some environmental variables and loads the parameter in <code>config.txt</code> so that those parameters can be passed to the container and also uses those parameters to create a new <code>MACVLAN</code> network adapter on your computer. Then it creates the container. Finally it creates an HTML launch page for the application by modifying a template and prompts the user to open this HTML file.</p>
-<p>At this point, the ZTP Docker image you downloaded is now a Docker container instance. Also, the folder <code>ftp</code> should exist which is the Docker volume for this container.</p>
-<p>Since at this point the container won’t be doing anything useful as it does not have <em>your</em> information, I recommend stopping the container.</p>
+<p>The script does a few things more than just create the container. It
+sets up some environmental variables and loads the parameter in
+<code>config.txt</code> so that those parameters can be passed to the
+container and also uses those parameters to create a new
+<code>MACVLAN</code> network adapter on your computer. Then it creates
+the container. Finally it creates an HTML launch page for the
+application by modifying a template and prompts the user to open this
+HTML file.</p>
+<p>At this point, the ZTP Docker image you downloaded is now a Docker
+container instance. Also, the folder <code>ftp</code> should exist which
+is the Docker volume for this container.</p>
+<p>Since at this point the container won’t be doing anything useful as
+it does not have <em>your</em> information, I recommend stopping the
+container.</p>
 <p>Run this command:</p>
 <div class="sourceCode" id="cb10"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="ex">./stop.sh</span></span></code></pre></div>
-<p>Inside of the newly created <code>ftp</code> folder, you should see the files as explained already in <a href="#files-and-folders-inside-the-ftp-foldervolume">Files and folders inside the <code>ftp</code> folder/volume</a>. Modify these files with your information.</p>
-<p>Don’t forget to copy your OS and configuration files for your devices to <code>ftp/os_images/</code> and <code>ftp/config_files/</code></p>
-<p>Once you have modified your provisioning files and copied the OS and/or configuration files for your devices to the appropriate folders, it is time to see it work.</p>
+<p>Inside of the newly created <code>ftp</code> folder, you should see
+the files as explained already in <a href="#files-and-folders-inside-the-ftp-foldervolume">Files and folders
+inside the <code>ftp</code> folder/volume</a>. Modify these files with
+your information.</p>
+<p>Don’t forget to copy your OS and configuration files for your devices
+to <code>ftp/os_images/</code> and <code>ftp/config_files/</code></p>
+<p>Once you have modified your provisioning files and copied the OS
+and/or configuration files for your devices to the appropriate folders,
+it is time to see it work.</p>
 <h2 data-number="2.4" id="restart-the-container"><span class="header-section-number">2.4</span> Restart the container</h2>
-<p>Now that we have everything set up for our devices, it is time to start the container, and let it provision all your devices.</p>
+<p>Now that we have everything set up for our devices, it is time to
+start the container, and let it provision all your devices.</p>
 <p>Run this command:</p>
 <div class="sourceCode" id="cb11"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="ex">./start.sh</span></span></code></pre></div>
 <p>If you did not stop the container from before, run this command:</p>
 <div class="sourceCode" id="cb12"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="ex">./restart.sh</span></span></code></pre></div>
-<p>The container starts. If the cables are plugged in and your devices powered on with a factory default configuration, it should be provisioning them.</p>
+<p>The container starts. If the cables are plugged in and your devices
+powered on with a factory default configuration, it should be
+provisioning them.</p>
 <h2 data-number="2.5" id="view-the-progress"><span class="header-section-number">2.5</span> View the progress</h2>
-<p>To view the progress, open one of the links in the <code>webadmin.html</code> page. This page should have opened by default when you ran <code>create_container.sh</code>. If you closed the page or if it never opened, simply click on <code>webadmin.html</code></p>
-<p>Inside of the <code>webadmin.html</code> launch page, there are several options. Here is a description of each option:</p>
+<p>To view the progress, open one of the links in the
+<code>webadmin.html</code> page. This page should have opened by default
+when you ran <code>create_container.sh</code>. If you closed the page or
+if it never opened, simply click on <code>webadmin.html</code></p>
+<p>Inside of the <code>webadmin.html</code> launch page, there are
+several options. Here is a description of each option:</p>
 <ul>
 <li>ttyd
 <ul>
@@ -762,8 +987,12 @@ INTERFACE=eth0</code></pre>
 <li>Window 5 displays the log file filtered for tftp traffic</li>
 <li>Window 6 is access to the terminal.
 <ul>
-<li>You can run commands from inside the Docker container. Alternatively, you can press <code>CTRL-C</code> on any other windows to gain access to the terminal.</li>
-<li>There are several scripts available in the starting directory (<code>debug</code>). Run <code>ls</code> to see them. Run them by typing <code>./</code> followed by the script name.</li>
+<li>You can run commands from inside the Docker container.
+Alternatively, you can press <code>CTRL-C</code> on any other windows to
+gain access to the terminal.</li>
+<li>There are several scripts available in the starting directory
+(<code>debug</code>). Run <code>ls</code> to see them. Run them by
+typing <code>./</code> followed by the script name.</li>
 </ul></li>
 </ul></li>
 </ul></li>
@@ -773,21 +1002,28 @@ INTERFACE=eth0</code></pre>
 </ul></li>
 <li>tailon
 <ul>
-<li>Displays multiple log files (using the drop down) and also includes filtering capability.</li>
+<li>Displays multiple log files (using the drop down) and also includes
+filtering capability.</li>
 </ul></li>
 <li>webfs
 <ul>
-<li>You can view the files in the <code>ftp</code> folder and download them.</li>
+<li>You can view the files in the <code>ftp</code> folder and download
+them.</li>
 </ul></li>
 </ul>
-<p>You can also interact with the Docker container by using the scripts inside the <code>exec</code> folder. Here is a description:</p>
+<p>You can also interact with the Docker container by using the scripts
+inside the <code>exec</code> folder. Here is a description:</p>
 <ul>
 <li><code>bash.sh</code>
 <ul>
 <li>Access to the terminal.
 <ul>
-<li>You can run commands from inside the Docker container. Alternatively, you can press <code>CTRL-C</code> on any other windows to gain access to the terminal.</li>
-<li>There are several scripts available in the starting directory (<code>debug</code>). Run <code>ls</code> to see them. Run them by typing <code>./</code> followed by the script name.</li>
+<li>You can run commands from inside the Docker container.
+Alternatively, you can press <code>CTRL-C</code> on any other windows to
+gain access to the terminal.</li>
+<li>There are several scripts available in the starting directory
+(<code>debug</code>). Run <code>ls</code> to see them. Run them by
+typing <code>./</code> followed by the script name.</li>
 </ul></li>
 </ul></li>
 <li><code>tail.sh</code>
@@ -796,7 +1032,8 @@ INTERFACE=eth0</code></pre>
 </ul></li>
 <li><code>tmux.sh</code>
 <ul>
-<li>The same as <code>ttyd (w/tmux)</code>, but in the command line instead of the web browser.</li>
+<li>The same as <code>ttyd (w/tmux)</code>, but in the command line
+instead of the web browser.</li>
 </ul></li>
 <li><code>transfer_report.sh</code>
 <ul>
@@ -804,35 +1041,77 @@ INTERFACE=eth0</code></pre>
 </ul></li>
 </ul>
 <h2 data-number="2.6" id="stop-the-container"><span class="header-section-number">2.6</span> Stop the container</h2>
-<p>Hopefully, your devices are loaded now. If not, skip ahead to the section <a href="#common-issues">Common issues</a>.</p>
+<p>Hopefully, your devices are loaded now. If not, skip ahead to the
+section <a href="#common-issues">Common issues</a>.</p>
 <p>To stop the container, run this command:</p>
 <div class="sourceCode" id="cb13"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="ex">./stop.sh</span></span></code></pre></div>
 <p>If you are finished with the container, run this command:</p>
 <div class="sourceCode" id="cb14"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="ex">./delete_container.sh</span></span></code></pre></div>
-<p>Both of these commands will stop the container and copy a timestamped version of the transfer report to your <code>ftp</code> folder. Deleting the container will additionally delete the container and remove the networking adapter created with the <code>create_container.sh</code> script and the <code>webadmin.html</code> file.</p>
-<p>Do not be afraid of deleting the container. The files in the <code>ftp</code> folder will not be overwritten the next time the container is created as it checks for a <code>.exists</code> file inside that folder which is created the first time the container is created. I actually hardly ever use the <code>stop.sh</code>, <code>restart.sh</code>, or <code>start.sh</code> scripts. Instead, I use <code>create_container.sh</code> and <code>delete_container.sh</code>.</p>
+<p>Both of these commands will stop the container and copy a timestamped
+version of the transfer report to your <code>ftp</code> folder. Deleting
+the container will additionally delete the container and remove the
+networking adapter created with the <code>create_container.sh</code>
+script and the <code>webadmin.html</code> file.</p>
+<p>Do not be afraid of deleting the container. The files in the
+<code>ftp</code> folder will not be overwritten the next time the
+container is created as it checks for a <code>.exists</code> file inside
+that folder which is created the first time the container is created. I
+actually hardly ever use the <code>stop.sh</code>,
+<code>restart.sh</code>, or <code>start.sh</code> scripts. Instead, I
+use <code>create_container.sh</code> and
+<code>delete_container.sh</code>.</p>
 <h1 data-number="3" id="common-issues"><span class="header-section-number">3</span> Common issues</h1>
-<h2 data-number="3.1" id="links-in-webadmin.html-display-the-message-the-connection-has-timed-out-or-this-site-cant-be-reached"><span class="header-section-number">3.1</span> Links in <code>webadmin.html</code> display the message <em>“The connection has timed out”</em> or <em>“This Site Can’t Be Reached”</em></h2>
-<p>Check that your Ethernet adapter link’s status is <em>UP</em> or connect your Ethernet adapter to a network device.</p>
-<p>Because of the way <code>MACVLAN</code> works, you cannot access the host directly. To work around this, a second <code>MACVLAN</code> interface is created on the same Ethernet adapter and a route to the Docker container is added. However, if that physical Ethernet adapter’s link status is <em>DOWN</em>, then it will not use that adapter. Rather than having a cable plugged in to view the management page, another option is to purchase a USB-to-Ethernet adapter with a built in 4-Port Ethernet switch. See <a href="#running-inside-a-virtual-machine">Running inside a Virtual Machine</a> for more information.</p>
-<h2 data-number="3.2" id="you-receive-errors-when-running-start.sh-restart.sh-stop.sh"><span class="header-section-number">3.2</span> You receive errors when running <code>start.sh</code>, <code>restart.sh</code>, <code>stop.sh</code></h2>
-<p>This could be because the network no longer exists. Did your computer get restarted? The network adapter won’t persist across a reboot.</p>
-<p>To resolve this issue, try running <code>delete_container.sh</code> followed by <code>create_container.sh</code></p>
-<h2 data-number="3.3" id="you-receive-errors-when-running-create_container.sh-or-delete_container.sh"><span class="header-section-number">3.3</span> You receive errors when running <code>create_container.sh</code> or <code>delete_container.sh</code></h2>
+<h2 data-number="3.1" id="links-in-webadmin.html-display-the-message-the-connection-has-timed-out-or-this-site-cant-be-reached"><span class="header-section-number">3.1</span> Links in
+<code>webadmin.html</code> display the message <em>“The connection has
+timed out”</em> or <em>“This Site Can’t Be Reached”</em></h2>
+<p>Check that your Ethernet adapter link’s status is <em>UP</em> or
+connect your Ethernet adapter to a network device.</p>
+<p>Because of the way <code>MACVLAN</code> works, you cannot access the
+host directly. To work around this, a second <code>MACVLAN</code>
+interface is created on the same Ethernet adapter and a route to the
+Docker container is added. However, if that physical Ethernet adapter’s
+link status is <em>DOWN</em>, then it will not use that adapter. Rather
+than having a cable plugged in to view the management page, another
+option is to purchase a USB-to-Ethernet adapter with a built in 4-Port
+Ethernet switch. See <a href="#running-inside-a-virtual-machine">Running
+inside a Virtual Machine</a> for more information.</p>
+<h2 data-number="3.2" id="you-receive-errors-when-running-start.sh-restart.sh-stop.sh"><span class="header-section-number">3.2</span> You receive errors when running
+<code>start.sh</code>, <code>restart.sh</code>,
+<code>stop.sh</code></h2>
+<p>This could be because the network no longer exists. Did your computer
+get restarted? The network adapter won’t persist across a reboot.</p>
+<p>To resolve this issue, try running <code>delete_container.sh</code>
+followed by <code>create_container.sh</code></p>
+<h2 data-number="3.3" id="you-receive-errors-when-running-create_container.sh-or-delete_container.sh"><span class="header-section-number">3.3</span> You receive errors when running
+<code>create_container.sh</code> or
+<code>delete_container.sh</code></h2>
 <ul>
-<li>Is the name of your Ethernet adapter in <code>config.txt</code> correct?</li>
-<li>Do you already have a container running? Run <code>./is_running.sh</code> to see.</li>
-<li>Did you change the hostname in <code>config.txt</code>? If it differs from the currently running hostname, it won’t be able to delete it until you set it back or use Docker commands.</li>
+<li>Is the name of your Ethernet adapter in <code>config.txt</code>
+correct?</li>
+<li>Do you already have a container running? Run
+<code>./is_running.sh</code> to see.</li>
+<li>Did you change the hostname in <code>config.txt</code>? If it
+differs from the currently running hostname, it won’t be able to delete
+it until you set it back or use Docker commands.</li>
 </ul>
-<h2 data-number="3.4" id="my-aruba-device-says-connection-refused."><span class="header-section-number">3.4</span> My Aruba device says <em>“Connection Refused”</em>.</h2>
+<h2 data-number="3.4" id="my-aruba-device-says-connection-refused."><span class="header-section-number">3.4</span> My Aruba device says
+<em>“Connection Refused”</em>.</h2>
 <p>Is the OS already at the version you are trying to load?</p>
-<p>If so, Aruba LAN switches will try to download the file 5 or 6 times before moving onto the configuration file.</p>
-<h2 data-number="3.5" id="my-device-doesnt-appear-to-be-loading"><span class="header-section-number">3.5</span> My device doesn’t appear to be loading</h2>
+<p>If so, Aruba LAN switches will try to download the file 5 or 6 times
+before moving onto the configuration file.</p>
+<h2 data-number="3.5" id="my-device-doesnt-appear-to-be-loading"><span class="header-section-number">3.5</span> My device doesn’t appear to be
+loading</h2>
 <ul>
-<li>Verify the OS file is for the correct device and the file is not corrupt. Try loading it manually to verify it is correct.</li>
-<li>Verify the configuration file is valid by trying to load it manually.</li>
-<li>Did you create a network storm? Connecting too many switches together can create a network loop where the switch utilization goes to 100% and the network is no longer accessible.</li>
-<li>Did you add the MAC address to the list? Some times new devices get racked, but they don’t automatically enter themselves into your files.</li>
+<li>Verify the OS file is for the correct device and the file is not
+corrupt. Try loading it manually to verify it is correct.</li>
+<li>Verify the configuration file is valid by trying to load it
+manually.</li>
+<li>Did you create a network storm? Connecting too many switches
+together can create a network loop where the switch utilization goes to
+100% and the network is no longer accessible.</li>
+<li>Did you add the MAC address to the list? Some times new devices get
+racked, but they don’t automatically enter themselves into your
+files.</li>
 <li>Is the Vendor Class ID string correct?</li>
 <li>Is the device restored to factory defaults?
 <ul>
@@ -840,21 +1119,40 @@ INTERFACE=eth0</code></pre>
 <li>Aruba: <code>erase startup-config</code></li>
 </ul></li>
 <li>Verify you are using the correct port on the device. See <a href="#where-to-plug-in-the-cables">Where to plug in the cables</a></li>
-<li>If your files contain spaces in their names, try renaming them without spaces.</li>
-<li>Did you specify the full filename including the file extension? If you forgot, the script will search the directory for files with the same name and pick the first one it finds. It also searches for duplicate MAC addresses and configuration files. It will write messages to the log file for all the issues it finds.</li>
-<li>Use the log file to gather more information. See <a href="#view-the-progress">View the progress</a> for more information about viewing the log file.</li>
+<li>If your files contain spaces in their names, try renaming them
+without spaces.</li>
+<li>Did you specify the full filename including the file extension? If
+you forgot, the script will search the directory for files with the same
+name and pick the first one it finds. It also searches for duplicate MAC
+addresses and configuration files. It will write messages to the log
+file for all the issues it finds.</li>
+<li>Use the log file to gather more information. See <a href="#view-the-progress">View the progress</a> for more information
+about viewing the log file.</li>
 </ul>
 <h1 data-number="4" id="additional-information"><span class="header-section-number">4</span> Additional Information</h1>
-<h2 data-number="4.1" id="links-to-docker-and-github-pages"><span class="header-section-number">4.1</span> Links to Docker and GitHub pages</h2>
+<h2 data-number="4.1" id="links-to-docker-and-github-pages"><span class="header-section-number">4.1</span> Links to Docker and GitHub
+pages</h2>
 <p>Docker: <a href="https://hub.docker.com/r/toddwint/ztp" class="uri">https://hub.docker.com/r/toddwint/ztp</a></p>
 <p>GitHub: <a href="https://github.com/toddwint/ztp" class="uri">https://github.com/toddwint/ztp</a></p>
-<h2 data-number="4.2" id="running-inside-a-virtual-machine"><span class="header-section-number">4.2</span> Running inside a Virtual Machine</h2>
-<p>Using a virtual machine is a good way to use this application if you currently run Windows or MacOS.</p>
-<p>Configure your networking to <code>bridge</code> mode will yield the best results. However, I suggest using a USB-to-Ethernet adapter and attaching it directly to your virtual machine. Even better, <em>Cable Matters</em> makes a USB-to-4-Port-Gigabit-Ethernet-Switch in both standard <a href="https://a.co/d/6krs6f4">USB type A</a> and <a href="https://a.co/d/dCDJ9Oy">USB type C</a> connectors. The nice thing about these adapters (other than having 4 Ethernet ports directly connected to your laptop) is that it has an internal switch which means the Ethernet interface will always show link status of <em>UP</em>.</p>
-<h2 data-number="4.3" id="installing-docker-on-ubuntu-linux"><span class="header-section-number">4.3</span> Installing Docker on Ubuntu Linux</h2>
-<p>Below are the commands taken from Docker’s website (<a href="https://docs.docker.com/engine/install/ubuntu/">here</a> and <a href="https://docs.docker.com/engine/install/linux-postinstall/#manage-docker-as-a-non-root-user">here</a>) how to install Docker on Ubuntu Linux.</p>
+<h2 data-number="4.2" id="running-inside-a-virtual-machine"><span class="header-section-number">4.2</span> Running inside a Virtual
+Machine</h2>
+<p>Using a virtual machine is a good way to use this application if you
+currently run Windows or MacOS.</p>
+<p>Configure your networking to <code>bridge</code> mode will yield the
+best results. However, I suggest using a USB-to-Ethernet adapter and
+attaching it directly to your virtual machine. Even better, <em>Cable
+Matters</em> makes a USB-to-4-Port-Gigabit-Ethernet-Switch in both
+standard <a href="https://a.co/d/6krs6f4">USB type A</a> and <a href="https://a.co/d/dCDJ9Oy">USB type C</a> connectors. The nice thing
+about these adapters (other than having 4 Ethernet ports directly
+connected to your laptop) is that it has an internal switch which means
+the Ethernet interface will always show link status of <em>UP</em>.</p>
+<h2 data-number="4.3" id="installing-docker-on-ubuntu-linux"><span class="header-section-number">4.3</span> Installing Docker on Ubuntu
+Linux</h2>
+<p>Below are the commands taken from Docker’s website (<a href="https://docs.docker.com/engine/install/ubuntu/">here</a> and <a href="https://docs.docker.com/engine/install/linux-postinstall/#manage-docker-as-a-non-root-user">here</a>)
+how to install Docker on Ubuntu Linux.</p>
 <ol type="1">
-<li>Update the <code>apt</code> package index and install packages to allow <code>apt</code> to use a repository over HTTPS:</li>
+<li>Update the <code>apt</code> package index and install packages to
+allow <code>apt</code> to use a repository over HTTPS:</li>
 </ol>
 <div class="sourceCode" id="cb15"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt-get update</span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt-get install <span class="at">-y</span> ca-certificates curl gnupg lsb-release</span></code></pre></div>
@@ -886,34 +1184,46 @@ INTERFACE=eth0</code></pre>
 <span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>    containerd.io <span class="dt">\</span></span>
 <span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>    docker-compose-plugin</span></code></pre></div>
 <ol start="6" type="1">
-<li>Add your user to the <code>docker</code> group to manage Docker as a non-root user</li>
+<li>Add your user to the <code>docker</code> group to manage Docker as a
+non-root user</li>
 </ol>
 <div class="sourceCode" id="cb20"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> usermod <span class="at">-aG</span> docker <span class="va">$USER</span></span></code></pre></div>
 <ol start="7" type="1">
-<li>Log out and log back in so that your group membership is re-evaluated.</li>
+<li>Log out and log back in so that your group membership is
+re-evaluated.</li>
 </ol>
-<h2 data-number="4.4" id="install-git-on-ubuntu-linux"><span class="header-section-number">4.4</span> Install git on Ubuntu Linux</h2>
-<p>Use the following command to install <code>git</code> on Ubuntu Linux:</p>
+<h2 data-number="4.4" id="install-git-on-ubuntu-linux"><span class="header-section-number">4.4</span> Install git on Ubuntu
+Linux</h2>
+<p>Use the following command to install <code>git</code> on Ubuntu
+Linux:</p>
 <div class="sourceCode" id="cb21"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt update</span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt install git</span></code></pre></div>
-<h2 data-number="4.5" id="download-the-ztp-docker-image"><span class="header-section-number">4.5</span> Download the ZTP Docker image</h2>
-<p>Download the Docker image to your Docker image files folder with the following command:</p>
+<h2 data-number="4.5" id="download-the-ztp-docker-image"><span class="header-section-number">4.5</span> Download the ZTP Docker
+image</h2>
+<p>Download the Docker image to your Docker image files folder with the
+following command:</p>
 <div class="sourceCode" id="cb22"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> pull toddwint/ztp</span></code></pre></div>
-<p>The docker image downloads to your computer. Verify with the following command:</p>
+<p>The docker image downloads to your computer. Verify with the
+following command:</p>
 <div class="sourceCode" id="cb23"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> image ls</span></code></pre></div>
 <p>Example output:</p>
 <pre><code>REPOSITORY             TAG       IMAGE ID       CREATED         SIZE
 toddwint/ztp           latest    dfe47ddf7ccf   5 weeks ago     150MB</code></pre>
 <h2 data-number="4.6" id="download-the-github-files"><span class="header-section-number">4.6</span> Download the GitHub files</h2>
-<p>Download the GitHub project to the current folder with the following command:</p>
+<p>Download the GitHub project to the current folder with the following
+command:</p>
 <div class="sourceCode" id="cb25"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone https://github.com/toddwint/ztp</span></code></pre></div>
-<p>For users that want to run the docker image and never build it from source, the following commands can be used to remove the source files make the directories easier to mange:</p>
+<p>For users that want to run the docker image and never build it from
+source, the following commands can be used to remove the source files
+make the directories easier to mange:</p>
 <div class="sourceCode" id="cb26"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mv</span> ztp/run/ ztp01</span>
 <span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> ztp01/docs</span>
 <span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="fu">mv</span> ztp/<span class="pp">@(</span>README<span class="pp">|</span>ZTP Instructions<span class="pp">)*</span> ztp01/docs/</span>
 <span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span> <span class="at">-rf</span> ztp/</span></code></pre></div>
-<h2 data-number="4.7" id="give-the-current-user-access-to-ip-command-without-requiring-a-password-optional"><span class="header-section-number">4.7</span> Give the current user access to <code>ip</code> command without requiring a password (optional)</h2>
-<p>For Ubuntu Linux, add these commands if you do not wish to enter a password when the container starts and creates the network.</p>
+<h2 data-number="4.7" id="give-the-current-user-access-to-ip-command-without-requiring-a-password-optional"><span class="header-section-number">4.7</span> Give the current user access to
+<code>ip</code> command without requiring a password (optional)</h2>
+<p>For Ubuntu Linux, add these commands if you do not wish to enter a
+password when the container starts and creates the network.</p>
 <div class="sourceCode" id="cb27"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> touch /etc/sudoers.d/ip_cmd</span>
 <span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> chmod 0440 /etc/sudoers.d/ip_cmd</span>
 <span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> tee /etc/sudoers.d/ip_cmd <span class="op">&gt;</span> /dev/null <span class="op">&lt;&lt; EOF</span></span>
@@ -923,51 +1233,82 @@ toddwint/ztp           latest    dfe47ddf7ccf   5 weeks ago     150MB</code></pr
 <span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a><span class="op">EOF</span></span>
 <span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> visudo <span class="at">-c</span></span></code></pre></div>
 <h2 data-number="4.8" id="updating-to-a-new-version"><span class="header-section-number">4.8</span> Updating to a new version</h2>
-<p>If you wish to download the latest Docker container and GitHub files, perform the following steps:</p>
+<p>If you wish to download the latest Docker container and GitHub files,
+perform the following steps:</p>
 <ol type="1">
 <li>Stop and delete the current container.
 <ul>
-<li>You can view all the currently running Docker containers by running the command <code>docker ps</code> or <code>docker container ls</code></li>
+<li>You can view all the currently running Docker containers by running
+the command <code>docker ps</code> or
+<code>docker container ls</code></li>
 </ul></li>
-<li>Remove the current Docker file image and download the latest one with these commands:
+<li>Remove the current Docker file image and download the latest one
+with these commands:
 <ul>
-<li>You can view all the Docker file images on your system by running the command <code>docker image ls</code></li>
+<li>You can view all the Docker file images on your system by running
+the command <code>docker image ls</code></li>
 </ul></li>
 </ol>
 <div class="sourceCode" id="cb28"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> rmi toddwint/ztp</span>
 <span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> pull toddwint/ztp</span></code></pre></div>
 <ol start="3" type="1">
-<li>Delete the current <code>ztp</code> directory, and download the latest ones. Don’t forget to copy any important files elsewhere before deleting it. Here are some example commands to do that:</li>
+<li>Delete the current <code>ztp</code> directory, and download the
+latest ones. Don’t forget to copy any important files elsewhere before
+deleting it. Here are some example commands to do that:</li>
 </ol>
 <div class="sourceCode" id="cb29"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span> <span class="at">-rf</span> ztp/</span>
 <span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone https://github.com/toddwint/ztp</span></code></pre></div>
-<h2 data-number="4.9" id="running-more-than-one-container-at-a-time."><span class="header-section-number">4.9</span> Running more than one container at a time.</h2>
-<p>It is possible to run more than one container at a time. To do so follow these steps.</p>
+<h2 data-number="4.9" id="running-more-than-one-container-at-a-time."><span class="header-section-number">4.9</span> Running more than one container
+at a time.</h2>
+<p>It is possible to run more than one container at a time. To do so
+follow these steps.</p>
 <ul>
-<li><p>Make a copy of the <code>run</code> folder which I often rename to my container hostname such as <code>ztp01</code>.</p></li>
-<li><p>In <code>config.txt</code> change the Ethernet adapter to a new name (you won’t be able to use the same Ethernet adapter) and the hostname. Also, change the IP addresses. I would increment the 2nd octet.</p></li>
+<li><p>Make a copy of the <code>run</code> folder which I often rename
+to my container hostname such as <code>ztp01</code>.</p></li>
+<li><p>In <code>config.txt</code> change the Ethernet adapter to a new
+name (you won’t be able to use the same Ethernet adapter) and the
+hostname. Also, change the IP addresses. I would increment the 2nd
+octet.</p></li>
 </ul>
-<h2 data-number="4.10" id="changing-the-default-ip-scheme"><span class="header-section-number">4.10</span> Changing the default IP scheme</h2>
-<p>Different size subnets should be fine (/16, /20, /22, etc). Don’t put anything smaller than a <code>/28</code> network.</p>
-<p>The image will reserve the last 4 IPs for the container IP, management host IP, spare IP, and the gateway IP. It will reserve 2 IPs lower than that range for the DHCP range of unknown hosts, but after running the python script will expand that to the IP after your last device.</p>
-<p>If you do want to use the first IPs in the subnet range, it should be fine. It will check and skip the static DHCP assignments if those IPs are set.</p>
-<h2 data-number="4.11" id="renaming-predictable-network-interface-names-to-user-defined-values"><span class="header-section-number">4.11</span> Renaming predictable network interface names to user defined values</h2>
-<p><a href="https://github.com/systemd/systemd/blob/main/docs/PREDICTABLE_INTERFACE_NAMES.md">Predictable network interface names</a> look like <code>ens33</code>, <code>eno1</code>, <code>enp1s0</code>, <code>enx78e7d1ea46da</code></p>
-<p>If you wish to change this behavior and rename them to names like <code>lan0</code> or <code>lan1</code>, follow these steps.</p>
-<p><strong>NOTE:</strong> Do not use kernel reserved names like <code>eth0</code> or <code>wlan0</code>. Those names are reserved. If you run into issues, that is why.</p>
-<p>In this example the Ethernet adapter name is: <code>eno1</code>. Replace <code>eno1</code> with the name of your adapter.</p>
+<h2 data-number="4.10" id="changing-the-default-ip-scheme"><span class="header-section-number">4.10</span> Changing the default IP
+scheme</h2>
+<p>Different size subnets should be fine (/16, /20, /22, etc). Don’t put
+anything smaller than a <code>/28</code> network.</p>
+<p>The image will reserve the last 4 IPs for the container IP,
+management host IP, spare IP, and the gateway IP. It will reserve 2 IPs
+lower than that range for the DHCP range of unknown hosts, but after
+running the python script will expand that to the IP after your last
+device.</p>
+<p>If you do want to use the first IPs in the subnet range, it should be
+fine. It will check and skip the static DHCP assignments if those IPs
+are set.</p>
+<h2 data-number="4.11" id="renaming-predictable-network-interface-names-to-user-defined-values"><span class="header-section-number">4.11</span> Renaming predictable network
+interface names to user defined values</h2>
+<p><a href="https://github.com/systemd/systemd/blob/main/docs/PREDICTABLE_INTERFACE_NAMES.md">Predictable
+network interface names</a> look like <code>ens33</code>,
+<code>eno1</code>, <code>enp1s0</code>, <code>enx78e7d1ea46da</code></p>
+<p>If you wish to change this behavior and rename them to names like
+<code>lan0</code> or <code>lan1</code>, follow these steps.</p>
+<p><strong>NOTE:</strong> Do not use kernel reserved names like
+<code>eth0</code> or <code>wlan0</code>. Those names are reserved. If
+you run into issues, that is why.</p>
+<p>In this example the Ethernet adapter name is: <code>eno1</code>.
+Replace <code>eno1</code> with the name of your adapter.</p>
 <p>Example: <code>eno1</code></p>
 <div class="sourceCode" id="cb30"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="va">INTF</span><span class="op">=</span>eno1</span></code></pre></div>
-<p>Find the pci path of the device. Use <code>grep</code> to filter for <code>ID_PATH</code> and awk to grab the value.</p>
+<p>Find the pci path of the device. Use <code>grep</code> to filter for
+<code>ID_PATH</code> and awk to grab the value.</p>
 <div class="sourceCode" id="cb31"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="ex">udevadm</span> info /sys/class/net/<span class="va">$INTF</span> <span class="kw">|</span> <span class="fu">grep</span> ID_PATH= <span class="kw">|</span> <span class="fu">awk</span> <span class="at">-F</span><span class="op">=</span> <span class="st">&#39;{print $2}&#39;</span></span></code></pre></div>
 <p>Sample output:</p>
 <pre><code>pci-0000:03:00.0</code></pre>
 <p>Save the ID_PATH value to a variable.</p>
 <div class="sourceCode" id="cb33"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="va">IDPATH</span><span class="op">=</span><span class="va">$(</span><span class="ex">udevadm</span> info /sys/class/net/<span class="va">$INTF</span> <span class="kw">|</span> <span class="fu">grep</span> ID_PATH= <span class="kw">|</span> <span class="fu">awk</span> <span class="at">-F</span><span class="op">=</span> <span class="st">&#39;{print $2}&#39;</span><span class="va">)</span></span></code></pre></div>
-<p>Decide a new name for the interface and save that name to a variable.</p>
+<p>Decide a new name for the interface and save that name to a
+variable.</p>
 <p>Example: <code>lan1</code></p>
 <div class="sourceCode" id="cb34"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="va">INTFNAME</span><span class="op">=</span>lan1</span></code></pre></div>
-<p>Run the following command to create the configuration file using the variables created in the previous steps.</p>
+<p>Run the following command to create the configuration file using the
+variables created in the previous steps.</p>
 <div class="sourceCode" id="cb35"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> tee /etc/systemd/network/10-<span class="va">${INTFNAME}</span>.link <span class="op">&gt;</span> /dev/null <span class="op">&lt;&lt; EOF</span></span>
 <span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a><span class="st">[Match]</span></span>
 <span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a><span class="st">Path=</span><span class="va">$IDPATH</span></span>

@@ -1,6 +1,6 @@
 ---
 title: README
-date: 2023-11-03
+date: 2023-12-21
 ---
 
 # toddwint/ztp
@@ -46,20 +46,20 @@ Example `docker run` and `docker compose` commands as well as sample commands to
 
 - Ubuntu base image
 - Plus:
-  - rsyslog
-  - isc-dhcp-server
+  - bsdmainutils
   - ftp
-  - vsftpd
+  - fzf
+  - iproute2
+  - iputils-ping
+  - isc-dhcp-server
+  - python3-minimal
+  - rsyslog
   - tftp-hpa
   - tftpd-hpa
-  - webfs
-  - bsdmainitils
-  - fzf
   - tmux
-  - python3-minimal
-  - iputils-ping
-  - iproute2
   - tzdata
+  - vsftpd
+  - webfs
   - [ttyd](https://github.com/tsl0922/ttyd)
     - View the terminal in your browser
   - [frontail](https://github.com/mthenw/frontail)

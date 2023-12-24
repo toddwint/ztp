@@ -162,7 +162,7 @@ dhcp_report.write_text(dhcp_report_template.read_text())
 
 # Keep track of provisioning methods enabled. Reset the values.
 prov_enabled = {'vendor_class_id_method': False, 'mac_addr_method': False}
-prov_methods.write_text(json.dumps(prov_enabled))
+prov_methods.write_text(json.dumps(prov_enabled, indent=1))
 
 # Start of Vendor Class ID section
 if not vendor_csv_file.exists():
@@ -602,7 +602,7 @@ def dhcp_report_write(report_objs, columns):
 dhcp_report_write(report_ztp, report_columns)
 
 # Write the enabled provisioning methods to json file
-prov_methods.write_text(json.dumps(prov_enabled))
+prov_methods.write_text(json.dumps(prov_enabled, indent=1))
 
 # Done. Ready to go
 msg = '[INFO] Finished reconfiguring files. Ready! '

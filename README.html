@@ -5,258 +5,282 @@
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <meta name="author" content="Todd Wintermute" />
-  <meta name="dcterms.date" content="2023-11-03" />
+  <meta name="dcterms.date" content="2023-12-21" />
   <title>README</title>
   <style>
-    html {
-      line-height: 1.5;
-      font-family: Helvetica,Verdana,Sans-serif;
-      font-size: 20px;
-      color: #1a1a1a;
-      background-color: #fdfdfd;
-    }
-    body {
-      margin: 0 auto;
-      max-width: 36em;
-      padding-left: 50px;
-      padding-right: 50px;
-      padding-top: 50px;
-      padding-bottom: 50px;
-      hyphens: auto;
-      word-wrap: break-word;
-      text-rendering: optimizeLegibility;
-      font-kerning: normal;
-    }
-    @media (max-width: 600px) {
-      body {
-        font-size: 0.9em;
-        padding: 1em;
-      }
-    }
-    @media print {
-      body {
-        background-color: transparent;
-        color: black;
-        font-size: 12pt;
-      }
-      p, h2, h3 {
-        orphans: 3;
-        widows: 3;
-      }
-      h2, h3, h4 {
-        page-break-after: avoid;
-      }
-    }
-    p {
-      margin: 1em 0;
-    }
-    a {
-      color: blue;
-    }
-    a:visited {
-      color: blue;
-    }
-    img {
-      max-width: 100%;
-    }
-    h1, h2, h3, h4, h5, h6 {
-      margin-top: 1.4em;
-    }
-    h5, h6 {
-      font-size: 1em;
-      font-style: italic;
-    }
-    h6 {
-      font-weight: normal;
-    }
-    ol, ul {
-      padding-left: 1.7em;
-      margin-top: 1em;
-    }
-    li > ol, li > ul {
-      margin-top: 0;
-    }
-    blockquote {
-      margin: 1em 0 1em 1.7em;
-      padding-left: 1em;
-      border-left: 2px solid #e6e6e6;
-      color: #606060;
-    }
-    code {
-      font-family: Menlo, Monaco, 'Lucida Console', Consolas, monospace;
-      background-color: whitesmoke;
-      padding: .2em .4em;
-      font-size: 85%;
-      margin: 0;
-    }
-    pre {
-      margin: 1em 0;
-      background-color: whitesmoke;
-      padding: 1em;
-      overflow: auto;
-    }
-    pre code {
-      padding: 0;
-      overflow: visible;
-    }
-    .sourceCode {
-     background-color: transparent;
-     overflow: visible;
-    }
-    hr {
-      background-color: #1a1a1a;
-      border: none;
-      height: 1px;
-      margin: 1em 0;
-    }
-    table {
-      margin: 1em 0;
-      border-collapse: collapse;
-      width: 100%;
-      overflow-x: auto;
-      display: block;
-      font-variant-numeric: lining-nums tabular-nums;
-    }
-    table caption {
-      margin-bottom: 0.75em;
-    }
-    tbody {
-      margin-top: 0.5em;
-      border-top: 1px solid #1a1a1a;
-      border-bottom: 1px solid #1a1a1a;
-    }
-    th {
-      border-top: 1px solid #1a1a1a;
-      padding: 0.25em 0.5em 0.25em 0.5em;
-    }
-    td {
-      padding: 0.125em 0.5em 0.25em 0.5em;
-    }
-    header {
-      margin-bottom: 4em;
-      text-align: center;
-    }
-    #TOC li {
-      list-style: none;
-    }
-    #TOC a:not(:hover) {
-      text-decoration: none;
-    }
-    code{white-space: pre-wrap;}
-    span.smallcaps{font-variant: small-caps;}
-    span.underline{text-decoration: underline;}
-    div.column{display: inline-block; vertical-align: top; width: 50%;}
-    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
-    ul.task-list{list-style: none;}
-    pre > code.sourceCode { white-space: pre; position: relative; }
-    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-    pre > code.sourceCode > span:empty { height: 1.2em; }
-    .sourceCode { overflow: visible; }
-    code.sourceCode > span { color: inherit; text-decoration: inherit; }
-    div.sourceCode { margin: 1em 0; }
-    pre.sourceCode { margin: 0; }
-    @media screen {
-    div.sourceCode { overflow: auto; }
-    }
-    @media print {
-    pre > code.sourceCode { white-space: pre-wrap; }
-    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-    }
-    pre.numberSource code
-      { counter-reset: source-line 0; }
-    pre.numberSource code > span
-      { position: relative; left: -4em; counter-increment: source-line; }
-    pre.numberSource code > span > a:first-child::before
-      { content: counter(source-line);
-        position: relative; left: -1em; text-align: right; vertical-align: baseline;
-        border: none; display: inline-block;
-        -webkit-touch-callout: none; -webkit-user-select: none;
-        -khtml-user-select: none; -moz-user-select: none;
-        -ms-user-select: none; user-select: none;
-        padding: 0 4px; width: 4em;
-        color: #aaaaaa;
-      }
-    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
-    div.sourceCode
-      {  background-color: #f8f8f8; }
-    @media screen {
-    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
-    }
-    code span.al { color: #ef2929; } /* Alert */
-    code span.an { color: #8f5902; font-weight: bold; font-style: italic; } /* Annotation */
-    code span.at { color: #c4a000; } /* Attribute */
-    code span.bn { color: #0000cf; } /* BaseN */
-    code span.cf { color: #204a87; font-weight: bold; } /* ControlFlow */
-    code span.ch { color: #4e9a06; } /* Char */
-    code span.cn { color: #000000; } /* Constant */
-    code span.co { color: #8f5902; font-style: italic; } /* Comment */
-    code span.cv { color: #8f5902; font-weight: bold; font-style: italic; } /* CommentVar */
-    code span.do { color: #8f5902; font-weight: bold; font-style: italic; } /* Documentation */
-    code span.dt { color: #204a87; } /* DataType */
-    code span.dv { color: #0000cf; } /* DecVal */
-    code span.er { color: #a40000; font-weight: bold; } /* Error */
-    code span.ex { } /* Extension */
-    code span.fl { color: #0000cf; } /* Float */
-    code span.fu { color: #000000; } /* Function */
-    code span.im { } /* Import */
-    code span.in { color: #8f5902; font-weight: bold; font-style: italic; } /* Information */
-    code span.kw { color: #204a87; font-weight: bold; } /* Keyword */
-    code span.op { color: #ce5c00; font-weight: bold; } /* Operator */
-    code span.ot { color: #8f5902; } /* Other */
-    code span.pp { color: #8f5902; font-style: italic; } /* Preprocessor */
-    code span.sc { color: #000000; } /* SpecialChar */
-    code span.ss { color: #4e9a06; } /* SpecialString */
-    code span.st { color: #4e9a06; } /* String */
-    code span.va { color: #000000; } /* Variable */
-    code span.vs { color: #4e9a06; } /* VerbatimString */
-    code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warning */
-    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
-  </style>
+html {
+line-height: 1.5;
+font-family: Helvetica,Verdana,Sans-serif;
+font-size: 20px;
+color: #1a1a1a;
+background-color: #fdfdfd;
+}
+body {
+margin: 0 auto;
+max-width: 36em;
+padding-left: 50px;
+padding-right: 50px;
+padding-top: 50px;
+padding-bottom: 50px;
+hyphens: auto;
+overflow-wrap: break-word;
+text-rendering: optimizeLegibility;
+font-kerning: normal;
+}
+@media (max-width: 600px) {
+body {
+font-size: 0.9em;
+padding: 1em;
+}
+h1 {
+font-size: 1.8em;
+}
+}
+@media print {
+body {
+background-color: transparent;
+color: black;
+font-size: 12pt;
+}
+p, h2, h3 {
+orphans: 3;
+widows: 3;
+}
+h2, h3, h4 {
+page-break-after: avoid;
+}
+}
+p {
+margin: 1em 0;
+}
+a {
+color: blue;
+}
+a:visited {
+color: blue;
+}
+img {
+max-width: 100%;
+}
+h1, h2, h3, h4, h5, h6 {
+margin-top: 1.4em;
+}
+h5, h6 {
+font-size: 1em;
+font-style: italic;
+}
+h6 {
+font-weight: normal;
+}
+ol, ul {
+padding-left: 1.7em;
+margin-top: 1em;
+}
+li > ol, li > ul {
+margin-top: 0;
+}
+blockquote {
+margin: 1em 0 1em 1.7em;
+padding-left: 1em;
+border-left: 2px solid #e6e6e6;
+color: #606060;
+}
+code {
+font-family: Menlo, Monaco, 'Lucida Console', Consolas, monospace;
+background-color: whitesmoke;
+padding: .2em .4em;
+font-size: 85%;
+margin: 0;
+}
+pre {
+margin: 1em 0;
+background-color: whitesmoke;
+padding: 1em;
+overflow: auto;
+}
+pre code {
+padding: 0;
+overflow: visible;
+overflow-wrap: normal;
+}
+.sourceCode {
+background-color: transparent;
+overflow: visible;
+}
+hr {
+background-color: #1a1a1a;
+border: none;
+height: 1px;
+margin: 1em 0;
+}
+table {
+margin: 1em 0;
+border-collapse: collapse;
+width: 100%;
+overflow-x: auto;
+display: block;
+font-variant-numeric: lining-nums tabular-nums;
+}
+table caption {
+margin-bottom: 0.75em;
+}
+tbody {
+margin-top: 0.5em;
+border-top: 1px solid #1a1a1a;
+border-bottom: 1px solid #1a1a1a;
+}
+th {
+border-top: 1px solid #1a1a1a;
+padding: 0.25em 0.5em 0.25em 0.5em;
+}
+td {
+padding: 0.125em 0.5em 0.25em 0.5em;
+}
+header {
+margin-bottom: 4em;
+text-align: center;
+}
+#TOC li {
+list-style: none;
+}
+#TOC ul {
+padding-left: 1.3em;
+}
+#TOC > ul {
+padding-left: 0;
+}
+#TOC a:not(:hover) {
+text-decoration: none;
+}
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+width: 0.8em;
+margin: 0 0.8em 0.2em -1.6em;
+vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ background-color: #f8f8f8; }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ef2929; } 
+code span.an { color: #8f5902; font-weight: bold; font-style: italic; } 
+code span.at { color: #c4a000; } 
+code span.bn { color: #0000cf; } 
+code span.cf { color: #204a87; font-weight: bold; } 
+code span.ch { color: #4e9a06; } 
+code span.cn { color: #000000; } 
+code span.co { color: #8f5902; font-style: italic; } 
+code span.cv { color: #8f5902; font-weight: bold; font-style: italic; } 
+code span.do { color: #8f5902; font-weight: bold; font-style: italic; } 
+code span.dt { color: #204a87; } 
+code span.dv { color: #0000cf; } 
+code span.er { color: #a40000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #0000cf; } 
+code span.fu { color: #000000; } 
+code span.im { } 
+code span.in { color: #8f5902; font-weight: bold; font-style: italic; } 
+code span.kw { color: #204a87; font-weight: bold; } 
+code span.op { color: #ce5c00; font-weight: bold; } 
+code span.ot { color: #8f5902; } 
+code span.pp { color: #8f5902; font-style: italic; } 
+code span.sc { color: #000000; } 
+code span.ss { color: #4e9a06; } 
+code span.st { color: #4e9a06; } 
+code span.va { color: #000000; } 
+code span.vs { color: #4e9a06; } 
+code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } 
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
   <!--[if lt IE 9]>
     <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
   <![endif]-->
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
 </head>
 <body>
 <header id="title-block-header">
 <h1 class="title">README</h1>
 <p class="author">Todd Wintermute</p>
-<p class="date">2023-11-03</p>
+<p class="date">2023-12-21</p>
 </header>
 <nav id="TOC" role="doc-toc">
 <ul>
-<li><a href="#toddwintztp"><span class="toc-section-number">1</span> toddwint/ztp</a>
+<li><a href="#toddwintztp" id="toc-toddwintztp"><span class="toc-section-number">1</span> toddwint/ztp</a>
 <ul>
-<li><a href="#info"><span class="toc-section-number">1.1</span> Info</a></li>
-<li><a href="#overview"><span class="toc-section-number">1.2</span> Overview</a></li>
-<li><a href="#features"><span class="toc-section-number">1.3</span> Features</a></li>
-<li><a href="#sample-commands-to-create-the-macvlan"><span class="toc-section-number">1.4</span> Sample commands to create the <code>macvlan</code></a></li>
-<li><a href="#sample-docker-run-command"><span class="toc-section-number">1.5</span> Sample <code>docker run</code> command</a></li>
-<li><a href="#sample-docker-compose-compose.yaml-file"><span class="toc-section-number">1.6</span> Sample <code>docker compose</code> (<code>compose.yaml</code>) file</a></li>
+<li><a href="#info" id="toc-info"><span class="toc-section-number">1.1</span> Info</a></li>
+<li><a href="#overview" id="toc-overview"><span class="toc-section-number">1.2</span> Overview</a></li>
+<li><a href="#features" id="toc-features"><span class="toc-section-number">1.3</span> Features</a></li>
+<li><a href="#sample-commands-to-create-the-macvlan" id="toc-sample-commands-to-create-the-macvlan"><span class="toc-section-number">1.4</span> Sample commands to create the
+<code>macvlan</code></a></li>
+<li><a href="#sample-docker-run-command" id="toc-sample-docker-run-command"><span class="toc-section-number">1.5</span> Sample <code>docker run</code>
+command</a></li>
+<li><a href="#sample-docker-compose-compose.yaml-file" id="toc-sample-docker-compose-compose.yaml-file"><span class="toc-section-number">1.6</span> Sample <code>docker compose</code>
+(<code>compose.yaml</code>) file</a></li>
 </ul></li>
 </ul>
 </nav>
 <h1 data-number="1" id="toddwintztp"><span class="header-section-number">1</span> toddwint/ztp</h1>
 <h2 data-number="1.1" id="info"><span class="header-section-number">1.1</span> Info</h2>
-<p><code>ZTP</code> (Zero-Touch Provisioning) docker image for Juniper SRX345, SRX1500, ACX7024, EX2300, EX4100, and HPE Aruba 2930F devices.</p>
+<p><code>ZTP</code> (Zero-Touch Provisioning) docker image for Juniper
+SRX345, SRX1500, ACX7024, EX2300, EX4100, and HPE Aruba 2930F
+devices.</p>
 <p>Docker Hub: <a href="https://hub.docker.com/r/toddwint/ztp" class="uri">https://hub.docker.com/r/toddwint/ztp</a></p>
 <p>GitHub: <a href="https://github.com/toddwint/ztp" class="uri">https://github.com/toddwint/ztp</a></p>
-<p><em>For more detailed information, please view the <code>ZTP Instructions</code> files: <code>ZTP Instructions.md</code>, <code>ZTP Instructions.html</code>, or <code>ZTP Instructions.pdf</code>.</em></p>
+<p><em>For more detailed information, please view the
+<code>ZTP Instructions</code> files: <code>ZTP Instructions.md</code>,
+<code>ZTP Instructions.html</code>, or
+<code>ZTP Instructions.pdf</code>.</em></p>
 <h2 data-number="1.2" id="overview"><span class="header-section-number">1.2</span> Overview</h2>
-<p>Docker image for performing Zero-Touch Provisioning of network devices.</p>
+<p>Docker image for performing Zero-Touch Provisioning of network
+devices.</p>
 <ul>
 <li>Supports the following devices:
 <ul>
@@ -268,31 +292,41 @@
 <li>HPE Aruba 2930F</li>
 </ul></li>
 </ul>
-<p>Pull the docker image from Docker Hub or, optionally, build the docker image from the source files in the <code>build</code> directory.</p>
-<p>Create and run the container using <code>docker run</code> commands, <code>docker compose</code> commands, or by downloading and using the files here on github in the directories <code>run</code> or <code>compose</code>.</p>
-<p><strong>NOTE: A volume named <code>ftp</code> is created the first time the container is started and contains default files. Modify these files with your information and restart the container.</strong></p>
-<p>Manage the container using a web browser. Navigate to the IP address of the container and one of the <code>HTTPPORT</code>s.</p>
-<p><strong>NOTE: Network interface must be UP i.e. a cable plugged in.</strong></p>
-<p>Example <code>docker run</code> and <code>docker compose</code> commands as well as sample commands to create the macvlan are below.</p>
+<p>Pull the docker image from Docker Hub or, optionally, build the
+docker image from the source files in the <code>build</code>
+directory.</p>
+<p>Create and run the container using <code>docker run</code> commands,
+<code>docker compose</code> commands, or by downloading and using the
+files here on github in the directories <code>run</code> or
+<code>compose</code>.</p>
+<p><strong>NOTE: A volume named <code>ftp</code> is created the first
+time the container is started and contains default files. Modify these
+files with your information and restart the container.</strong></p>
+<p>Manage the container using a web browser. Navigate to the IP address
+of the container and one of the <code>HTTPPORT</code>s.</p>
+<p><strong>NOTE: Network interface must be UP i.e. a cable plugged
+in.</strong></p>
+<p>Example <code>docker run</code> and <code>docker compose</code>
+commands as well as sample commands to create the macvlan are below.</p>
 <h2 data-number="1.3" id="features"><span class="header-section-number">1.3</span> Features</h2>
 <ul>
 <li>Ubuntu base image</li>
 <li>Plus:
 <ul>
-<li>rsyslog</li>
-<li>isc-dhcp-server</li>
+<li>bsdmainutils</li>
 <li>ftp</li>
-<li>vsftpd</li>
+<li>fzf</li>
+<li>iproute2</li>
+<li>iputils-ping</li>
+<li>isc-dhcp-server</li>
+<li>python3-minimal</li>
+<li>rsyslog</li>
 <li>tftp-hpa</li>
 <li>tftpd-hpa</li>
-<li>webfs</li>
-<li>bsdmainitils</li>
-<li>fzf</li>
 <li>tmux</li>
-<li>python3-minimal</li>
-<li>iputils-ping</li>
-<li>iproute2</li>
 <li>tzdata</li>
+<li>vsftpd</li>
+<li>webfs</li>
 <li><a href="https://github.com/tsl0922/ttyd">ttyd</a>
 <ul>
 <li>View the terminal in your browser</li>
@@ -307,13 +341,15 @@
 <li><a href="https://github.com/gvalkov/tailon">tailon</a>
 <ul>
 <li>View multiple logs and files in your browser</li>
-<li>User selectable <code>tail</code>, <code>grep</code>, <code>sed</code>, and <code>awk</code> commands</li>
+<li>User selectable <code>tail</code>, <code>grep</code>,
+<code>sed</code>, and <code>awk</code> commands</li>
 <li>Filter logs and files</li>
 <li>Download logs to your computer</li>
 </ul></li>
 </ul></li>
 </ul>
-<h2 data-number="1.4" id="sample-commands-to-create-the-macvlan"><span class="header-section-number">1.4</span> Sample commands to create the <code>macvlan</code></h2>
+<h2 data-number="1.4" id="sample-commands-to-create-the-macvlan"><span class="header-section-number">1.4</span> Sample commands to create the
+<code>macvlan</code></h2>
 <p>Create the docker macvlan interface.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> network create <span class="at">-d</span> macvlan <span class="at">--subnet</span><span class="op">=</span>172.21.0.0/16 <span class="at">--gateway</span><span class="op">=</span>172.21.255.254 <span class="dt">\</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">--aux-address</span><span class="op">=</span><span class="st">&quot;mgmt_ip=172.21.255.253&quot;</span> <span class="at">-o</span> parent=<span class="st">&quot;eth0&quot;</span> <span class="dt">\</span></span>
@@ -321,10 +357,12 @@
 <p>Create a management macvlan interface.</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> ip link add <span class="st">&quot;ztp01&quot;</span> link <span class="st">&quot;eth0&quot;</span> type macvlan mode bridge</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> ip link set <span class="st">&quot;ztp01&quot;</span> up</span></code></pre></div>
-<p>Assign an IP on the management macvlan interface plus add routes to the docker container.</p>
+<p>Assign an IP on the management macvlan interface plus add routes to
+the docker container.</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> ip addr add <span class="st">&quot;172.21.255.253/32&quot;</span> dev <span class="st">&quot;ztp01&quot;</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> ip route add <span class="st">&quot;172.21.0.0/16&quot;</span> dev <span class="st">&quot;ztp01&quot;</span></span></code></pre></div>
-<h2 data-number="1.5" id="sample-docker-run-command"><span class="header-section-number">1.5</span> Sample <code>docker run</code> command</h2>
+<h2 data-number="1.5" id="sample-docker-run-command"><span class="header-section-number">1.5</span> Sample <code>docker run</code>
+command</h2>
 <div class="sourceCode" id="cb4"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">-dit</span> <span class="dt">\</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">--name</span> <span class="st">&quot;ztp01&quot;</span> <span class="dt">\</span></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">--network</span> <span class="st">&quot;ztp01&quot;</span> <span class="dt">\</span></span>
@@ -343,7 +381,8 @@
 <span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">-e</span> HOSTNAME=<span class="st">&quot;ztp01&quot;</span> <span class="dt">\</span></span>
 <span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">-e</span> APPNAME=<span class="st">&quot;ztp&quot;</span> <span class="dt">\</span></span>
 <span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;toddwint/ztp&quot;</span></span></code></pre></div>
-<h2 data-number="1.6" id="sample-docker-compose-compose.yaml-file"><span class="header-section-number">1.6</span> Sample <code>docker compose</code> (<code>compose.yaml</code>) file</h2>
+<h2 data-number="1.6" id="sample-docker-compose-compose.yaml-file"><span class="header-section-number">1.6</span> Sample
+<code>docker compose</code> (<code>compose.yaml</code>) file</h2>
 <div class="sourceCode" id="cb5"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">name</span><span class="kw">:</span><span class="at"> ztp01</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="fu">services</span><span class="kw">:</span></span>

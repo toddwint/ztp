@@ -1,0 +1,154 @@
+[
+ [
+  "Launch tmux",
+  "/opt/ztp/scripts/tmux.sh"
+ ],
+ [
+  "Watch transfer report",
+  "/opt/ztp/scripts/transfer_report.py"
+ ],
+ [
+  "Search logs",
+  [
+   [
+    "transfer report",
+    "column.py /opt/ztp/logs/transfer_report.csv | fzf --reverse --no-sort --header-lines=1"
+   ],
+   [
+    "ztp log (syslog)",
+    "tail -F -n +1 /opt/ztp/logs/ztp.log | fzf --tac --no-sort"
+   ],
+   [
+    "ftp transfers",
+    "tail -F -n +1 /opt/ztp/logs/vsftpd_xfers.log | fzf --reverse --no-sort"
+   ],
+   [
+    "tftp transfers",
+    "tail -F -n +1 /opt/ztp/logs/ztp.log | fzf --reverse --no-sort --query=\"'in.tftpd \" "
+   ]
+  ]
+ ],
+ [
+  "View logs",
+  [
+   [
+    "transfer report",
+    "column.py /opt/ztp/logs/transfer_report.csv | more"
+   ],
+   [
+    "ztp log (syslog)",
+    "more /opt/ztp/logs/ztp.log"
+   ],
+   [
+    "ftp transfers",
+    "more /opt/ztp/logs/vsftpd_xfers.log"
+   ],
+   [
+    "tftp transfers",
+    "grep 'in.tftpd' /opt/ztp/logs/ztp.log | more"
+   ]
+  ]
+ ],
+ [
+  "View configuration",
+  [
+   [
+    "ztp.csv",
+    "column.py /opt/ztp/ftp/ztp.csv | more"
+   ],
+   [
+    "vendor_class_defaults.csv",
+    "column.py /opt/ztp/ftp/vendor_class_defaults.csv | more"
+   ],
+   [
+    "supported_device_models.json",
+    "more /opt/ztp/ftp/supported_device_models.json"
+   ],
+   [
+    "provisioning_methods.json",
+    "more /opt/ztp/logs/provisioning_methods.json"
+   ],
+   [
+    "dhcpd",
+    "more /etc/dhcp/dhcpd.conf"
+   ],
+   [
+    "vsftpd",
+    "more /etc/vsftpd.conf"
+   ],
+   [
+    "tftpd-hpa",
+    "more /etc/default/tftpd-hpa"
+   ],
+   [
+    "webfsd",
+    "more /etc/webfsd.conf"
+   ],
+   [
+    "IP addresses",
+    "ip addr show | more"
+   ],
+   [
+    "Routing table",
+    "ip route show | more"
+   ],
+   [
+    "ARP or NDISC cache",
+    "ip neighbor show | more"
+   ],
+   [
+    "Network devices",
+    "ip link show | more"
+   ]
+  ]
+ ],
+ [
+  "Debug scripts",
+  [
+   [
+    "Save transfer report",
+    "/opt/ztp/debug/save_transfer_report.sh"
+   ],
+   [
+    "Other dhcp leases",
+    "dhcp-lease-list"
+   ],
+   [
+    "Generate DHCPD configuration",
+    "/opt/ztp/debug/generate_dhcpd_conf.sh"
+   ],
+   [
+    "Show ztp services",
+    "/opt/ztp/debug/services_status.sh"
+   ],
+   [
+    "Show processes",
+    "ps ax | more"
+   ],
+   [
+    "Show sockets",
+    "ss --all --numeric --processes | more"
+   ],
+   [
+    "ttyd1 log",
+    "more /opt/ztp/logs/ttyd1.log"
+   ],
+   [
+    "ttyd2 log",
+    "more /opt/ztp/logs/ttyd2.log"
+   ],
+   [
+    "frontail log",
+    "more /opt/ztp/logs/frontail.log"
+   ],
+   [
+    "tailon log",
+    "more /opt/ztp/logs/tailon.log"
+   ],
+   [
+    "generate_transfer_report.log",
+    "more /opt/ztp/logs/generate_transfer_report.log"
+   ]
+  ]
+ ]
+]
