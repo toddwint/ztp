@@ -9,8 +9,9 @@ the progress of the file transfers.
 Script will replace the dhcpd, tftp, and ftp configuration files,
 and then restart the processes.
 """
-__version__ = '0.0.9'
-__date__ = '2023-07-20'
+
+__version__ = '0.0.10'
+__date__ = '2024-08-06'
 __author__ = 'Todd Wintermute'
 
 from syslog import syslog
@@ -66,27 +67,23 @@ try:
 except:
     device_models_json = pathlib.Path(f'{confdir}/{supported_devices}')
     device_models = json.loads(device_models_json.read_text())
-vendor_class = """\
-#Class to Match Option 60
-class "Vendor-Class" {
-        match option vendor-class-identifier;
-}\
-"""
 
-vendor_subclasses = {
+vendor_classes = {
     'juniper': """\
-    subclass "Vendor-Class" "{vendor_cid}" {{
-        option ztp.juniper-transfer-mode ftp;
-        option ztp.juniper-ftp-timeout "3600";
-        option ztp.juniper-image-file-name "{os}";
-        option ztp.juniper-config-file-name "{config}";
-        }}\
+class "vendor-class-{row}" {{
+    match if option vendor-class-identifier ~= "{vendor_cid}";
+    option ztp.juniper-transfer-mode ftp;
+    option ztp.juniper-ftp-timeout "3600";
+    option ztp.juniper-image-file-name "{os}";
+    option ztp.juniper-config-file-name "{config}";
+}}\
 """,
     'aruba': """\
-    subclass "Vendor-Class" "{vendor_cid}" {{
-        option ztp.aruba-image-file-name "{os}";
-        option ztp.aruba-config-file-name "{config}";
-        }}\
+class "vendor-class-{row}" {{
+    match if option vendor-class-identifier ~= "{vendor_cid}";
+    option ztp.aruba-image-file-name "{os}";
+    option ztp.aruba-config-file-name "{config}";
+}}\
 """,
 }
 
@@ -111,31 +108,35 @@ host {hostname} {{
 """
 }
 
-# Create command line arguments (optionally to get a different filename)
-parser = argparse.ArgumentParser(
-    description='Generate dhcpd.conf file from CSV file.',
-    epilog='Have a great day!',
-    )
-parser.add_argument(
-    '-v', '--version',
-    help='show the version number and exit',
-    action='version',
-    version=f'Version: {__version__}',
-    )
-parser.add_argument(
-    'ztp_csv',
-    nargs='?',
-    type=pathlib.Path,
-    default=ztp_csv_file,
-    help=f'name of ZTP CSV file (default={ztp_csv_file})',
-    )
-parser.add_argument(
-    '-i', '--vendor_csv',
-    nargs='?',
-    type=pathlib.Path,
-    default=vendor_csv_file,
-    help=f'name of Vendor Class CSV file (default={vendor_csv_file})',
-    )
+def parse_arguments():
+    "Create command line arguments (optionally to get a different filename)"
+    parser = argparse.ArgumentParser(
+        description='Generate dhcpd.conf file from CSV file.',
+        epilog='Have a great day!',
+        )
+    parser.add_argument(
+        '-v', '--version',
+        help='show the version number and exit',
+        action='version',
+        version=f'Version: {__version__}',
+        )
+    parser.add_argument(
+        'ztp_csv',
+        nargs='?',
+        type=pathlib.Path,
+        default=ztp_csv_file,
+        help=f'name of ZTP CSV file (default={ztp_csv_file})',
+        )
+    parser.add_argument(
+        '-i', '--vendor_csv',
+        nargs='?',
+        type=pathlib.Path,
+        default=vendor_csv_file,
+        help=f'name of Vendor Class CSV file (default={vendor_csv_file})',
+        )
+    return parser
+
+parser = parse_arguments()
 args = parser.parse_args()
 
 if ztp_csv_file == args.ztp_csv:
@@ -200,7 +201,8 @@ for n,item in enumerate(vendor_objs, 1):
         tmp_vendor_objs.remove(tmp_item)
         continue
     vendor = device_models[hardware]['vendor']
-    tmp_item['template'] = vendor_subclasses[vendor]
+    tmp_item['template'] = vendor_classes[vendor]
+    tmp_item['row'] = n
     if not vendor_cid:
         msg = 'Vendor class id missing. Skipping device. '
         print(msg)
@@ -309,15 +311,9 @@ else:
 
 if tmp_vendor_objs:
     dhcpd_text = dhcpd_tmp_config_file.read_text()
-    dhcpd_sections = dhcpd_text.split('\n\n')
     add_lines = [each['template'] for each in tmp_vendor_objs]
-    add_text = '\n'.join(add_lines) + '\n}\n'
-    dhcpd_sections.insert(2, vendor_class)
-    ztp_section = dhcpd_sections.pop(4)
-    endbrkt = ztp_section.index('}')
-    ztp_section = ztp_section[:endbrkt] + add_text
-    dhcpd_sections.insert(4, ztp_section)
-    dhcpd_tmp_config_file.write_text('\n\n'.join(dhcpd_sections))
+    add_text = '\n'.join(add_lines)
+    dhcpd_tmp_config_file.write_text(f"{dhcpd_text}\n{add_text}\n")
 # End of Vendor Class ID section
 
 # Start of MAC ADDR method ztp.csv section
