@@ -71,7 +71,9 @@ except:
 vendor_classes = {
     'juniper': """\
 class "vendor-class-{row}" {{
-    match if option vendor-class-identifier ~= "{vendor_cid}";
+    match
+    if option vendor-class-identifier = "{vendor_cid}"
+    or option vendor-class-identifier ~~ "{vendor_cid}";
     option ztp.juniper-transfer-mode ftp;
     option ztp.juniper-ftp-timeout "3600";
     option ztp.juniper-image-file-name "{os}";
@@ -80,7 +82,9 @@ class "vendor-class-{row}" {{
 """,
     'aruba': """\
 class "vendor-class-{row}" {{
-    match if option vendor-class-identifier ~= "{vendor_cid}";
+    match
+    if option vendor-class-identifier = "{vendor_cid}"
+    or option vendor-class-identifier ~~ "{vendor_cid}";
     option ztp.aruba-image-file-name "{os}";
     option ztp.aruba-config-file-name "{config}";
 }}\
