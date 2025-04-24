@@ -46,6 +46,7 @@ if __name__ == '__main__':
     fzfcmd = "fzf --tac --no-sort"
     fzfcmd2 = "fzf --reverse --no-sort"
     logsdir = f"/opt/{appname}/logs"
+    logsdir2 = f"/opt/{appname}/logs/ntpstats"
     ftpdir = f"/opt/{appname}/ftp"
     debugdir = f"/opt/{appname}/debug"
     menu_log_fzf = [
@@ -53,12 +54,22 @@ if __name__ == '__main__':
         (f"{appname} log (syslog)", f"{tailcmd} {logsdir}/{appname}.log | {fzfcmd}"),
         ("ftp transfers", f"{tailcmd} {logsdir}/vsftpd_xfers.log | {fzfcmd2}"),
         ("tftp transfers", f"""{tailcmd} {logsdir}/{appname}.log | {fzfcmd2} --query="'in.tftpd " """),
+        ("ntp rawstats", f"{tailcmd} {logsdir2}/rawstats | {fzfcmd}"),
+        ("ntp peerstats", f"{tailcmd} {logsdir2}/peerstats | {fzfcmd}"),
+        ("ntp loopstats", f"{tailcmd} {logsdir2}/loopstats | {fzfcmd}"),
+        ("ntp sysstats", f"{tailcmd} {logsdir2}/sysstats | {fzfcmd}"),
+        ("ntp clockstats", f"{tailcmd} {logsdir2}/clockstats | {fzfcmd}"),
         ]
     menu_log = [
         ("transfer report", f"column.py {logsdir}/transfer_report.csv | more"),
         (f"{appname} log (syslog)", f"more {logsdir}/{appname}.log"),
         ("ftp transfers", f"more {logsdir}/vsftpd_xfers.log"),
         ("tftp transfers", f"grep 'in.tftpd' {logsdir}/{appname}.log | more"),
+        ("ntp rawstats", f"more {logsdir2}/rawstats"),
+        ("ntp peerstats", f"more {logsdir2}/peerstats"),
+        ("ntp loopstats", f"more {logsdir2}/loopstats"),
+        ("ntp sysstats", f"more {logsdir2}/sysstats"),
+        ("ntp clockstats", f"more {logsdir2}/clockstats"),
         ]
     menu_configuration = [
         ("ztp.csv", f"column.py {ftpdir}/ztp.csv | more"),
@@ -69,6 +80,7 @@ if __name__ == '__main__':
         ("vsftpd", "more /etc/vsftpd.conf"),
         ("tftpd-hpa", "more /etc/default/tftpd-hpa"),
         ("webfsd", "more /etc/webfsd.conf"),
+        ("ntp", "more /etc/ntp.conf"),
         ("IP addresses", "ip addr show | more"),
         ("Routing table", "ip route show | more"),
         ("ARP or NDISC cache", "ip neighbor show | more"),

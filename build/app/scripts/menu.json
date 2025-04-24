@@ -25,6 +25,26 @@
    [
     "tftp transfers",
     "tail -F -n +1 /opt/ztp/logs/ztp.log | fzf --reverse --no-sort --query=\"'in.tftpd \" "
+   ],
+   [
+    "ntp rawstats",
+    "tail -F -n +1 /opt/ztp/logs/ntpstats/rawstats | fzf --tac --no-sort"
+   ],
+   [
+    "ntp peerstats",
+    "tail -F -n +1 /opt/ztp/logs/ntpstats/peerstats | fzf --tac --no-sort"
+   ],
+   [
+    "ntp loopstats",
+    "tail -F -n +1 /opt/ztp/logs/ntpstats/loopstats | fzf --tac --no-sort"
+   ],
+   [
+    "ntp sysstats",
+    "tail -F -n +1 /opt/ztp/logs/ntpstats/sysstats | fzf --tac --no-sort"
+   ],
+   [
+    "ntp clockstats",
+    "tail -F -n +1 /opt/ztp/logs/ntpstats/clockstats | fzf --tac --no-sort"
    ]
   ]
  ],
@@ -46,6 +66,26 @@
    [
     "tftp transfers",
     "grep 'in.tftpd' /opt/ztp/logs/ztp.log | more"
+   ],
+   [
+    "ntp rawstats",
+    "more /opt/ztp/logs/ntpstats/rawstats"
+   ],
+   [
+    "ntp peerstats",
+    "more /opt/ztp/logs/ntpstats/peerstats"
+   ],
+   [
+    "ntp loopstats",
+    "more /opt/ztp/logs/ntpstats/loopstats"
+   ],
+   [
+    "ntp sysstats",
+    "more /opt/ztp/logs/ntpstats/sysstats"
+   ],
+   [
+    "ntp clockstats",
+    "more /opt/ztp/logs/ntpstats/clockstats"
    ]
   ]
  ],
@@ -83,6 +123,10 @@
    [
     "webfsd",
     "more /etc/webfsd.conf"
+   ],
+   [
+    "ntp",
+    "more /etc/ntp.conf"
    ],
    [
     "IP addresses",

@@ -16,6 +16,7 @@ RUN apt-get update \
     rsyslog \
     isc-dhcp-server \
     ftp \
+    ntp \
     vsftpd \
     tftp-hpa \
     tftpd-hpa \

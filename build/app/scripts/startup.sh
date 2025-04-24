@@ -70,9 +70,20 @@ if [ -e /opt/"$APPNAME"/scripts/.firstrun ]; then
     touch /opt/"$APPNAME"/logs/vsftpd_xfers.log
     #touch /opt/"$APPNAME"/logs/webfsd.log
     #chown www-data:www-data /opt/"$APPNAME"/logs/webfsd.log
+    mkdir -p /opt/"$APPNAME"/logs/ntpstats
+    ln -s /var/log/ntpstats/rawstats /opt/"$APPNAME"/logs/ntpstats/rawstats
+    ln -s /var/log/ntpstats/peerstats /opt/"$APPNAME"/logs/ntpstats/peerstats
+    ln -s /var/log/ntpstats/loopstats /opt/"$APPNAME"/logs/ntpstats/loopstats
+    ln -s /var/log/ntpstats/clockstats /opt/"$APPNAME"/logs/ntpstats/clockstats
+    ln -s /var/log/ntpstats/sysstats /opt/"$APPNAME"/logs/ntpstats/sysstats
 else
     truncate -s 0 /opt/"$APPNAME"/logs/vsftpd_xfers.log
     #truncate -s 0 /opt/"$APPNAME"/logs/webfsd.log
+    truncate -s 0 /opt/"$APPNAME"/logs/ntpstats/rawstats
+    truncate -s 0 /opt/"$APPNAME"/logs/ntpstats/peerstats
+    truncate -s 0 /opt/"$APPNAME"/logs/ntpstats/loopstats
+    truncate -s 0 /opt/"$APPNAME"/logs/ntpstats/clockstats
+    truncate -s 0 /opt/"$APPNAME"/logs/ntpstats/sysstats
 fi
 
 # Print first message to either the app log file or syslog
@@ -94,8 +105,11 @@ then
     cp /opt/"$APPNAME"/configs/supported_device_models.json /opt/"$APPNAME"/ftp/
     cp /opt/"$APPNAME"/scripts/csv_filter.py /opt/"$APPNAME"/ftp/
     echo "Copied files to /opt/$APPNAME/ftp"
-    chown -R "${HUID}":"${HGID}" /opt/"$APPNAME"/ftp
 fi
+# Always set the user and file permissions of the ftp files
+find /opt/"$APPNAME"/ftp/os_images/ -type f -execdir chmod 664 '{}' '+'
+find /opt/"$APPNAME"/ftp/config_files/ -type f -execdir chmod 664 '{}' '+'
+chown --recursive "${HUID}":"${HGID}" /opt/"$APPNAME"/ftp
 
 # Calculate network values
 if [ -e /opt/"$APPNAME"/scripts/.firstrun ]; then
@@ -142,6 +156,7 @@ if [ -e /opt/"$APPNAME"/scripts/.firstrun ]; then
     cp /opt/"$APPNAME"/configs/vsftpd.conf.template /opt/"$APPNAME"/configs/vsftpd.conf
     cp /opt/"$APPNAME"/configs/tftpd-hpa.template /opt/"$APPNAME"/configs/tftpd-hpa
     cp /opt/"$APPNAME"/configs/webfsd.conf.template /opt/"$APPNAME"/configs/webfsd.conf
+    cp /opt/"$APPNAME"/configs/ntp.conf /etc/ntp.conf
 
     # python generate-dhcpd-conf.py modifications
     sed -Ei 's/^(starting_ip =).*192.168.*/\1 '"'$IPSTART'"'/' /opt/"$APPNAME"/scripts/generate-dhcpd-conf.py
@@ -161,7 +176,7 @@ if [ -e /opt/"$APPNAME"/scripts/.firstrun ]; then
     sed -Ei 's/^(\s+range).*/\1 '"$DHCPSTART"' '"$DHCPEND"';/' /opt/"$APPNAME"/configs/dhcpd.conf
     sed -Ei 's/^(\s+option subnet-mask).*/\1 '"$NETMASK"';/' /opt/"$APPNAME"/configs/dhcpd.conf
     sed -Ei 's/^(\s+option broadcast-address).*/\1 '"$BROADCAST"';/' /opt/"$APPNAME"/configs/dhcpd.conf
-    sed -Ei 's/^(\s+option (routers|domain-name-servers)) [0-9.]+;/\1 '"$IP"';/' /opt/"$APPNAME"/configs/dhcpd.conf
+    sed -Ei 's/^(\s+option (routers|ntp-servers|domain-name-servers)) [0-9.]+;/\1 '"$IP"';/' /opt/"$APPNAME"/configs/dhcpd.conf
     sed -Ei 's/^([# ]+option (tftp-server-name)) "[0-9.]+";/\1 "'"$IP"'";/' /opt/"$APPNAME"/configs/dhcpd.conf
 
     # vsftpd template modifications
@@ -202,6 +217,7 @@ service vsftpd start
 service tftpd-hpa start
 service webfs start
 service isc-dhcp-server start
+service ntp start
 
 
 # Start web interface
