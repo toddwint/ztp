@@ -22,8 +22,8 @@ cp "${SCRIPTDIR}/config.txt" "${SCRIPTDIR}/.env"
 echo "Copied config.txt to .env"
 
 # Get the User ID and Group ID.
-HUID=$(id -u)
-HGID=$(id -g)
+HUID=${SUDO_UID:-$(id -u)}
+HGID=${SUDO_GID:-$(id -g)}
 echo "User id: ${HUID}, Group id: ${HGID}"
 USERINFO="""
 # Current user id

@@ -1,4 +1,6 @@
 # List of all configuration options can be found at:
+# <https://manpages.ubuntu.com/manpages/jammy/man5/vsftpd.conf.5.html>
+# or
 # <http://vsftpd.beasts.org/vsftpd_conf.html>
 # or
 # <https://linux.die.net/man/5/vsftpd.conf>
@@ -41,7 +43,8 @@ write_enable=YES
 
 # The value that the umask for file creation is set to for local users. NOTE! If you want to specify octal values, remember the "0" prefix otherwise the value will be treated as a base 10 integer!
 # Default: 077
-local_umask=022
+# 002 equals rwxr-xr-x
+local_umask=002
 
 # Note! This option only has an effect for non-PAM builds of vsftpd. If disabled, vsftpd will not check /etc/shells for a valid user shell for local logins.
 # Default: YES
@@ -136,7 +139,7 @@ pasv_min_port=10090
 pasv_max_port=10100
 
 # Could not find this option in documentation
-allow_writeable_chroot=YES
+#allow_writeable_chroot=YES
 
 # If enabled, vsftpd will load a list of usernames, from the filename given by userlist_file. If a user tries to log in using a name in this file, they will be denied before they are asked for a password. This may be useful in preventing cleartext passwords being transmitted. See also userlist_deny.
 # Default: NO

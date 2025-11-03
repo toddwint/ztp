@@ -21,4 +21,8 @@ header-includes:
       }{
       \endorigfigure
       }
+  - \let\originAlParaGraph\paragraph
+  - \renewcommand{\paragraph}[1]{\originAlParaGraph{#1} \hfill}
+  - \let\originAlSubParaGraph\subparagraph
+  - \renewcommand{\subparagraph}[1]{\originAlSubParaGraph{#1} \hfill}
 ---

@@ -6,6 +6,50 @@ dpkg-reconfigure --frontend noninteractive tzdata
 
 echo $HOSTNAME > /etc/hostname
 
+# Create a container user matching the host system user and group
+if [ -e /opt/"$APPNAME"/scripts/.firstrun ]; then
+    # Change Debian starting user values
+    # <https://www.debian.org/doc/debian-policy/ch-opersys.html#users-and-groups>
+    sed -Ei '/FIRST_UID=1000/ s/1000/59900/' /etc/adduser.conf
+    sed -Ei '/FIRST_GID=1000/ s/1000/59900/' /etc/adduser.conf
+    # Add APPNAME user with default Debian values
+    if grep "bookworm" /etc/debian_version; then
+        # NOTE: --gecos is deprecated and removed after Debian Bookworm (12.0)
+        #       replace with --comment
+        adduser --disabled-password --gecos "$APPNAME" "$APPNAME"
+    else
+        adduser --disabled-password --comment "$APPNAME" "$APPNAME"
+    fi
+    # Try to change APPNAME IDs to match HUID & HGID values
+    if [ -z $HGID ] || getent group ${HGID}; then
+        echo "HGID is empty or group already exists."
+        echo "Keeping group id number: $APPNAME ($(id --group $APPNAME))"
+    else
+        echo "HGID is available: ($HGID)"
+        echo "Changing group id number: $APPNAME ($HGID)"
+        groupmod --gid $HGID "$APPNAME"
+    fi
+    if [ -z $HUID ] || getent passwd ${HUID}; then
+        echo "HUID is empty or user already exists."
+        echo "Keeping user id number: $APPNAME ($(id --user $APPNAME))"
+    else
+        echo "HUID is available: ($HUID)"
+        echo "Changing user id number: $APPNAME ($HUID)"
+        usermod --uid $HUID "$APPNAME"
+    fi
+    # Set APPNAME and Host User ID password equal to username
+    chpasswd <<< "$APPNAME:$APPNAME"
+    # HUID may be different than APPNAME (e.g. root)
+    if [ -n $HUID ] && id --user $HUID; then
+        chpasswd <<< "$(id --user --name $HUID):$APPNAME"
+    fi
+    if grep -E "^$(id --user --name $HUID)$" /etc/ftpusers; then
+        sed -Ei '/^'$(id --user --name)'$/ s/^/#/' /etc/ftpusers
+    fi
+    # Make sure permissions of home folder match
+    chown -R "$APPNAME":"$APPNAME" /home/"$APPNAME"
+fi
+
 # Extract compressed binaries and move binaries to bin
 if [ -e /opt/"$APPNAME"/scripts/.firstrun ]; then
     # Unzip frontail and tailon
@@ -109,7 +153,9 @@ fi
 # Always set the user and file permissions of the ftp files
 find /opt/"$APPNAME"/ftp/os_images/ -type f -execdir chmod 664 '{}' '+'
 find /opt/"$APPNAME"/ftp/config_files/ -type f -execdir chmod 664 '{}' '+'
-chown --recursive "${HUID}":"${HGID}" /opt/"$APPNAME"/ftp
+if [ -n $HUID ] && [ -n $HGID ]; then
+    chown --recursive ${HUID}:${HGID} /opt/"$APPNAME"/ftp
+fi
 
 # Calculate network values
 if [ -e /opt/"$APPNAME"/scripts/.firstrun ]; then

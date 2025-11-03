@@ -1,6 +1,6 @@
 ---
 title: ZTP Instructions
-date: 2023-08-26
+date: 2025-11-02
 ---
 
 
@@ -354,28 +354,34 @@ Download the GitHub project to the current folder with the following command:
 git clone https://github.com/toddwint/ztp
 ```
 
-There are two main folders in the GitHub project. Here is a brief description:
+There are three main folders in the GitHub project. Here is a brief description:
 
 - build
     - Contains the source code and Docker files which is everything you need if you want to build the application offline.
     - You are also free to modify the code and tailor it to your own needs.
     - Most users won't need these files. They can be discarded.
+- compose
+    - Contains files to assist in creating and managing the container.
+    - Uses docker compose, a tool which can run multi-container applications.
+    - I recommend renaming this folder to the hostname of your ZTP server (as configured in `config.txt`) such as `ztp01` and moving it to a location on your computer which is easy to access.
 - run
     - Contains files to assist in creating and managing the container.
-    - I recommend renaming this folder to the hostname of your ZTP server (as configured in `config.txt`) such as `ztp01` and moving it to a location on your computer which is easy to access.
+    - Uses docker run, a tool which can only launch a single container application.
+    - I recommend using the compose tool over this run tool. However, if you have issues with compose, this is an option.
 
 
 NOTE: If you do not require the `ztp/build` folder and files, I recommend reorganizing the folder structure as such:
 
+- Rename the `ztp/compose` or `ztp/run` folder (e.g. `ztp01`)
+- Remove the unused directory of the two `ztp/run` or `ztp/compose`
 - Remove the directory `ztp/build`
-- Rename the `ztp/run` folder (e.g. `ztp01`)
 - Create a docs folder and copy the `README` and `ZTP Instructions` files to it.
 
 For example commands, see the section [Download the GitHub files](#download-the-github-files).
 
 ## Create the Docker container
 
-All the files from here on will be found in the `run` folder.
+All the files from here on will be found in the `compose` or `run` folder.
 
 
 ### Modify container configuration parameters: `config.txt`
@@ -401,12 +407,18 @@ INTERFACE=eth0
 **NOTE:** The script will take care of setting the IP address on your Ethernet adapter so that you can communicate with the Docker container. It is not recommended to set an IP on your Ethernet adapter, and it can actually cause issues.
 
 
-### Run the script to create the container: `create_container.sh`
+### Run the script to create the container: `create_project.sh` or `create_container.sh`
 
 After configuring the options in `config.txt`, you are ready to create the container.
 
 To create the container run the following command:
 
+`ztp/compose`
+```bash
+./create_project.sh
+```
+
+`ztp/run`
 ```bash
 ./create_container.sh
 ```
@@ -415,32 +427,39 @@ The script does a few things more than just create the container. It sets up som
 
 At this point, the ZTP Docker image you downloaded is now a Docker container instance. Also, the folder `ftp` should exist which is the Docker volume for this container.
 
-Since at this point the container won't be doing anything useful as it does not have _your_ information, I recommend stopping the container.
-
-Run this command:
-
-```bash
-./stop.sh
-```
-
 Inside of the newly created `ftp` folder, you should see the files as explained already in [Files and folders inside the `ftp` folder/volume](#files-and-folders-inside-the-ftp-foldervolume). Modify these files with your information.
 
 Don't forget to copy your OS and configuration files for your devices to `ftp/os_images/` and `ftp/config_files/`
+
+
+### Transfer files to the ftp folder
+
+Now that the `ftp` folder exists, it is a good time to transfer your files.
+
+You can copy and paste them over if they are on the same machine or if you have a USB drive.
+
+If you have SSH access to the host machine, that might be another good option.
+
+Another option is to use the `FTP` server built inside of ZTP to copy the files over.
+
+Plug a network cable from the PC to PC. ZTP should provide a network address to the other PC. The IP address will match the range specified in config.txt (default=172.21.0.0/16).
+
+Use the following values to connect to the `FTP` server:
+
+- Address or Hostname: `172.21.255.252` (or `IPADDR` value in `config.txt`)
+- Username: `ztp` (or `APPNAME` value in `config.txt`)
+- Password: `ztp` (or `APPNAME` value in `config.txt`)
+
+__Note: If you are logged in as root directly, the username will be root and the password will be the same as above.__
+
+__Note: If you are using `sudo` to launch the container, the SUDO_UID and SUDO_GID will be used instead or the ids for root.__
 
 Once you have modified your provisioning files and copied the OS and/or configuration files for your devices to the appropriate folders, it is time to see it work.
 
 
 ## Restart the container
 
-Now that we have everything set up for our devices, it is time to start the container, and let it provision all your devices.
-
-Run this command:
-
-```bash
-./start.sh
-```
-
-If you did not stop the container from before, run this command:
+Now that we have everything set up for our devices, it is time to restart the container, and let it provision all your devices. ZTP does not automatically detect new files. Restarting will handle this for us.
 
 ```bash
 ./restart.sh
@@ -451,7 +470,7 @@ The container starts. If the cables are plugged in and your devices powered on w
 
 ## View the progress
 
-To view the progress, open one of the links in the `webadmin.html` page. This page should have opened by default when you ran `create_container.sh`. If you closed the page or if it never opened, simply click on `webadmin.html`
+To view the progress, open one of the links in the `webadmin.html` page. This page should have opened by default when you ran `create_project.sh` or `create_container.sh`. If you closed the page or if it never opened, simply click on `webadmin.html`
 
 Inside of the `webadmin.html` launch page, there are several options. Here is a description of each option:
 
@@ -500,13 +519,19 @@ To stop the container, run this command:
 
 If you are finished with the container, run this command:
 
+`ztp/compose`
+```bash
+./delete_project.sh
+```
+
+`ztp/run`
 ```bash
 ./delete_container.sh
 ```
 
-Both of these commands will stop the container and copy a timestamped version of the transfer report to your `ftp` folder. Deleting the container will additionally delete the container and remove the networking adapter created with the `create_container.sh` script and the `webadmin.html` file.
+Both of these commands will stop the container and copy a timestamped version of the transfer report to your `ftp` folder. Deleting the container will additionally delete the container and remove the networking adapter created with the `create_project.sh` or `create_container.sh` script and the `webadmin.html` file.
 
-Do not be afraid of deleting the container. The files in the `ftp` folder will not be overwritten the next time the container is created as it checks for a `.exists` file inside that folder which is created the first time the container is created. I actually hardly ever use the `stop.sh`, `restart.sh`, or `start.sh` scripts. Instead, I use `create_container.sh` and `delete_container.sh`.
+Do not be afraid of deleting the container. The files in the `ftp` folder will not be overwritten the next time the container is created as it checks for a `.exists` file inside that folder which is created the first time the container is created. I actually hardly ever use the `stop.sh`, `restart.sh`, or `start.sh` scripts. Instead, I use `create_project.sh` or `create_container.sh` and `delete_project.sh` or `delete_container.sh`.
 
 
 # Common issues
@@ -523,10 +548,10 @@ Because of the way `MACVLAN` works, you cannot access the host directly. To work
 
 This could be because the network no longer exists. Did your computer get restarted? The network adapter won't persist across a reboot.
 
-To resolve this issue, try running `delete_container.sh` followed by `create_container.sh`
+To resolve this issue, try running `delete_project.sh` or `delete_container.sh` followed by `create_project.sh` or `create_container.sh`
 
 
-## You receive errors when running `create_container.sh` or `delete_container.sh`
+## You receive errors when running `create_project.sh`, `create_container.sh`, `delete_project.sh` or `delete_container.sh`
 
 - Is the name of your Ethernet adapter in `config.txt` correct?
 - Do you already have a container running? Run `./is_running.sh` to see.
@@ -669,6 +694,15 @@ git clone https://github.com/toddwint/ztp
 
 For users that want to run the docker image and never build it from source, the following commands can be used to remove the source files make the directories easier to mange:
 
+`ztp/compose`
+```bash
+mv ztp/compose/ ztp01
+mkdir ztp01/docs
+mv ztp/@(README|ZTP Instructions)* ztp01/docs/
+rm -rf ztp/
+```
+
+`ztp/run`
 ```bash
 mv ztp/run/ ztp01
 mkdir ztp01/docs
@@ -720,7 +754,7 @@ git clone https://github.com/toddwint/ztp
 
 It is possible to run more than one container at a time. To do so follow these steps.
 
-- Make a copy of the `run` folder which I often rename to my container hostname such as `ztp01`.
+- Make a copy of the `compose` or `run` folder which I often rename to my container hostname such as `ztp01`.
 
 - In `config.txt` change the Ethernet adapter to a new name (you won't be able to use the same Ethernet adapter) and the hostname. Also, change the IP addresses. I would increment the 2nd octet.
 
