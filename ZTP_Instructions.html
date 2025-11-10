@@ -1,13 +1,14 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang xml:lang>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-US" xml:lang="en-US">
 <head>
   <meta charset="utf-8" />
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <meta name="author" content="Todd Wintermute" />
-  <meta name="dcterms.date" content="2025-11-02" />
+  <meta name="dcterms.date" content="yyyy-mm-dd" />
   <title>ZTP Instructions</title>
   <style>
+
 html {
 font-family: Helvetica,Verdana,Sans-serif;
 color: #1a1a1a;
@@ -114,8 +115,8 @@ background-color: transparent;
 overflow: visible;
 }
 hr {
-background-color: #1a1a1a;
 border: none;
+border-top: 1px solid #1a1a1a;
 height: 1px;
 margin: 1em 0;
 }
@@ -128,7 +129,8 @@ display: block;
 font-variant-numeric: lining-nums tabular-nums;
 }
 table caption {
-margin-bottom: 0.75em;
+caption-side: bottom;
+margin-top: 0.75em;
 }
 tbody {
 margin-top: 0.5em;
@@ -237,30 +239,12 @@ code span.va { color: #000000; }
 code span.vs { color: #4e9a06; } 
 code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } 
 </style>
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
 </head>
 <body>
 <header id="title-block-header">
 <h1 class="title">ZTP Instructions</h1>
 <p class="author">Todd Wintermute</p>
-<p class="date">2025-11-02</p>
+<p class="date">2025-11-09</p>
 </header>
 <nav id="TOC" role="doc-toc">
 <ul>
@@ -414,10 +398,10 @@ options telling it the location of the file server and the file names it
 needs to download. It can also include the transfer protocol to use such
 as ftp or tftp. It uses these options to download the files. Then it
 installs these files all by itself.</p>
-<p>This Docker image contains a DHCP, FTP, and TFTP server as well as
-scripts to put everything together. It contains additional applications
-and scripts so that you can view the transfers in your web browser and
-monitor the progress.</p>
+<p>This Docker image contains a DHCP, FTP, TFTP, and NTP server as well
+as scripts to put everything together. It contains additional
+applications and scripts so that you can view the transfers in your web
+browser and monitor the progress.</p>
 <p>Be aware, although a file transfer might be complete, the device
 might still need 15 or 20 minutes to finish installing.</p>
 <p>So it sounds interesting. You want to try it out, but how do you get
@@ -480,66 +464,73 @@ srx1500,Juniper-srx1500,,
 </colgroup>
 <thead>
 <tr>
-<th>hardware</th>
-<th>vendor_class_string</th>
-<th>os</th>
-<th>config</th>
+<th style="text-align: right;">hardware</th>
+<th style="text-align: left;">vendor_class_string</th>
+<th style="text-align: left;">os</th>
+<th style="text-align: left;">config</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>srx345</td>
-<td>Juniper-srx345</td>
-<td></td>
-<td></td>
+<td style="text-align: right;">srx345</td>
+<td style="text-align: left;">Juniper-srx345</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
 </tr>
 <tr>
-<td>srx1500</td>
-<td>Juniper-srx1500</td>
-<td></td>
-<td></td>
+<td style="text-align: right;">srx1500</td>
+<td style="text-align: left;">Juniper-srx1500</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
 </tr>
 <tr>
-<td>2930f</td>
-<td>Aruba JL253A 2930F-24G-4SFP+ Switch dslforum.org</td>
-<td></td>
-<td></td>
+<td style="text-align: right;">2930f</td>
+<td style="text-align: left;">Aruba JL253A 2930F-24G-4SFP+ Switch
+dslforum.org</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
 </tr>
 <tr>
-<td>2930f</td>
-<td>Aruba JL254A 2930F-48G-4SFP+ Switch dslforum.org</td>
-<td></td>
-<td></td>
+<td style="text-align: right;">2930f</td>
+<td style="text-align: left;">Aruba JL254A 2930F-48G-4SFP+ Switch
+dslforum.org</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
 </tr>
 <tr>
-<td>2930f</td>
-<td>Aruba JL255A 2930F-24G-PoE+-4SFP+ Switch dslforum.org</td>
-<td></td>
-<td></td>
+<td style="text-align: right;">2930f</td>
+<td style="text-align: left;">Aruba JL255A 2930F-24G-PoE+-4SFP+ Switch
+dslforum.org</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
 </tr>
 <tr>
-<td>2930f</td>
-<td>Aruba JL256A 2930F-48G-PoE+-4SFP+ Switch dslforum.org</td>
-<td></td>
-<td></td>
+<td style="text-align: right;">2930f</td>
+<td style="text-align: left;">Aruba JL256A 2930F-48G-PoE+-4SFP+ Switch
+dslforum.org</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
 </tr>
 <tr>
-<td>2930f</td>
-<td>Aruba JL260A 2930F-48G-4SFP Switch dslforum.org</td>
-<td></td>
-<td></td>
+<td style="text-align: right;">2930f</td>
+<td style="text-align: left;">Aruba JL260A 2930F-48G-4SFP Switch
+dslforum.org</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
 </tr>
 <tr>
-<td>2930f</td>
-<td>Aruba JL263A 2930F-24G-PoE+-4SFP+-TAA Switch dslforum.org</td>
-<td></td>
-<td></td>
+<td style="text-align: right;">2930f</td>
+<td style="text-align: left;">Aruba JL263A 2930F-24G-PoE+-4SFP+-TAA
+Switch dslforum.org</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
 </tr>
 <tr>
-<td>2930f</td>
-<td>Aruba JL264A 2930F-48G-PoE+-4SFP+-TAA Switch dslforum.org</td>
-<td></td>
-<td></td>
+<td style="text-align: right;">2930f</td>
+<td style="text-align: left;">Aruba JL264A 2930F-48G-PoE+-4SFP+-TAA
+Switch dslforum.org</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
 </tr>
 </tbody>
 </table>
@@ -604,48 +595,48 @@ acx7024,888888eeeee6,junos-acx7024.tgz,router3.cfg</code></pre>
 <table>
 <thead>
 <tr>
-<th>hardware</th>
-<th>mac</th>
-<th>os</th>
-<th>config</th>
+<th style="text-align: left;">hardware</th>
+<th style="text-align: left;">mac</th>
+<th style="text-align: left;">os</th>
+<th style="text-align: left;">config</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>2930f</td>
-<td>888888eeeee1</td>
-<td>aruba-2930f.swi</td>
-<td>switch1.cfg</td>
+<td style="text-align: left;">2930f</td>
+<td style="text-align: left;">888888eeeee1</td>
+<td style="text-align: left;">aruba-2930f.swi</td>
+<td style="text-align: left;">switch1.cfg</td>
 </tr>
 <tr>
-<td>ex2300</td>
-<td>888888eeeee2</td>
-<td>junos-ex2300.tgz</td>
-<td>switch2.cfg</td>
+<td style="text-align: left;">ex2300</td>
+<td style="text-align: left;">888888eeeee2</td>
+<td style="text-align: left;">junos-ex2300.tgz</td>
+<td style="text-align: left;">switch2.cfg</td>
 </tr>
 <tr>
-<td>ex4100</td>
-<td>888888eeeee3</td>
-<td>junos-ex4100.tgz</td>
-<td>switch3.cfg</td>
+<td style="text-align: left;">ex4100</td>
+<td style="text-align: left;">888888eeeee3</td>
+<td style="text-align: left;">junos-ex4100.tgz</td>
+<td style="text-align: left;">switch3.cfg</td>
 </tr>
 <tr>
-<td>srx1500</td>
-<td>888888eeeee4</td>
-<td>junos-srx1500.tgz</td>
-<td>router1.cfg</td>
+<td style="text-align: left;">srx1500</td>
+<td style="text-align: left;">888888eeeee4</td>
+<td style="text-align: left;">junos-srx1500.tgz</td>
+<td style="text-align: left;">router1.cfg</td>
 </tr>
 <tr>
-<td>srx345</td>
-<td>888888eeeee5</td>
-<td>junos-srx345.tgz</td>
-<td>router2.cfg</td>
+<td style="text-align: left;">srx345</td>
+<td style="text-align: left;">888888eeeee5</td>
+<td style="text-align: left;">junos-srx345.tgz</td>
+<td style="text-align: left;">router2.cfg</td>
 </tr>
 <tr>
-<td>acx7024</td>
-<td>888888eeeee6</td>
-<td>junos-acx7024.tgz</td>
-<td>router3.cfg</td>
+<td style="text-align: left;">acx7024</td>
+<td style="text-align: left;">888888eeeee6</td>
+<td style="text-align: left;">junos-acx7024.tgz</td>
+<td style="text-align: left;">router3.cfg</td>
 </tr>
 </tbody>
 </table>
@@ -754,7 +745,7 @@ adding it to the list. Chances are it will work.</p>
 including the comma after the previous entry’s <code>}</code> (close
 curly brace).</p>
 <p>Let’s look at one entry and explain what the fields do.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a> <span class="er">&quot;srx345&quot;:</span> <span class="fu">{</span></span>
+<div class="sourceCode" id="cb4"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a> <span class="st">&quot;srx345&quot;</span><span class="er">:</span> <span class="fu">{</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;vendor&quot;</span><span class="fu">:</span> <span class="st">&quot;juniper&quot;</span><span class="fu">,</span></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;incr_mac&quot;</span><span class="fu">:</span> <span class="dv">1</span></span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a> <span class="fu">}</span><span class="er">,</span></span></code></pre></div>
@@ -1004,7 +995,7 @@ server:</p>
 <p><strong>Note: If you are logged in as root directly, the username
 will be root and the password will be the same as above.</strong></p>
 <p><strong>Note: If you are using <code>sudo</code> to launch the
-container, the SUDO_UID and SUDO_GID will be used instead or the ids for
+container, the SUDO_UID and SUDO_GID will be used instead of the ids for
 root.</strong></p>
 <p>Once you have modified your provisioning files and copied the OS
 and/or configuration files for your devices to the appropriate folders,

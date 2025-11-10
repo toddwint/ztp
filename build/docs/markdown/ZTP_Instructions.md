@@ -1,6 +1,7 @@
 ---
 title: ZTP Instructions
-date: 2025-11-02
+author: Todd Wintermute
+date: 2025-11-09
 ---
 
 
@@ -41,7 +42,7 @@ First, the device vendor has to include the option for provisioning their device
 
 When the ZTP capable device boots up from a factory default configuration, it looks for a DHCP message which includes certain options telling it the location of the file server and the file names it needs to download. It can also include the transfer protocol to use such as ftp or tftp. It uses these options to download the files. Then it installs these files all by itself.
 
-This Docker image contains a DHCP, FTP, and TFTP server as well as scripts to put everything together. It contains additional applications and scripts so that you can view the transfers in your web browser and monitor the progress.
+This Docker image contains a DHCP, FTP, TFTP, and NTP server as well as scripts to put everything together. It contains additional applications and scripts so that you can view the transfers in your web browser and monitor the progress.
 
 Be aware, although a file transfer might be complete, the device might still need 15 or 20 minutes to finish installing.
 
@@ -96,7 +97,7 @@ srx1500,Juniper-srx1500,,
 Or in an human viewable way
 
 | hardware | vendor_class_string                                       | os  | config |
-|----------|-----------------------------------------------------------|-----|--------|
+|---------:|:----------------------------------------------------------|:----|:-------|
 | srx345   | Juniper-srx345                                            |     |        |
 | srx1500  | Juniper-srx1500                                           |     |        |
 | 2930f    | Aruba JL253A 2930F-24G-4SFP+ Switch dslforum.org          |     |        |
@@ -151,7 +152,7 @@ Or in an human viewable way
 
 
 | hardware | mac          | os                | config      |
-|----------|--------------|-------------------|-------------|
+|:---------|:-------------|:------------------|:------------|
 | 2930f    | 888888eeeee1 | aruba-2930f.swi   | switch1.cfg |
 | ex2300   | 888888eeeee2 | junos-ex2300.tgz  | switch2.cfg |
 | ex4100   | 888888eeeee3 | junos-ex4100.tgz  | switch3.cfg |
@@ -452,7 +453,7 @@ Use the following values to connect to the `FTP` server:
 
 __Note: If you are logged in as root directly, the username will be root and the password will be the same as above.__
 
-__Note: If you are using `sudo` to launch the container, the SUDO_UID and SUDO_GID will be used instead or the ids for root.__
+__Note: If you are using `sudo` to launch the container, the SUDO_UID and SUDO_GID will be used instead of the ids for root.__
 
 Once you have modified your provisioning files and copied the OS and/or configuration files for your devices to the appropriate folders, it is time to see it work.
 

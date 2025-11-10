@@ -2,7 +2,7 @@ name: ${HOSTNAME}
 
 services:
   ztp:
-    image: toddwint/ztp
+    image: toddwint/${APPNAME}
     hostname: ${HOSTNAME}
     ports:
         - "${IPADDR}:${HTTPPORT1}:${HTTPPORT1}"

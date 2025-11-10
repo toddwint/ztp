@@ -1,6 +1,7 @@
 ---
 title: README
-date: 2023-12-21
+author: Todd Wintermute
+date: 2025-11-09
 ---
 
 # toddwint/ztp
@@ -14,7 +15,7 @@ Docker Hub: <https://hub.docker.com/r/toddwint/ztp>
 
 GitHub: <https://github.com/toddwint/ztp>
 
-_For more detailed information, please view the `ZTP Instructions` files: `ZTP Instructions.md`, `ZTP Instructions.html`, or `ZTP Instructions.pdf`._
+_For more detailed information, please view the `ZTP_Instructions` files: `ZTP_Instructions.md`, `ZTP_Instructions.html`, or `ZTP_Instructions.pdf`._
 
 
 ## Overview

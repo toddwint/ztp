@@ -1,0 +1,550 @@
+# Reference: 
+# 1. <https://pandoc.org/MANUAL.html#options>
+# 2. <https://pandoc.org/MANUAL.html#defaults-files>
+# 3. <https://pandoc.org/MANUAL.html#templates>
+#      - <https://pandoc.org/MANUAL.html#variables>
+# 4. <https://pandoc.org/MANUAL.html#extensions>
+
+
+##### General options #####
+
+from: "\
+  markdown\
+  +emoji\
+  +abbreviations\
+  "
+
+#from:
+#to:
+#output-file:
+#data-dir:
+#defaults:
+#  -
+#bash-completion:
+#verbosity: INFO  ### [ERROR, WARNING, INFO] ###
+#fail-if-warnings: true
+#log-file: file
+#list-input-formats:
+#list-output-formats:
+#list-extensions:
+#list-highlight-languages:
+#list-highlight-styles:
+#version:
+#help:
+#input-file:
+#input-files:
+#  -
+#  -
+
+### alternative for "from" is "reader"
+### alternative for "to" is "writer"
+### verbosity values can be: [ERROR, WARNING, INFO]
+### Default extensions for "from"
+###  -abbreviations\
+###  +all_symbols_escapable\
+###  -angle_brackets_escapable\
+###  -ascii_identifiers\
+###  +auto_identifiers\
+###  -autolink_bare_uris\
+###  +backtick_code_blocks\
+###  +blank_before_blockquote\
+###  +blank_before_header\
+###  +bracketed_spans\
+###  +citations\
+###  -compact_definition_lists\
+###  +definition_lists\
+###  -east_asian_line_breaks\
+###  -emoji\
+###  +escaped_line_breaks\
+###  +example_lists\
+###  +fancy_lists\
+###  +fenced_code_attributes\
+###  +fenced_code_blocks\
+###  +fenced_divs\
+###  +footnotes\
+###  -four_space_rule\
+###  -gfm_auto_identifiers\
+###  +grid_tables\
+###  -gutenberg\
+###  -hard_line_breaks\
+###  +header_attributes\
+###  -ignore_line_breaks\
+###  +implicit_figures\
+###  +implicit_header_references\
+###  +inline_code_attributes\
+###  +inline_notes\
+###  +intraword_underscores\
+###  +latex_macros\
+###  +line_blocks\
+###  +link_attributes\
+###  -lists_without_preceding_blankline\
+###  -literate_haskell\
+###  -mark\
+###  -markdown_attribute\
+###  +markdown_in_html_blocks\
+###  -mmd_header_identifiers\
+###  -mmd_link_attributes\
+###  -mmd_title_block\
+###  +multiline_tables\
+###  +native_divs\
+###  +native_spans\
+###  -old_dashes\
+###  +pandoc_title_block\
+###  +pipe_tables\
+###  +raw_attribute\
+###  +raw_html\
+###  +raw_tex\
+###  -rebase_relative_paths\
+###  -short_subsuperscripts\
+###  +shortcut_reference_links\
+###  +simple_tables\
+###  +smart\
+###  +space_in_atx_header\
+###  -spaced_reference_links\
+###  +startnum\
+###  +strikeout\
+###  +subscript\
+###  +superscript\
+###  +task_lists\
+###  +table_captions\
+###  +tex_math_dollars\
+###  -tex_math_double_backslash\
+###  -tex_math_single_backslash\
+###  -wikilinks_title_after_pipe\
+###  -wikilinks_title_before_pipe\
+###  +yaml_metadata_block\
+
+
+##### Reader options #####
+
+metadata-file: ${.}/defaults-metadata.yaml
+
+#shift-heading-level-by: -1
+#base-header-level: 1
+#indented-code-classes:
+#  - python
+#default-image-extension: '.jpg'
+#file-scope: true
+#filters:
+#  - citeproc
+#  - cound-words.lua
+#  - type: json
+#    path: special.lua
+#lua-filter:
+#metadata:
+#  key: value
+#  key2: true
+#metadata-files:
+#  - meta.yaml
+#preserve-tabs: true
+#tab-stop: 8
+#track-changes: accept
+#extract-media: dir
+#abbreviations: abbrevs.txt
+#trace: true
+
+
+##### General writer options #####
+
+standalone: true
+table-of-contents: true
+toc-depth: 5
+list-of-figures: true
+list-of-tables: true
+highlight-style: tango
+
+#standalone: true
+#template: file
+#variables:
+#  key: val
+#  key2: true
+#sandbox: true
+#print-default-template:
+#print-default-data-file:
+#eol: nl
+#dpi: 300
+#wrap: 60
+#columns: 72
+#table-of-contents: true
+#toc: true
+#toc-depth: 3
+#list-of-figures: true
+#lof: true
+#list-of-tables: true
+#lot: true
+#strip-comments: true
+#highlight-style:
+#print-highlight-style
+#syntax-definition: mylang.xml
+#syntax-definitions:
+#  -mylang.xml
+#include-in-header:
+#  -inc.tex
+#include-before-body:
+#  -inc.tex
+#include-after-body:
+#  -inc.tex
+#resource-path: ['.','foo']
+#request-headers:
+#  - ["User-Agent", "Mozilla/5.0"]
+#no-check-certificate: true
+
+### highlight-stype options: [null,pygments,tango,espresso,zenburn,kate,monochrome,breezedark,haddock]
+
+
+
+##### Options affecting specific writers #####
+
+self-contained: true
+figure-caption-position: above
+table-caption-position: below
+number-sections: true
+list-of-figures: true
+list-of-tables: true
+pdf-engine: typst
+
+#self-contained: true
+#embed-resources: true
+#link-images: true
+#html-q-tags: true
+#ascii: true
+#reference-links: true
+#reference-location: block
+#figure-caption-position: above
+#table-caption-position: below
+#markdown-headings: atx
+#list-tables: true
+#top-level-division: chapter
+#number-sections: true
+#number-offset: \[1,4\]
+#listings: true
+#incremental: true
+#slide-level: 2
+#section-divs: true
+#email-obfuscation: references
+#identifier-prefix: ch1
+#title-previx: MySite
+#css:
+#  - styles/screen.cs
+#  - styles/special.css
+#reference-doc: my.docx
+#split-level: 2
+#chunk-template: "%i.html"
+#epub-cover-image: cover.jpg
+#epub-title-page: false
+#epub-metadata: meta.xml
+#epub-fonts:
+#  - special.otf
+#  - headline.otf
+#epub-subdirectory: ''
+#ipynb-output: best
+#pdf-engine: typst
+#pdf-engine-opt: '-shell-escape'
+#pdf-engine-opts:
+#  - '-shell-escape'
+
+
+##### Citation rendering #####
+
+#citeproc: true
+#bibliography: logic.bib
+#csl: ieee.csl
+#citation-abbreviations: ab.json
+#cite-method: natbib
+
+### cite-method optins [citeproc, natbib, biblatex] (LaTeX output only)
+### set ‘citeproc: true’ to use citeproc to format citations
+### If you need control over when the citeproc processing is done relative to other filters, you should instead use citeproc in the list of filters (see Reader options).
+
+
+##### Math rendering in HTML #####
+
+#html-math-method:
+#  method: mathjax
+#  html-math-method: URL
+
+### html-math-method options: [mathjax, mathml, webtex, katex, gladtex, plain]
+
+
+##### Options for wrapper scripts #####
+
+#dump-args: true
+#ignore-args: true
+
+
+##### Variables #####
+
+variables:
+
+  #### Metadata variables ####
+
+  #title:
+  #author:
+  #  - Aristotle
+  #  - Peter Abelard
+  #date:
+  #subtitle:
+  #abstract:
+  #abstract-title:
+  #keywords:
+  #subject:
+  #description:
+  #category:
+
+
+  #### Language variables ####
+
+  #lang: en-US
+  #dir: ltr
+
+  ### dir options: [ltr, rtl] left-to-right or right-to-left
+
+
+  #### Variables for HTML ####
+
+  #document-css: false
+  #mainfont: Helvetica,Verdana,Sans-serif
+  #fontsize: 20px
+  #fontcolor:
+  #linkcolor: blue
+  #monofont:
+  #monobackgroundcolor: whitesmoke
+  #linestretch:
+  #maxwidth:
+  #backgroundcolor:
+  #margin-left:
+  #margin-right:
+  #margin-top:
+  #margin-bottom:
+
+
+  ### Variables for HTML math ###
+
+  #classoption: fleqn
+
+
+  ### Variables for HTML slides ###
+
+  #institute:
+  #revealjs-url:
+  #s5-url:
+  #slidy-url:
+  #slideous-url:
+  #title-slide-attributes:
+
+
+  ### Variables for Beamer slides ###
+
+  #aspectration: 43
+  #beameroption:
+  #institute:
+  #logo:
+  #navigation: empty
+  #section-titles:
+  #theme:
+  #colortheme:
+  #fonttheme:
+  #innertheme:
+  #outertheme:
+  #themeoptions:
+  #colorthemeoptions:
+  #fontthemeoptions:
+  #innerthemeoptions:
+  #outerthemeoptions:
+  #titlegraphic:
+  #titlegraphicoptions:
+  #shorttitle:
+  #shortsubstitle:
+  #shortauthor:
+  #shortinstitute:
+  #shortdate:
+
+
+  ### Variables for PowerPoint ###
+
+  #monofont:
+
+
+  ### Variables for LaTeX ###
+
+  # Layout #
+
+  #block-headings: true
+  #classoption:
+  #  - openany
+  #  - twocolumn
+  #  - landscape
+  #documentclass: article
+  #geometry:
+  #  - margin=1.0in
+  #  - top=30mm
+  #  - left=20mm
+  #  - heightrounded
+  #hyperrefoptoins:
+  #  - linktoc=all
+  #  - pdfwindowui
+  #  - pdfpagemode=FullScreen
+  #indent: true
+  #linestretch: 1.5
+  #margin-left:
+  #margin-right:
+  #margin-top:
+  #margin-bottom:
+  #pagestyle:
+  #papersize: letter
+  #secnumdepth:
+  #beamarticle:
+  #handout:
+
+  # Fonts #
+
+  #fontenc: T1
+  #fontfamily: XCharter
+  #fontfamilyoptions:
+  #fontsize:
+  #mainfont:
+  #sansfont:
+  #monofont:
+  #mathfont:
+  #CJKmainfont:
+  #CJKsansfont:
+  #CJKmonofont:
+  #mainfontoptoins:
+  #sansfontoptions:
+  #monofontoptions:
+  #mathfontoptions:
+  #CJKoptions:
+  #luatexjapresetoptions:
+  #mainfontfallback:
+  #sansfontfallback:
+  #monofontfallback:
+  #babelfonts:
+  #microtypeoptions:
+
+  # Links #
+
+  #colorlinks:
+  #boxlinks:
+  #linkcolor:
+  #filecolor:
+  #citecolor:
+  #urlcolor:
+  #toccolor:
+  #links-as-notes:
+  #urlstyle:
+
+  # Front matter #
+
+  #lof:
+  #lot:
+  #thanks:
+  #toc:
+  #toc-depth:
+
+  # BibLaTeX Bibliographies #
+
+  #biblatexoptions:
+  #biblio-style:
+  #biblio-title:
+  #bibliography:
+  #natbiboptions:
+
+
+  ### Variables for ConTeXt ###
+
+  #fontsize: 12pt
+  #headertext:
+  #footertext:
+  #indenting:
+  #interlinespace: 4ex
+  #layout:
+  #linkcolor:
+  #contrastcolor:
+  #linkstyle:
+  #lof:
+  #lot:
+  #mainfont:
+  #sansfont:
+  #monofont:
+  #mathfont:
+  #mainfontfallback:
+  #sansfontfallback:
+  #monofontfallback:
+  #margin-left:
+  #margin-right:
+  #margin-top:
+  #margin-bottom:
+  #pagenumbering:
+  #papersize: letter
+  #pdfa:
+  #pdfaiccprofile:
+  #pdfaintent:
+  #toc:
+  #urlstyle:
+  #whitespace:
+  #includesource:
+
+
+  ### Variables for wkhtmltopdf ###
+
+  #footer-html:
+  #header-html:
+  #margin-left:
+  #margin-right:
+  #margin-top:
+  #margin-bottom:
+  #papersize:
+
+
+  ### Variables for man pages ###
+
+  #adjusting:
+  #footer:
+  #header:
+  #section:
+
+
+  ### Variables for Texinfo ###
+
+  #version:
+  #filename:
+
+
+  ### Variables for Typst ###
+
+  #margin:
+  #papersize: us-letter
+  #mainfont:
+  #fontsize: 12pt
+  #section-numbering:
+  #page-numbering:
+  #columns:
+
+
+  ### Variables for ms ###
+
+  #fontfamily:
+  #indent: 2m
+  #lineheight: 12p
+  #pointsize: 10p
+
+  ### fontfamily option: A (Avant Garde), B (Bookman), C (Helvetica), HN (Helvetica Narrow), P (Palatino), or T (Times New Roman)
+
+
+  ### Variables set automatically ###
+
+  date-meta: yyyy-mm-dd
+
+  #body:
+  #date-meta: yyyy-mm-dd
+  #header-includes:
+  #include-before:
+  #include-after:
+  #meta-json:
+  #numbersections:
+  #sourcefile:
+  #outputfile:
+  #curdir:
+  #pandoc-version:
+  #toc:
+  #toc-title:

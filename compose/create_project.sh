@@ -14,10 +14,8 @@ done
 # Then start by importing environment file
 source "${SCRIPTDIR}"/config.txt
 
-# Copy the docker compose files. Copy config.txt to .env
+# Copy config.txt to .env
 echo "Creating project: ${HOSTNAME}"
-cp "${SCRIPTDIR}/templates/compose.yaml.template" "${SCRIPTDIR}/compose.yaml"
-echo "Added file: compose.yaml"
 cp "${SCRIPTDIR}/config.txt" "${SCRIPTDIR}/.env"
 echo "Copied config.txt to .env"
 
@@ -36,6 +34,18 @@ HGID=${HGID}
 # Add User and Group IDs to env variables
 echo "Adding User ID and Group ID to .env"
 echo -e "${USERINFO}" >> "${SCRIPTDIR}/.env"
+
+# Copy the docker compose file. Substitute values if possible.
+if command -v envsubst &> /dev/null; then
+    set -o allexport
+    source .env
+    set +o allexport
+    envsubst < "${SCRIPTDIR}/templates/compose.yaml.template" > "${SCRIPTDIR}/compose.yaml"
+    echo "Created customized file: compose.yaml"
+else
+    cp "${SCRIPTDIR}/templates/compose.yaml.template" "${SCRIPTDIR}/compose.yaml"
+    echo "Copied template file: compose.yaml"
+fi
 
 # Create the docker network and management macvlan interface
 echo '- - - - -'

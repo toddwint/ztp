@@ -4,9 +4,9 @@ Use information in the syslog to update `transfer_report.csv` with
 file transfer messages.
 """
 
-__version__ = '0.0.3'
+__version__ = '0.0.4'
 __author__ = 'Todd Wintermute'
-__date__ = '2023-07-20'
+__date__ = '2025-11-07'
 
 import csv
 import datetime as dt
@@ -14,13 +14,16 @@ import ipaddress
 import json
 import os
 import pathlib
+import pwd
 import re
 import subprocess
 import sys
 import time
 
-appname = os.environ['APPNAME']
-hostname = os.environ['HOSTNAME']
+fprint = lambda p: print(p, flush=True) # unbuffered print (nohup fix)
+
+appname = os.getenv('APPNAME') or 'ztp'
+hostname = os.getenv('HOSTNAME') or 'ztp01'
 logsdir = f"/opt/{appname}/logs"
 ftpdir = f"/opt/{appname}/ftp"
 configsdir = f"/opt/{appname}/configs"
@@ -34,6 +37,12 @@ ztp_log = pathlib.Path(f"{logsdir}/ztp.log")
 ftp_log = pathlib.Path(f"{logsdir}/vsftpd_xfers.log")
 device_models_json = pathlib.Path(f'{ftpdir}/supported_device_models.json')
 prov_methods = pathlib.Path(f'{logsdir}/provisioning_methods.json')
+if appname in [user for user, *_ in pwd.getpwall()]:
+    HUID = pwd.getpwnam(appname).pw_uid
+    HGID = pwd.getpwnam(appname).pw_gid
+else:
+    HUID = pwd.getpwnam('root').pw_uid
+    HGID = pwd.getpwnam('root').pw_gid
 
 vendor_csv_columns = ['hardware', 'vendor_cid', 'os', 'config']
 report_csv_columns = columns = [
@@ -78,10 +87,7 @@ def write_xfer_report(dhcp_objs, xfer_report, columns):
         writer = csv.DictWriter(f, fieldnames=columns, extrasaction='ignore')
         writer.writeheader()
         writer.writerows(dhcp_objs)
-    rval = subprocess.run(
-        f"chown $HUID:$HGID {str(xfer_report)}",
-        shell=True
-        )
+    os.chown(path=xfer_report, uid=HUID, gid=HGID)
 
 def hash_a_list(list_obj):
    return hash(json.dumps(list_obj))

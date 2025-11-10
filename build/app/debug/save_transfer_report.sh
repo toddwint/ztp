@@ -1,36 +1,41 @@
 #!/usr/bin/env bash
-#set -x
-TS=$(date -Is | tr -d :)
 
+TS=$(date -Is | tr -d :)
 REPORT_GLOB="/opt/$APPNAME/ftp/transfer_report-*.csv"
 XFER_REPORT="/opt/$APPNAME/logs/transfer_report.csv"
+HUID=$(id --user "$APPNAME" 2> /dev/null || id --user root)
+HGID=$(id --group "$APPNAME" 2> /dev/null || id --group root)
 
-if [ ! -f "$XFER_REPORT" ]
-    then
+if [ ! -f "$XFER_REPORT" ]; then
     echo "$XFER_REPORT does not exist."
     exit 1
 fi
 
-if compgen -G $REPORT_GLOB > /dev/null
-then
-    # One or more previous export(s) exist
-    PREV_REPORT=$(ls $REPORT_GLOB | tail -n1)
-    DIFF=$(diff -s $XFER_REPORT $PREV_REPORT)
-    RETURN=$?
-    if [ $RETURN -eq 0 ]
-    then
-        echo "Transfer report export will be skipped because $PREV_REPORT is identical to $XFER_REPORT."
-        exit 1
-    else
-        echo "Previous export is different than current report. Exporting current report..."
-        # The files are different so an export is needed.
-    fi
-else
-    echo "No previous report export found. Creating one..."
-    # No previous files exist so an export is needed.
+# Check if current xfer report is the same as any previous exports
+hash_xfer_report=$(md5sum $XFER_REPORT | awk '{print $1}')
+hash_previous_search=$(md5sum $REPORT_GLOB | grep $hash_xfer_report)
+RETURN=$?
+if [ $RETURN -eq 0 ]; then
+    echo "Transfer report export will be skipped." \
+        "It is idential to another report."
+    exit 1
 fi
 
-cp /opt/"$APPNAME"/ftp/transfer_report.csv \
-   /opt/"$APPNAME"/ftp/transfer_report-"${TS}".csv
-chown $HUID:$HGID /opt/"$APPNAME"/ftp/transfer_report-"${TS}".csv
-echo "Transfer report saved to \`./ftp/transfer_report-"${TS}".csv\`"
+# check if current xfer report has data after column 5
+has_data=$(\
+    sed '1d' $XFER_REPORT \
+    | cut --delimiter=, --fields=6- \
+    | grep -E '\w+' \
+    )
+RETURN=$?
+if [ $RETURN -eq 0 ]; then
+    echo "Transfer report contains transfers. Exporting current report..."
+    xfer_export=/opt/"$APPNAME"/ftp/transfer_report-"${TS}".csv
+    cp /opt/"$APPNAME"/ftp/transfer_report.csv $xfer_export
+    chown $HUID:$HGID $xfer_export
+    echo "Transfer report saved to \`./ftp/transfer_report-"${TS}".csv\`"
+else
+    echo "Transfer report export will be skipped." \
+    "It does not contain any transfer data."
+    exit 1
+fi
