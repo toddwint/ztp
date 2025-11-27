@@ -1,3 +1,9 @@
+## 2025-11-26
+
+- Container. Bug fixed in generate_transfer_report.py. os module was being overwritten by another variable inside a list comprehension due to use of walrus operator.
+- Container. Fixed transfer report export script agian to ignore the msg column. Only looking for data in the transfer columns.
+
+
 ## 2025-11-09
 
 - Docs. Changed from Latex to Typst backend

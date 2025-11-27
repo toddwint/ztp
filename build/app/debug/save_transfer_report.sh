@@ -24,7 +24,7 @@ fi
 # check if current xfer report has data after column 5
 has_data=$(\
     sed '1d' $XFER_REPORT \
-    | cut --delimiter=, --fields=6- \
+    | cut --delimiter=, --fields=6-9 \
     | grep -E '\w+' \
     )
 RETURN=$?

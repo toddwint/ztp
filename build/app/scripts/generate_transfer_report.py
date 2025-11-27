@@ -4,9 +4,9 @@ Use information in the syslog to update `transfer_report.csv` with
 file transfer messages.
 """
 
-__version__ = '0.0.4'
+__version__ = '0.0.5'
 __author__ = 'Todd Wintermute'
-__date__ = '2025-11-07'
+__date__ = '2025-11-26'
 
 import csv
 import datetime as dt
@@ -204,10 +204,10 @@ ips_alt = '|'.join([re.escape(ip) for ip in ips])
 re_ip = re.compile(
     f"(?P<protocol>{daemons_alt}).*\\b(?P<ip>{ips_alt})\\b"
     )
-v_os_set = set([os for key in vendor_objs if  (os := key['os'])])
+v_os_set = set([key['os'] for key in vendor_objs if key['os']])
 v_os_set_alt = '|'.join([re.escape(os) for os in v_os_set])
 v_os = re.compile(f"(?P<os>{v_os_set_alt})")
-v_conf_set = set([conf for key in vendor_objs if (conf := key['config'])])
+v_conf_set = set([key['config'] for key in vendor_objs if key['config']])
 v_conf_set_alt = '|'.join([re.escape(conf) for conf in v_conf_set])
 v_conf = re.compile(f"(?P<config>{v_conf_set_alt})")
 

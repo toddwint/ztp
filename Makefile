@@ -1,7 +1,6 @@
 # This is a Makefile
 
 git_id := toddwint
-#repo_name := $(basename $(notdir "$(shell "pwd")"))
 repo_name != basename "$${PWD}"
 version := $(shell date -u +"%Y.%m.%d-%H.%M.%S")
 #version := $(file < ./version)
@@ -40,7 +39,7 @@ multiplatform_buildx: check_requirements
 	./multiplatform_buildx.sh
 
 .PHONY: remove
-remove: 
+remove:
 	-@rm ./build/docs/output/*
 
 .PHONY: git-release-push
@@ -48,6 +47,7 @@ git-release-push:
 	gh release create \
 		"${version}" \
 		--latest \
-		--notes-file release_notes.md \
+		--notes "$$( (sed '/./,$$!d' | awk -v RS='\n{3,}' 'NR==1') \
+			< release_notes.md )" \
 		--generate-notes \
 		--title "${version}" \
